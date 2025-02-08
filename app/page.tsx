@@ -1,3 +1,4 @@
+import Header from "@/components/layout/header";
 import Text from "@/components/Text";
 import { getAddress } from "@/lib/chopin-server";
 
@@ -5,8 +6,9 @@ export default async function Home() {
   const address = await getAddress();
 
   return (
-    <div>
+    <main className="">
+      <Header />
       <Text initialAddress={address} />
-    </div>
+    </main>
   );
 }
