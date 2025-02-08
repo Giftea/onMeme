@@ -1,5 +1,5 @@
-import Header from "@/components/layout/header";
-import Text from "@/components/Text";
+import Header from "@/components/layout/Header";
+import ProfileCard from "@/components/profile/ProfileCard";
 import { getAddress } from "@/lib/chopin-server";
 
 export default async function Home() {
@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <main className="">
       <Header />
-      <Text initialAddress={address} />
+      <ProfileCard initialAddress={address}  />
     </main>
   );
 }
