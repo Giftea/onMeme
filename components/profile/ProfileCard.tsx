@@ -22,7 +22,7 @@ export default function ProfileCard({ initialAddress }: ProfileCardProps) {
   }, []);
 
   return (
-    <Card className="max-w-[1500px] mx-10 2xl:mx-auto p-6 my-6 flex space-x-4 items-center">
+    <Card className="max-w-[1060px] mx-10 lg:mx-auto p-6 my-6 flex space-x-4 items-center">
       <Image
         width={100}
         height={100}

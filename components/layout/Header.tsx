@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header className="bg-card p-4 px-10">
-      <div className="flex items-center justify-between mx-auto max-w-[1500px]">
+      <div className="flex items-center justify-between mx-auto max-w-[1060px]">
         {theme === "dark" ? (
           <Image src="/images/logo.svg" alt="Logo" width={140} height={140} />
         ) : (
