@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import * as fabric from "fabric";
+// import { useEffect, useRef, useState } from "react";
+// import * as fabric from "fabric";
 import { Card } from "@/components/ui/card";
 
 const MemeGenerator = () => {

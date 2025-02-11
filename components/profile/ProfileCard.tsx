@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { createAvatar } from "@dicebear/core";
 import { croodles } from "@dicebear/collection";
 import Image from "next/image";
-import { useAddress } from "@/hooks";
+// import { useAddress } from "@/hooks";
 import { shortenAddress } from "@/lib/utils";
 
 interface ProfileCardProps {
