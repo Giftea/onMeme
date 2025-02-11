@@ -13,16 +13,17 @@ export default function Header() {
   return (
     <header className="bg-card p-4 px-10">
       <div className="flex items-center justify-between mx-auto max-w-[1060px]">
-        {theme === "dark" ? (
+        {theme === "dark" && (
           <Image src="/images/logo.svg" alt="Logo" width={140} height={140} />
-        ) : (
+        )}
+        {theme === "light" && (
           <Image
             src="/images/logo-dark.svg"
             alt="Logo"
             width={140}
             height={140}
           />
-        )}{" "}
+        )}
         <div className="flex items-center space-x-2">
           <Switch id="theme" onCheckedChange={() => toggleTheme()} />
           <label htmlFor="theme">Theme</label>
