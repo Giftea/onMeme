@@ -7,6 +7,7 @@ import {
   integer,
   text,
   jsonb,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
@@ -15,7 +16,9 @@ export const users = pgTable("users", {
   id: varchar("id", { length: 42 }).primaryKey(),
   username: varchar("username", { length: 255 }).notNull(),
   address: varchar("address", { length: 42 }).unique().notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+  createdAt: timestamp("created_at", { withTimezone: true }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
 });
 
 // Templates Table
@@ -23,7 +26,9 @@ export const templates = pgTable("templates", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   imageUrl: text("image_url").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+  createdAt: timestamp("created_at", { withTimezone: true }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
 });
 
 // Memes Table
@@ -32,10 +37,14 @@ export const memes = pgTable("memes", {
   ownerId: varchar("owner_id", { length: 42 })
     .references(() => users.id)
     .notNull(),
-  templateId: integer("template_id").references(() => templates.id, { onDelete: "set null" }),
+  templateId: integer("template_id").references(() => templates.id, {
+    onDelete: "set null",
+  }),
   imageUrl: text("image_url").notNull(),
   isPublic: boolean("is_public").default(true),
-  createdAt: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+  createdAt: timestamp("created_at", { withTimezone: true }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
 });
 
 // Likes Table
@@ -47,7 +56,9 @@ export const likes = pgTable("likes", {
   userId: varchar("user_id", { length: 42 })
     .references(() => users.id)
     .notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+  createdAt: timestamp("created_at", { withTimezone: true }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
 });
 
 // NFTs Table
@@ -58,7 +69,9 @@ export const nfts = pgTable("nfts", {
     .references(() => users.address)
     .notNull(),
   metadata: jsonb("metadata").notNull(),
-  mintedAt: timestamp("minted_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+  mintedAt: timestamp("minted_at", { withTimezone: true }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
 });
 
 // Listings Table
@@ -71,9 +84,37 @@ export const listings = pgTable("listings", {
     .references(() => users.address)
     .notNull(),
   price: integer("price").notNull(),
-  status: varchar("status", { length: 10 }).$type<"listed" | "sold" | "cancelled">().notNull(),
-  listedAt: timestamp("listed_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+  status: varchar("status", { length: 10 })
+    .$type<"listed" | "sold" | "cancelled">()
+    .notNull(),
+  listedAt: timestamp("listed_at", { withTimezone: true }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
 });
+
+// Tokens Table
+export const tokens = pgTable("tokens", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  symbol: varchar("symbol", { length: 255 }).notNull(),
+  decimals: integer("decimals").notNull(),
+  maxSupply: integer("max_supply").notNull(),
+});
+
+// Balances Table
+export const balances = pgTable(
+  "balances",
+  {
+    address: varchar("address", { length: 42 })
+      .references(() => users.address)
+      .notNull(),
+    tokenId: integer("token_id")
+      .references(() => tokens.id)
+      .notNull(),
+    balance: integer("balance").notNull().default(0),
+  },
+  (table) => [primaryKey({ columns: [table.address, table.tokenId] })]
+);
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
@@ -126,5 +167,20 @@ export const listingsRelations = relations(listings, ({ one }) => ({
   seller: one(users, {
     fields: [listings.seller],
     references: [users.address],
+  }),
+}));
+
+export const tokensRelations = relations(tokens, ({ many }) => ({
+  balances: many(balances),
+}));
+
+export const balancesRelations = relations(balances, ({ one }) => ({
+  user: one(users, {
+    fields: [balances.address],
+    references: [users.address],
+  }),
+  token: one(tokens, {
+    fields: [balances.tokenId],
+    references: [tokens.id],
   }),
 }));

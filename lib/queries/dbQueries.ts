@@ -5,8 +5,11 @@ import {
   listings,
   likes,
   memes,
+  tokens,
+  balances,
 } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql, and } from "drizzle-orm";
+const PROJECT_OWNER_ADDRESS = process.env.PROJECT_OWNER_ADDRESS || "";
 
 // Get all users
 export async function getUsers() {
@@ -115,4 +118,110 @@ export async function getLikesForMeme(memeId: number) {
 // Like a meme
 export async function likeMeme(memeId: number, userId: string) {
   return await db.insert(likes).values({ memeId, userId }).returning();
+}
+
+// Create a token
+export async function createToken(
+  creatorAddress: string, // New parameter to check authorization
+  name: string,
+  symbol: string,
+  decimals: number,
+  maxSupply: number
+) {
+  if (creatorAddress.toLowerCase() !== PROJECT_OWNER_ADDRESS.toLowerCase()) {
+    throw new Error("Unauthorized: Only the project owner can create tokens");
+  }
+
+  return await db.insert(tokens).values({ name, symbol, decimals, maxSupply }).returning();
+}
+
+// Get the max supply of a token
+export async function getMaxSupply(tokenId: number) {
+  const result = await db
+    .select({ maxSupply: tokens.maxSupply })
+    .from(tokens)
+    .where(eq(tokens.id, tokenId));
+  return result[0]?.maxSupply ?? 0;
+}
+
+// Get the total circulating supply of a token
+export async function getTotalCirculatingSupply(tokenId: number) {
+  const result = await db
+    .select({ totalSupply: sql<number>`SUM(${balances.balance})` })
+    .from(balances)
+    .where(eq(balances.tokenId, tokenId));
+  return result[0]?.totalSupply ?? 0;
+}
+
+// Get the balance of an address for a token
+export async function getBalance(address: string, tokenId: number) {
+  const result = await db
+    .select({ balance: balances.balance })
+    .from(balances)
+    .where(and(eq(balances.address, address), eq(balances.tokenId, tokenId)));
+
+  return result[0]?.balance ?? 0;
+}
+
+// Mint tokens
+export async function mint(address: string, amount: number, tokenId: number) {
+  const maxSupply = await getMaxSupply(tokenId);
+  const currentSupply = await getTotalCirculatingSupply(tokenId);
+
+  if (currentSupply + amount > maxSupply) {
+    throw new Error("Minting would exceed max supply");
+  }
+
+  return await db
+    .insert(balances)
+    .values({ address, tokenId, balance: amount })
+    .onConflictDoUpdate({
+      target: [balances.address, balances.tokenId],
+      set: { balance: sql`${balances.balance} + ${amount}` },
+    })
+    .returning();
+}
+
+// Burn tokens
+export async function burn(address: string, amount: number, tokenId: number) {
+  const currentBalance = await getBalance(address, tokenId);
+
+  if (currentBalance < amount) {
+    throw new Error("Insufficient balance");
+  }
+
+  return await db
+    .update(balances)
+    .set({ balance: sql`${balances.balance} - ${amount}` })
+    .where(and(eq(balances.address, address), eq(balances.tokenId, tokenId)))
+    .returning();
+}
+
+// Transfer tokens
+export async function transfer(
+  from: string,
+  to: string,
+  amount: number,
+  tokenId: number
+) {
+  const senderBalance = await getBalance(from, tokenId);
+
+  if (senderBalance < amount) {
+    throw new Error("Insufficient balance");
+  }
+
+  await db.transaction(async (tx) => {
+    await tx
+      .update(balances)
+      .set({ balance: sql`${balances.balance} - ${amount}` })
+      .where(and(eq(balances.address, from), eq(balances.tokenId, tokenId)));
+
+    await tx
+      .insert(balances)
+      .values({ address: to, tokenId, balance: amount })
+      .onConflictDoUpdate({
+        target: [balances.address, balances.tokenId],
+        set: { balance: sql`${balances.balance} + ${amount}` },
+      });
+  });
 }
