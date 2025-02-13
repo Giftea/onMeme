@@ -49,8 +49,8 @@ export async function getNFTsByOwner(owner: string) {
 }
 
 // Mint a new NFT
-export async function mintNFT(token: string, owner: string, metadata: object) {
-  return await db.insert(nfts).values({ token, owner, metadata }).returning();
+export async function mintNFT(owner: string, metadata: object) {
+  return await db.insert(nfts).values({ token: '1', owner, metadata }).returning();
 }
 
 // Get all listings

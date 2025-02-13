@@ -9,7 +9,7 @@ export default function NFTList() {
       .then((res) => res.json())
       .then((data) => setNfts(data));
   }, []);
-console.log(nfts)
+
   return (
     <div>
       <h2>NFTs</h2>
