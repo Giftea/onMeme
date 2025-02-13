@@ -42,6 +42,6 @@ export const userRouter = router({
       throw new Error("User not found");
     }
 
-    return user[0]; // Return user object
+    return user[0];
   }),
 });

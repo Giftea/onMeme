@@ -36,6 +36,7 @@
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.39.2",
     "drizzle-zod": "^0.7.0",
+    "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "fabric": "^6.5.4",
     "lucide-react": "^0.475.0",

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "../ui/button";
 import MintNFTModal from "./MintNFTModal";
+import Link from "next/link";
 
 export default function NFTCard({
   meme,
@@ -14,7 +15,7 @@ export default function NFTCard({
   address?: string | null;
 }) {
   return (
-    <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
+    <div className="border flex cursor-pointer justify-center items-center border-gray-400 rounded-lg p-4">
       {meme && address && (
         <div className="space-y-3">
           <Image
@@ -29,15 +30,17 @@ export default function NFTCard({
       )}
       {nft && nft?.metadata && (
         <div className="space-y-3">
-          <Image
-            src={nft?.metadata?.image}
-            alt="meme"
-            className="rounded-lg"
-            width={300}
-            height={300}
-          />
-          <p className="font-semibold text-lg">{nft?.metadata?.name}</p>
-          <p className="text-gray-500 !mt-0 ">{nft?.metadata?.description}</p>
+          <Link href={`/nfts/${nft?.id}`} className="space-y-3">
+            <Image
+              src={nft?.metadata?.image}
+              alt="meme"
+              className="rounded-lg"
+              width={300}
+              height={300}
+            />
+            <p className="font-semibold text-lg">{nft?.metadata?.name}</p>
+            <p className="text-gray-500 !mt-0 ">{nft?.metadata?.description}</p>
+          </Link>
           <div className="flex justify-between items-center">
             <p className="">Price: {nft?.metadata?.price} MEME</p>
             <Button className="font-semibold text-lg px-8 py-5 float-right">

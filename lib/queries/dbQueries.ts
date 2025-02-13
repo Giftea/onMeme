@@ -43,6 +43,12 @@ export async function getAllNFTs() {
   return await db.select().from(nfts);
 }
 
+// Get NFT by ID
+export async function getNFTByID(id: number) {
+  const nft = await db.select().from(nfts).where(eq(nfts.id, id));
+  return nft[0];
+}
+
 // Get NFTs owned by a specific user
 export async function getNFTsByOwner(owner: string) {
   return await db.select().from(nfts).where(eq(nfts.owner, owner));
@@ -50,7 +56,10 @@ export async function getNFTsByOwner(owner: string) {
 
 // Mint a new NFT
 export async function mintNFT(owner: string, metadata: object) {
-  return await db.insert(nfts).values({ token: '1', owner, metadata }).returning();
+  return await db
+    .insert(nfts)
+    .values({ token: "1", owner, metadata })
+    .returning();
 }
 
 // Get all listings
@@ -132,7 +141,10 @@ export async function createToken(
     throw new Error("Unauthorized: Only the project owner can create tokens");
   }
 
-  return await db.insert(tokens).values({ name, symbol, decimals, maxSupply }).returning();
+  return await db
+    .insert(tokens)
+    .values({ name, symbol, decimals, maxSupply })
+    .returning();
 }
 
 // Get the max supply of a token

@@ -7,7 +7,7 @@ export default function UserTab({
   memes,
   nfts,
 }: {
-  memes: React.ReactNode;
+  memes?: React.ReactNode;
   nfts: React.ReactNode;
 }) {
   const searchParams = useSearchParams();
