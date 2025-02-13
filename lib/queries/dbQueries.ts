@@ -62,6 +62,23 @@ export async function mintNFT(owner: string, metadata: object) {
     .returning();
 }
 
+// Get all likes for an nft
+export async function getLikesForNft(nftId: number) {
+  return await db.select().from(likes).where(eq(likes.nftId, nftId));
+}
+
+// Like an nft
+export async function likeNft(nftId: number, userId: string) {
+  try {
+    return await db.insert(likes).values({ nftId, userId }).returning();
+  } catch (error) {
+    if ((error as any).code === "23505") {
+      throw new Error("You have already liked this NFT");
+    }
+    throw error;
+  }
+}
+
 // Get all listings
 export async function getAllListings() {
   return await db.select().from(listings);
@@ -117,16 +134,6 @@ export async function createMeme(
     .insert(memes)
     .values({ ownerId, templateId, imageUrl, isPublic })
     .returning();
-}
-
-// Get all likes for an nft
-export async function getLikesForNft(nftId: number) {
-  return await db.select().from(likes).where(eq(likes.nftId, nftId));
-}
-
-// Like an nft
-export async function likeNft(nftId: number, userId: string) {
-  return await db.insert(likes).values({ nftId, userId }).returning();
 }
 
 // Create a token

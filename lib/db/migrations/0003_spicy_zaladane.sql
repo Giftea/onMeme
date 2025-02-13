@@ -1,1 +1,0 @@
-ALTER TABLE "likes" ADD CONSTRAINT "likes_user_id_nft_id_pk" PRIMARY KEY("user_id","nft_id");
