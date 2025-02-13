@@ -119,14 +119,14 @@ export async function createMeme(
     .returning();
 }
 
-// Get all likes for a meme
-export async function getLikesForMeme(memeId: number) {
-  return await db.select().from(likes).where(eq(likes.memeId, memeId));
+// Get all likes for an nft
+export async function getLikesForNft(nftId: number) {
+  return await db.select().from(likes).where(eq(likes.nftId, nftId));
 }
 
-// Like a meme
-export async function likeMeme(memeId: number, userId: string) {
-  return await db.insert(likes).values({ memeId, userId }).returning();
+// Like an nft
+export async function likeNft(nftId: number, userId: string) {
+  return await db.insert(likes).values({ nftId, userId }).returning();
 }
 
 // Create a token

@@ -1,5 +1,6 @@
 "use client";
 import Collections from "@/components/nfts/Collections";
+import LikeNFT from "@/components/nfts/LikeNFT";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc.utils";
@@ -8,8 +9,10 @@ import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function Page() {
+  const address = Cookies.get("dev-address");
   const pathName = usePathname();
   const router = useRouter();
   const nftId = pathName.split("/nfts/")[1];
@@ -21,6 +24,10 @@ export default function Page() {
     isSuccess,
   } = trpc.nft.getNFTByID.useQuery({
     id: Number(nftId),
+  });
+
+  const { data: user } = trpc.user.fetchUser.useQuery({
+    address: String(address),
   });
 
   useEffect(() => {
@@ -44,7 +51,7 @@ export default function Page() {
       </div>
     );
   if (!isSuccess) return <div>Failed to load NFT</div>;
-  if (nft !== undefined && nft?.metadata) {
+  if (nft !== undefined && nft?.metadata && user) {
     return (
       <div>
         <Button
@@ -55,7 +62,8 @@ export default function Page() {
           Go Back
         </Button>
         <div className="grid grid-cols-2 gap-4">
-          <div className="border rounded-lg flex items-center justify-center p-4">
+          <div className="border rounded-lg flex flex-col space-y-2 justify-center items-end p-4">
+            <LikeNFT nftId={nft.id} userId={user?.id} />
             <Image
               src={nft?.metadata.image}
               className="rounded-lg"

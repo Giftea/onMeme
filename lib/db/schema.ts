@@ -50,8 +50,8 @@ export const memes = pgTable("memes", {
 // Likes Table
 export const likes = pgTable("likes", {
   id: serial("id").primaryKey(),
-  memeId: integer("meme_id")
-    .references(() => memes.id)
+  nftId: integer("nft_id")
+    .references(() => nfts.id)
     .notNull(),
   userId: varchar("user_id", { length: 42 })
     .references(() => users.id)
@@ -133,7 +133,6 @@ export const memesRelations = relations(memes, ({ one, many }) => ({
     fields: [memes.templateId],
     references: [templates.id],
   }),
-  likes: many(likes),
 }));
 
 export const templatesRelations = relations(templates, ({ many }) => ({
@@ -145,9 +144,9 @@ export const likesRelations = relations(likes, ({ one }) => ({
     fields: [likes.userId],
     references: [users.id],
   }),
-  meme: one(memes, {
-    fields: [likes.memeId],
-    references: [memes.id],
+  nft: one(nfts, {
+    fields: [likes.nftId],
+    references: [nfts.id],
   }),
 }));
 
@@ -157,6 +156,7 @@ export const nftsRelations = relations(nfts, ({ one, many }) => ({
     references: [users.address],
   }),
   listings: many(listings),
+  likes: many(likes),
 }));
 
 export const listingsRelations = relations(listings, ({ one }) => ({

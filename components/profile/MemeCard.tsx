@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "../ui/button";
 import MintNFTModal from "./MintNFTModal";
 import Link from "next/link";
+import { shortenText } from "@/lib/utils";
 
 export default function NFTCard({
   meme,
@@ -39,7 +40,9 @@ export default function NFTCard({
               height={300}
             />
             <p className="font-semibold text-lg">{nft?.metadata?.name}</p>
-            <p className="text-gray-500 !mt-0 ">{nft?.metadata?.description}</p>
+            <p className="text-gray-500 !mt-0 ">
+              {shortenText(nft?.metadata?.description)}
+            </p>
           </Link>
           <div className="flex justify-between items-center">
             <p className="">Price: {nft?.metadata?.price} MEME</p>

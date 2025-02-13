@@ -78,7 +78,7 @@ export default function ProfileCard({
           height={100}
           src={avatar}
           alt="Avatar"
-          className="border-4 bg-muted-foreground p-2 rounded-full"
+          className="border-4 border-secondary bg-muted-foreground p-2 rounded-full"
         />
         <div>
           {user && <p className="text-lg font-semibold">{user.username} </p>}

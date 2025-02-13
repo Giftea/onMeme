@@ -15,5 +15,12 @@ export default function Page() {
       setNFTs(nftsData as NFT[]);
     }
   }, [isNFTsLoading, nftsData]);
-  return <UserNFTs isLoading={isNFTsLoading} nfts={nfts} />;
+  return (
+    <>
+      <p className="text-4xl border-b pb-2 font-semibold text-gray-400 mb-6">
+        NFT Memes
+      </p>
+      <UserNFTs isLoading={isNFTsLoading} nfts={nfts} />
+    </>
+  );
 }

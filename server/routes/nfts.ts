@@ -5,6 +5,8 @@ import {
   getNFTByID,
   getNFTsByOwner,
   mintNFT,
+  getLikesForNft,
+  likeNft,
 } from "@/lib/queries/dbQueries";
 
 export const nftRouter = router({
@@ -36,5 +38,19 @@ export const nftRouter = router({
     )
     .mutation(async ({ input }) => {
       return await mintNFT(input.owner, input.metadata);
+    }),
+
+  // Get all likes for an nft
+  getLikesForNft: publicProcedure
+    .input(z.object({ nftId: z.number() }))
+    .query(async ({ input }) => {
+      return await getLikesForNft(input.nftId);
+    }),
+
+  // Like an nft
+  likeNft: publicProcedure
+    .input(z.object({ nftId: z.number(), userId: z.string() }))
+    .mutation(async ({ input }) => {
+      return await likeNft(input.nftId, input.userId);
     }),
 });
