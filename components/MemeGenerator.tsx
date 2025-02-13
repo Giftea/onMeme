@@ -78,9 +78,8 @@ const MemeGenerator = () => {
   // };
 
   return (
-    <Card className="max-w-[1060px] mx-10 lg:mx-auto p-6 my-6">
-      <div>
-      </div>
+    <Card className="  p-6 my-6">
+      <div></div>
       {/* <div className="flex">
         <div className="border bg-white">
           <canvas ref={canvasRef} className="border" />

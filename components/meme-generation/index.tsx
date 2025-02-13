@@ -40,7 +40,7 @@ export default function MemeGenerator() {
   };
 
   return (
-    <Card className="max-w-[1060px] mx-10 lg:mx-auto p-6 my-6">
+    <Card className="  p-6 my-6">
       <h1 className="text-3xl font-bold mb-4">Meme Generator</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>

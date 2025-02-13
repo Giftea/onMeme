@@ -71,7 +71,7 @@ export default function ProfileCard({
   }, [initialAddress]);
 
   return (
-    <Card className="max-w-[1060px] mx-10 lg:mx-auto p-6 my-6 flex justify-between items-center">
+    <Card className="  p-6 my-6 flex justify-between items-center">
       <div className="flex space-x-4 items-center">
         <Image
           width={100}
