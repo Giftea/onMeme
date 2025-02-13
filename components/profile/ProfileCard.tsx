@@ -5,40 +5,69 @@ import { createAvatar } from "@dicebear/core";
 import { croodles } from "@dicebear/collection";
 import Image from "next/image";
 import { shortenAddress } from "@/lib/utils";
-import { users } from "@/lib/db/schema";
 import { Button } from "../ui/button";
-import { getUserByAddress } from "@/lib/queries/dbQueries";
 import { useRouter } from "next/navigation";
 import EditUsernameModal from "./EditUsernameModal";
+import { trpc } from "@/lib/trpc.utils";
 
 interface ProfileCardProps {
   initialAddress: string | null;
   isProfilePage?: boolean;
+}
+interface UserType {
+  username: string;
+  address: string;
+  id: string;
+  createdAt: string | null;
 }
 
 export default function ProfileCard({
   initialAddress,
   isProfilePage,
 }: ProfileCardProps) {
-  //   const { data: userId } = useAddress(initialAddress);
-  const [user, setUser] = useState<null | typeof users.$inferSelect>(null);
+  const [user, setUser] = useState<undefined | UserType>(undefined);
   const router = useRouter();
 
-  async function fetchUser() {
-    const _user = await getUserByAddress(String(initialAddress));
-    setUser(_user);
+  const {
+    data: userProfile,
+    isLoading,
+    isSuccess,
+    isStale,
+  } = trpc.user.fetchUser.useQuery({ address: String(initialAddress) });
+
+  const { mutateAsync: handleCreateUser } = trpc.user.createUser.useMutation({
+    onSuccess: () => {},
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  async function createUser() {
+    if (!initialAddress) return;
+    await handleCreateUser({ address: initialAddress });
   }
 
   useEffect(() => {
-    fetchUser();
-  }, [initialAddress]);
+    if (
+      initialAddress &&
+      (userProfile === undefined || null) &&
+      !isLoading &&
+      !isSuccess
+    ) {
+      createUser();
+    }
+  }, [initialAddress, isLoading, isSuccess, userProfile, createUser]);
+
+  useEffect(() => {
+    setUser(userProfile);
+  }, [initialAddress, isLoading, isSuccess, userProfile, isStale]);
 
   const avatar = useMemo(() => {
     return createAvatar(croodles, {
       size: 128,
       seed: initialAddress || "default",
     }).toDataUri();
-  }, []);
+  }, [initialAddress]);
 
   return (
     <Card className="max-w-[1060px] mx-10 lg:mx-auto p-6 my-6 flex justify-between items-center">
@@ -58,7 +87,7 @@ export default function ProfileCard({
         </div>
       </div>
       {isProfilePage ? (
-        <EditUsernameModal initialAddress={initialAddress} user={user} />
+        user && <EditUsernameModal userName={user?.username} />
       ) : (
         <Button
           onClick={() => router.push("/profile")}

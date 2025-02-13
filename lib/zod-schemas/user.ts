@@ -1,11 +1,14 @@
 import { z } from "zod";
 
 export const UserSchema = z.object({
-  id: z.string().optional(),
   username: z
     .string()
     .min(1, { message: "Username must be at least 1 character long" }),
-  address: z.string().optional(),
+});
+
+// Define input validation schema
+export const UserAddressSchema = z.object({
+  address: z.string().length(42),
 });
 
 export type UserSchemaType = z.infer<typeof UserSchema>;

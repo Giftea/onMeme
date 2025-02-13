@@ -8,7 +8,7 @@ export default async function Home() {
   const address = await getAddress();
 
   return (
-    <main className="">
+    <main>
       <ProfileCard initialAddress={address} />
       <MemeGenerator />
       <TopTemplates />

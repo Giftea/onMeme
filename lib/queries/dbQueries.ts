@@ -5,7 +5,6 @@ import {
   listings,
   likes,
   memes,
-  templates,
 } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
@@ -14,20 +13,17 @@ export async function getUsers() {
   return await db.select().from(users);
 }
 
-// Get user by address
+// Fetch user by address
 export async function getUserByAddress(address: string) {
-  const user = await db.select().from(users).where(eq(users.address, address));
-
-  return user[0];
+  return await db.select().from(users).where(eq(users.address, address));
 }
 
 // Create a new user
-export async function createUser(
-  id: string,
-  username: string,
-  address: string
-) {
-  return await db.insert(users).values({ id, username, address }).returning();
+export async function createUser(id: string, address: string) {
+  return await db
+    .insert(users)
+    .values({ id, username: "", address })
+    .returning();
 }
 
 // Update user by address
