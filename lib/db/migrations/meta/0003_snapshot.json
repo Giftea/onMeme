@@ -1,6 +1,6 @@
 {
-  "id": "8f0ba731-a7d3-4805-9aab-d5dc8dc8643a",
-  "prevId": "fa951f1a-775e-48ad-881b-acb2b24ead69",
+  "id": "54f73671-1a9d-4f9b-a905-e5c398d040a9",
+  "prevId": "8f0ba731-a7d3-4805-9aab-d5dc8dc8643a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -130,7 +130,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "likes_user_id_nft_id_pk": {
+          "name": "likes_user_id_nft_id_pk",
+          "columns": [
+            "user_id",
+            "nft_id"
+          ]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
