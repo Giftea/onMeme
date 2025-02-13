@@ -14,6 +14,7 @@ interface ProfileCardProps {
   initialAddress: string | null;
   isProfilePage?: boolean;
 }
+
 interface UserType {
   username: string;
   address: string;
