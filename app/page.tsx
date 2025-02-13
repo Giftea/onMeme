@@ -1,4 +1,3 @@
-import Header from "@/components/layout/Header";
 import MemeGenerator from "@/components/meme-generation";
 import ProfileCard from "@/components/profile/ProfileCard";
 import TopMemes from "@/components/TopMemes";
@@ -10,7 +9,6 @@ export default async function Home() {
 
   return (
     <main className="">
-      <Header />
       <ProfileCard initialAddress={address} />
       <MemeGenerator />
       <TopTemplates />

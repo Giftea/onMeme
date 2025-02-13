@@ -30,6 +30,15 @@ export async function createUser(
   return await db.insert(users).values({ id, username, address }).returning();
 }
 
+// Update user by address
+export async function updateUser(address: string, username?: string) {
+  return await db
+    .update(users)
+    .set({ ...(username && { username }) }) // Update only if a new username is provided
+    .where(eq(users.address, address))
+    .returning();
+}
+
 // Get all NFTs
 export async function getAllNFTs() {
   return await db.select().from(nfts);

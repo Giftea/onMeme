@@ -8,19 +8,25 @@ import { shortenAddress } from "@/lib/utils";
 import { users } from "@/lib/db/schema";
 import { Button } from "../ui/button";
 import { getUserByAddress } from "@/lib/queries/dbQueries";
+import { useRouter } from "next/navigation";
+import EditUsernameModal from "./EditUsernameModal";
 
 interface ProfileCardProps {
   initialAddress: string | null;
+  isProfilePage?: boolean;
 }
 
-export default function ProfileCard({ initialAddress }: ProfileCardProps) {
+export default function ProfileCard({
+  initialAddress,
+  isProfilePage,
+}: ProfileCardProps) {
   //   const { data: userId } = useAddress(initialAddress);
   const [user, setUser] = useState<null | typeof users.$inferSelect>(null);
+  const router = useRouter();
 
   async function fetchUser() {
     const _user = await getUserByAddress(String(initialAddress));
     setUser(_user);
-    console.log(_user);
   }
 
   useEffect(() => {
@@ -46,12 +52,22 @@ export default function ProfileCard({ initialAddress }: ProfileCardProps) {
         />
         <div>
           {user && <p className="text-lg font-semibold">{user.username} </p>}
-          <p className="text-lg">{shortenAddress(String(initialAddress))}</p>
+          {initialAddress && (
+            <p className="text-lg">{shortenAddress(String(initialAddress))}</p>
+          )}
         </div>
       </div>
-      <Button className="text-lg" variant={"link"}>
-        View Creations
-      </Button>
+      {isProfilePage ? (
+        <EditUsernameModal initialAddress={initialAddress} user={user} />
+      ) : (
+        <Button
+          onClick={() => router.push("/profile")}
+          className="text-lg"
+          variant={"link"}
+        >
+          View Profile
+        </Button>
+      )}
     </Card>
   );
 }
