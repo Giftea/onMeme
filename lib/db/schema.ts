@@ -8,6 +8,7 @@ import {
   text,
   jsonb,
   primaryKey,
+  unique,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
@@ -48,18 +49,22 @@ export const memes = pgTable("memes", {
 });
 
 // Likes Table
-export const likes = pgTable("likes", {
-  id: serial("id").primaryKey(),
-  nftId: integer("nft_id")
-    .references(() => nfts.id)
-    .notNull(),
-  userId: varchar("user_id", { length: 42 })
-    .references(() => users.id)
-    .notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).default(
-    sql`CURRENT_TIMESTAMP`
-  ),
-});
+export const likes = pgTable(
+  "likes",
+  {
+    id: serial("id").primaryKey(),
+    nftId: integer("nft_id")
+      .references(() => nfts.id)
+      .notNull(),
+    userId: varchar("user_id", { length: 42 })
+      .references(() => users.id)
+      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).default(
+      sql`CURRENT_TIMESTAMP`
+    ),
+  },
+  (table) => [unique("user_nft_unique").on(table.userId, table.nftId)]
+);
 
 // NFTs Table
 export const nfts = pgTable("nfts", {

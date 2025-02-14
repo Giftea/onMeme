@@ -69,13 +69,21 @@ export async function getLikesForNft(nftId: number) {
 
 // Like an nft
 export async function likeNft(nftId: number, userId: string) {
-  try {
+  // Check if the user has already liked the NFT
+  const existingLike = await db
+    .select()
+    .from(likes)
+    .where(and(eq(likes.nftId, nftId), eq(likes.userId, userId)));
+
+  if (existingLike.length > 0) {
+    // If the like exists, delete it (unlike)
+    return await db
+      .delete(likes)
+      .where(and(eq(likes.nftId, nftId), eq(likes.userId, userId)))
+      .returning();
+  } else {
+    // If the like does not exist, insert a new like
     return await db.insert(likes).values({ nftId, userId }).returning();
-  } catch (error) {
-    if ((error as any).code === "23505") {
-      throw new Error("You have already liked this NFT");
-    }
-    throw error;
   }
 }
 
