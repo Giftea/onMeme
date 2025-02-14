@@ -1,4 +1,4 @@
-import { Memes, NFT } from "@/lib/types";
+import { ListedNFT, Memes, NFT } from "@/lib/types";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "../ui/button";
@@ -10,10 +10,12 @@ export default function NFTCard({
   meme,
   nft,
   address,
+  isListed
 }: {
   meme?: Memes;
-  nft?: NFT;
+  nft?: NFT | ListedNFT;
   address?: string | null;
+  isListed?: boolean;
 }) {
   return (
     <div className="border flex cursor-pointer justify-center items-center border-gray-400 rounded-lg p-4">
@@ -29,7 +31,7 @@ export default function NFTCard({
           <MintNFTModal meme={meme} address={address} />
         </div>
       )}
-      {nft && nft?.metadata && (
+      {nft && !isListed && nft?.metadata && (
         <div className="space-y-3">
           <Link href={`/nfts/${nft?.id}`} className="space-y-3">
             <Image

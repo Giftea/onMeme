@@ -45,3 +45,18 @@ export type NFT = {
     price: string;
   };
 };
+
+export interface ListedNFT {
+  status: "listed" | "sold" | "cancelled";
+  seller: string;
+  nftId: number;
+  price: number;
+  id: number;
+  listedAt: string | null;
+  metadata?: {
+    name: string;
+    description: string;
+    image: string;
+    price: string;
+  };
+}

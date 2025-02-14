@@ -7,7 +7,7 @@ export default function LikeNFT({
   userId,
 }: {
   nftId: number;
-  userId: string;
+  userId: string | undefined;
 }) {
   const [nftLiked, setNftLiked] = useState(false);
 
@@ -27,6 +27,7 @@ export default function LikeNFT({
   });
 
   async function handleOnclick() {
+    if (!userId) return;
     await handleLike({ nftId, userId });
     setNftLiked(!nftLiked);
   }
@@ -36,6 +37,7 @@ export default function LikeNFT({
   }
 
   useEffect(() => {
+    if (!userId) return;
     checkUserId() && setNftLiked(true);
   }, [likeCount]);
 

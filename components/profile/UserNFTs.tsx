@@ -1,32 +1,37 @@
 "use client";
+import { FolderClosed } from "lucide-react";
 import NFTCard, { NFTCardLoading } from "./MemeCard";
-import { NFT } from "@/lib/types";
+import { ListedNFT, NFT } from "@/lib/types";
 
 export default function UserNFTs({
   isLoading,
-  nfts,
+  nfts, isListed
 }: {
   isLoading: boolean;
-  nfts: NFT[] | undefined;
+  isListed?: boolean;
+  nfts: NFT[] | ListedNFT[] | undefined;
 }) {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(isLoading) &&
+        {isLoading &&
           Array.from({ length: 3 }).map((_, i) => <NFTCardLoading key={i} />)}
 
         {nfts && nfts?.length > 0 && (
           <>
             {nfts.map((item) => (
               <div key={item.id}>
-                <NFTCard nft={item} />
+                <NFTCard nft={item} isListed={isListed} />
               </div>
             ))}
           </>
         )}
 
         {((!isLoading && nfts === undefined) || nfts?.length === 0) && (
-          <div>No NFTs found</div>
+          <div className="w-full col-span-3 py-[5rem] flex flex-col items-center justify-center text-gray-400">
+            <FolderClosed size={40} />
+            No NFTs found
+          </div>
         )}
       </div>
     </>

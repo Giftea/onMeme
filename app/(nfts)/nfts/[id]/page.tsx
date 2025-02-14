@@ -51,7 +51,7 @@ export default function Page() {
       </div>
     );
   if (!isSuccess) return <div>Failed to load NFT</div>;
-  if (nft !== undefined && nft?.metadata && user) {
+  if (nft !== undefined && nft?.metadata) {
     return (
       <div>
         <Button
@@ -128,14 +128,14 @@ function NFTDescription({ owner, nft }: { owner: string; nft: NFT }) {
                 placeat?{" "}
               </p>
             </div>
-            <div className="flex justify-between mt-4 items-center">
+            <div className="flex justify-between mt-6 items-center">
               <p>
                 Price:{" "}
                 <span className="text-xl text-primary">
                   {nft.metadata?.price} MEME
                 </span>
               </p>
-              <Button className="px-8">Make Offer</Button>
+              <Button className="px-8 text-lg py-6">Purchase</Button>
             </div>
           </div>
           <div className="border rounded-lg p-4 mt-4 space-y-2">
