@@ -4,7 +4,7 @@ import LikeNFT from "@/components/nfts/LikeNFT";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc.utils";
-import { NFT } from "@/lib/types";
+import { ListedNFT } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -16,13 +16,13 @@ export default function Page() {
   const pathName = usePathname();
   const router = useRouter();
   const nftId = pathName.split("/nfts/")[1];
-  const [nft, setNft] = useState<NFT>();
+  const [nft, setNft] = useState<ListedNFT>();
 
   const {
     data: nftData,
     isLoading,
     isSuccess,
-  } = trpc.nft.getNFTByID.useQuery({
+  } = trpc.listing.getListingByID.useQuery({
     id: Number(nftId),
   });
 
@@ -32,9 +32,9 @@ export default function Page() {
 
   useEffect(() => {
     if (nftData !== undefined) {
-      setNft(nftData as NFT);
+      setNft(nftData as ListedNFT);
     }
-  }, [isLoading, isSuccess, nft]);
+  }, [isLoading, isSuccess, nft, nftData]);
 
   if (isLoading)
     return (
@@ -51,7 +51,7 @@ export default function Page() {
       </div>
     );
   if (!isSuccess) return <div>Failed to load NFT</div>;
-  if (nft !== undefined && nft?.metadata) {
+  if (nft !== undefined && nft?.nftMetadata) {
     return (
       <div>
         <Button
@@ -63,26 +63,26 @@ export default function Page() {
         </Button>
         <div className="grid grid-cols-2 gap-4">
           <div className="border rounded-lg flex flex-col space-y-2 justify-center items-end p-4">
-            <LikeNFT nftId={nft.id} userId={user?.id} />
+            <LikeNFT nftId={nft.listingId} userId={user?.address} />
             <Image
-              src={nft?.metadata.image}
+              src={nft?.nftMetadata.image}
               className="rounded-lg"
-              alt={nft?.metadata.name}
+              alt={nft?.nftMetadata.name}
               width={500}
               height={500}
             />
           </div>
           <div>
-            <NFTDescription owner={nft.owner} nft={nft} />
+            <NFTDescription owner={nft.sellerAddress} nft={nft} />
           </div>
         </div>
-        <Collections address={nft.owner} />
+        <Collections address={nft.sellerAddress} />
       </div>
     );
   }
 }
 
-function NFTDescription({ owner, nft }: { owner: string; nft: NFT }) {
+function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
   const [nftOwner, setNftOwner] = useState<{
     address: string;
     username: string;
@@ -110,10 +110,10 @@ function NFTDescription({ owner, nft }: { owner: string; nft: NFT }) {
     );
   if (!isSuccess) return <div>Failed to load NFT owner</div>;
   if (nftOwner !== undefined) {
-    const { short, full } = formatDate(String(nft?.mintedAt));
+    const { short } = formatDate(String(nft?.listedAt));
     return (
       <div>
-        <p className="text-5xl font-bold mt-4">{nft?.metadata?.name} </p>
+        <p className="text-5xl font-bold mt-4">{nft?.nftMetadata?.name} </p>
         <p className="mt-2 text-sm text-gray-400">
           Owned by <span className="text-primary">@{nftOwner?.username}</span>
         </p>
@@ -122,25 +122,20 @@ function NFTDescription({ owner, nft }: { owner: string; nft: NFT }) {
             <div>
               <p className="text-xl font-semibold">Description</p>
               <p className="text-gray-400 tracking-wide font-thin my-2">
-                {nft.metadata?.description} Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Error quidem, commodi quas
-                doloribus sunt ex aliquid tenetur asperiores? Assumenda,
-                placeat?{" "}
+                {nft.nftMetadata?.description}
               </p>
             </div>
             <div className="flex justify-between mt-6 items-center">
               <p>
                 Price:{" "}
-                <span className="text-xl text-primary">
-                  {nft.metadata?.price} MEME
-                </span>
+                <span className="text-xl text-primary">{nft.price} MEME</span>
               </p>
               <Button className="px-8 text-lg py-6">Purchase</Button>
             </div>
           </div>
           <div className="border rounded-lg p-4 mt-4 space-y-2">
             <div className="flex justify-between">
-              <p>Token ID</p> <p>{nft?.id}</p>
+              <p>Token ID</p> <p>{nft?.listingId}</p>
             </div>{" "}
             <div className="flex justify-between">
               <p>Offers</p> <p>0</p>

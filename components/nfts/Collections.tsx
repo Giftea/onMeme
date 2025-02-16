@@ -2,7 +2,7 @@
 import NFTCard, { NFTCardLoading } from "@/components/profile/MemeCard";
 import { trpc } from "@/lib/trpc.utils";
 import { useEffect, useState } from "react";
-import { NFT } from "@/lib/types";
+import { ListedNFT } from "@/lib/types";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import {
   Carousel,
@@ -12,14 +12,14 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 
 export default function Collections({ address }: { address: string }) {
-  const [nfts, setNFTs] = useState<NFT[]>();
-  const { data, isLoading } = trpc.nft.getNFTsByOwner.useQuery({
-    owner: String(address),
+  const [nfts, setNFTs] = useState<ListedNFT[]>();
+  const { data, isLoading } = trpc.listing.getListingsBySeller.useQuery({
+    seller: String(address),
   });
 
   useEffect(() => {
     if (data) {
-      setNFTs(data as NFT[]);
+      setNFTs(data as ListedNFT[]);
     }
   }, [isLoading, data]);
   return (
@@ -45,10 +45,10 @@ export default function Collections({ address }: { address: string }) {
               <>
                 {nfts.map((item) => (
                   <CarouselItem
-                    key={item.id}
+                    key={item.listingId}
                     className="md:basis-1/2 lg:basis-1/3"
                   >
-                    <NFTCard nft={item} />
+                    <NFTCard listedNFT={item} />
                   </CarouselItem>
                 ))}
               </>

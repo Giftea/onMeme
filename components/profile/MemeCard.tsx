@@ -1,21 +1,21 @@
 import { ListedNFT, Memes, NFT } from "@/lib/types";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "../ui/button";
 import MintNFTModal from "./MintNFTModal";
 import Link from "next/link";
 import { shortenText } from "@/lib/utils";
+import ListNFTModal from "./ListNFTModal";
 
 export default function NFTCard({
   meme,
   nft,
   address,
-  isListed
+  listedNFT,
 }: {
   meme?: Memes;
-  nft?: NFT | ListedNFT;
+  nft?: NFT;
+  listedNFT?: ListedNFT;
   address?: string | null;
-  isListed?: boolean;
 }) {
   return (
     <div className="border flex cursor-pointer justify-center items-center border-gray-400 rounded-lg p-4">
@@ -31,9 +31,9 @@ export default function NFTCard({
           <MintNFTModal meme={meme} address={address} />
         </div>
       )}
-      {nft && !isListed && nft?.metadata && (
+      {nft && nft?.metadata && (
         <div className="space-y-3">
-          <Link href={`/nfts/${nft?.id}`} className="space-y-3">
+          <div className="space-y-3">
             <Image
               src={nft?.metadata?.image}
               alt="meme"
@@ -45,13 +45,28 @@ export default function NFTCard({
             <p className="text-gray-500 !mt-0 ">
               {shortenText(nft?.metadata?.description)}
             </p>
-          </Link>
-          <div className="flex justify-between items-center">
-            <p className="">Price: {nft?.metadata?.price} MEME</p>
-            <Button className="font-semibold text-lg px-8 py-5 float-right">
-              Buy
-            </Button>
           </div>
+          <ListNFTModal nft={nft as NFT} />
+        </div>
+      )}
+
+      {listedNFT && listedNFT?.nftMetadata && (
+        <div className="space-y-3">
+          <Link href={`/nfts/${listedNFT?.listingId}`} className="space-y-3">
+            <Image
+              src={listedNFT?.nftMetadata?.image}
+              alt="meme"
+              className="rounded-lg"
+              width={300}
+              height={300}
+            />
+            <p className="font-semibold text-lg">
+              {listedNFT?.nftMetadata?.name}
+            </p>
+            <p className="text-gray-500 !mt-0 ">
+              {shortenText(listedNFT?.nftMetadata?.description)}
+            </p>
+          </Link>
         </div>
       )}
     </div>

@@ -11,15 +11,15 @@ export default function LikeNFT({
 }) {
   const [nftLiked, setNftLiked] = useState(false);
 
-  const { data: likeCount } = trpc.nft.getLikesForNft.useQuery({
+  const { data: likeCount } = trpc.listing.getLikesForNft.useQuery({
     nftId,
   });
 
   const trpcUtils = trpc.useUtils();
 
-  const { mutateAsync: handleLike } = trpc.nft.likeNft.useMutation({
+  const { mutateAsync: handleLike } = trpc.listing.likeNft.useMutation({
     onSuccess: () => {
-      trpcUtils.nft.getLikesForNft.invalidate();
+      trpcUtils.listing.getLikesForNft.invalidate();
     },
     onError: (error) => {
       console.error(error);
@@ -28,18 +28,16 @@ export default function LikeNFT({
 
   async function handleOnclick() {
     if (!userId) return;
-    await handleLike({ nftId, userId });
+    await handleLike({ listingId: nftId, userId });
     setNftLiked(!nftLiked);
-  }
-
-  function checkUserId() {
-    return likeCount?.some((item) => item.userId === userId);
   }
 
   useEffect(() => {
     if (!userId) return;
-    checkUserId() && setNftLiked(true);
-  }, [likeCount]);
+
+    const userHasLiked = likeCount?.some((item) => item.userId === userId);
+    if (userHasLiked) setNftLiked(true);
+  }, [likeCount, userId]);
 
   return (
     <div className="flex justify-between items-center space-x-2 w-fit">

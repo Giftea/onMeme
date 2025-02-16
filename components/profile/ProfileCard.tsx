@@ -33,7 +33,6 @@ export default function ProfileCard({
     data: userProfile,
     isLoading,
     isSuccess,
-    isStale,
   } = trpc.user.fetchUser.useQuery({ address: String(initialAddress) });
 
   const { mutateAsync: handleCreateUser } = trpc.user.createUser.useMutation({
@@ -43,11 +42,6 @@ export default function ProfileCard({
     },
   });
 
-  async function createUser() {
-    if (!initialAddress) return;
-    await handleCreateUser({ address: initialAddress });
-  }
-
   useEffect(() => {
     if (
       initialAddress &&
@@ -55,13 +49,17 @@ export default function ProfileCard({
       !isLoading &&
       !isSuccess
     ) {
+      const createUser = async () => {
+        await handleCreateUser({ address: initialAddress });
+      };
+
       createUser();
     }
-  }, [initialAddress, isLoading, isSuccess, userProfile, createUser]);
+  }, [initialAddress, isLoading, isSuccess, userProfile, handleCreateUser]);
 
   useEffect(() => {
     setUser(userProfile);
-  }, [initialAddress, isLoading, isSuccess, userProfile, isStale]);
+  }, [initialAddress, isLoading, isSuccess, userProfile]);
 
   const avatar = useMemo(() => {
     return createAvatar(croodles, {

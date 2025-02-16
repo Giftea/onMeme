@@ -1,5 +1,5 @@
 {
-  "id": "51a647d4-1099-478e-bf4b-ab1fe486c2ff",
+  "id": "59a1ffc0-a22c-44d2-a51f-c0d01f0458ac",
   "prevId": "fa951f1a-775e-48ad-881b-acb2b24ead69",
   "version": "7",
   "dialect": "postgresql",
@@ -81,8 +81,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "nft_id": {
-          "name": "nft_id",
+        "listing_id": {
+          "name": "listing_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -103,28 +103,28 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "likes_nft_id_nfts_id_fk": {
-          "name": "likes_nft_id_nfts_id_fk",
+        "likes_listing_id_listings_id_fk": {
+          "name": "likes_listing_id_listings_id_fk",
           "tableFrom": "likes",
-          "tableTo": "nfts",
+          "tableTo": "listings",
           "columnsFrom": [
-            "nft_id"
+            "listing_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "likes_user_id_users_id_fk": {
-          "name": "likes_user_id_users_id_fk",
+        "likes_user_id_users_address_fk": {
+          "name": "likes_user_id_users_address_fk",
           "tableFrom": "likes",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
           "columnsTo": [
-            "id"
+            "address"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -132,12 +132,12 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "user_nft_unique": {
-          "name": "user_nft_unique",
+        "user_listing_unique": {
+          "name": "user_listing_unique",
           "nullsNotDistinct": false,
           "columns": [
             "user_id",
-            "nft_id"
+            "listing_id"
           ]
         }
       },

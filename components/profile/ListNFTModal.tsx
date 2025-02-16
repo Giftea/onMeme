@@ -1,5 +1,5 @@
 "use client";
-import { Memes } from "@/lib/types";
+import { NFT } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,55 +24,45 @@ import { useForm } from "react-hook-form";
 import { trpc } from "@/lib/trpc.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Textarea } from "../ui/textarea";
-import { MintNFTSchema, MintNFTSchemaType } from "@/lib/zod-schemas/nft";
+import { ListingSchema, ListingSchemaType } from "@/lib/zod-schemas/nft";
 import { useToast } from "@/hooks/use-toast";
 import { Oval } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
 
-export default function MintNFTModal({
-  meme,
-  address,
-}: {
-  meme?: Memes;
-  address: string;
-}) {
+export default function ListNFTModal({ nft }: { nft?: NFT }) {
   const router = useRouter();
   const { toast } = useToast();
   const trpcUtils = trpc.useUtils();
   const [open, setOpen] = useState(false);
-  const defaultValues = { name: "", description: "", price: undefined };
-  const form = useForm<MintNFTSchemaType>({
-    resolver: zodResolver(MintNFTSchema),
+  const defaultValues = { price: undefined };
+  const form = useForm<ListingSchemaType>({
+    resolver: zodResolver(ListingSchema),
     defaultValues,
   });
 
-  const { mutateAsync: mintNFT, isPending } = trpc.nft.mintNFT.useMutation({
-    onSuccess: () => {
-      toast({
-        variant: "success",
-        title: "NFT Successfully Minted! 😎",
-      });
-      trpcUtils.nft.getNFTsByOwner.invalidate();
-      trpcUtils.nft.getAllNFTs.invalidate();
-      setOpen(false);
-      router.push("profile?tab=nfts");
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
-
-  const handleOnSubmit = async (data: MintNFTSchemaType) => {
-    const { name, description } = data;
-
-    await mintNFT({
-      owner: address,
-      metadata: {
-        name,
-        description,
-        image: meme?.imageUrl,
+  const { mutateAsync: listNFT, isPending } =
+    trpc.listing.createListing.useMutation({
+      onSuccess: () => {
+        toast({
+          variant: "success",
+          title: "NFT Successfully Listed! 😎",
+        });
+        trpcUtils.nft.getNFTsByOwner.invalidate();
+        trpcUtils.listing.getAllListings.invalidate();
+        setOpen(false);
+        router.push("/marketplace");
       },
+      onError: (error) => {
+        console.error(error);
+      },
+    });
+
+  const handleOnSubmit = async (data: ListingSchemaType) => {
+    const { price } = data;
+    await listNFT({
+      nftId: Number(nft?.id),
+      seller: String(nft?.owner),
+      price: Number(price),
     });
   };
 
@@ -80,23 +70,24 @@ export default function MintNFTModal({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="font-semibold float-right text-lg px-8 py-5">
-          Mint
+          List NFT
         </Button>
       </DialogTrigger>
       <DialogContent className="lg:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Mint Meme as NFT</DialogTitle>
+          <DialogTitle className="text-2xl">List Your NFT for Sale</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <div className="grid grid-cols-2 gap-4 py-4">
-          <Image
-            src={meme ? meme?.imageUrl : ""}
-            alt="meme"
-            className="rounded-lg"
-            width={400}
-            height={400}
-          />
-
+          {nft?.metadata?.image && (
+            <Image
+              src={nft?.metadata?.image}
+              alt="meme"
+              className="rounded-lg"
+              width={400}
+              height={400}
+            />
+          )}
           <Form {...form}>
             <form
               className="space-y-3"
@@ -104,29 +95,14 @@ export default function MintNFTModal({
             >
               <FormField
                 control={form.control}
-                name={"name"}
+                name={"price"}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="name" className="text-base">
-                      Name:
+                    <FormLabel htmlFor="price" className="text-base">
+                      Price:
                     </FormLabel>
                     <FormControl>
-                      <Input id="name" className="" {...field} />
-                    </FormControl>
-                    <FormMessage className="" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={"description"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="description" className="text-base">
-                      Description:
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea className="" {...field} />
+                      <Input id="price" type="number" className="" {...field} />
                     </FormControl>
                     <FormMessage className="" />
                   </FormItem>
@@ -151,7 +127,7 @@ export default function MintNFTModal({
                       secondaryColor="#ffffff70"
                     />
                   ) : (
-                    "Mint"
+                    "List Now"
                   )}
                 </Button>
               </DialogFooter>

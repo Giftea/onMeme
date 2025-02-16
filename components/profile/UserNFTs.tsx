@@ -5,11 +5,12 @@ import { ListedNFT, NFT } from "@/lib/types";
 
 export default function UserNFTs({
   isLoading,
-  nfts, isListed
+  nfts,
+  listedNFTs,
 }: {
   isLoading: boolean;
-  isListed?: boolean;
-  nfts: NFT[] | ListedNFT[] | undefined;
+  nfts?: NFT[];
+  listedNFTs?: ListedNFT[];
 }) {
   return (
     <>
@@ -21,13 +22,25 @@ export default function UserNFTs({
           <>
             {nfts.map((item) => (
               <div key={item.id}>
-                <NFTCard nft={item} isListed={isListed} />
+                <NFTCard nft={item} />
               </div>
             ))}
           </>
         )}
 
-        {((!isLoading && nfts === undefined) || nfts?.length === 0) && (
+        {listedNFTs && listedNFTs?.length > 0 && (
+          <>
+            {listedNFTs.map((item) => (
+              <div key={item.listingId}>
+                <NFTCard listedNFT={item} />
+              </div>
+            ))}
+          </>
+        )}
+
+        {((!isLoading && nfts === undefined && listedNFTs === undefined) ||
+          nfts?.length === 0 ||
+          listedNFTs?.length === 0) && (
           <div className="w-full col-span-3 py-[5rem] flex flex-col items-center justify-center text-gray-400">
             <FolderClosed size={40} />
             No NFTs found

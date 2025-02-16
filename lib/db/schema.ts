@@ -53,17 +53,17 @@ export const likes = pgTable(
   "likes",
   {
     id: serial("id").primaryKey(),
-    nftId: integer("nft_id")
-      .references(() => nfts.id)
+    listingId: integer("listing_id")
+      .references(() => listings.id, { onDelete: "cascade" })
       .notNull(),
     userId: varchar("user_id", { length: 42 })
-      .references(() => users.id)
+      .references(() => users.address)
       .notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).default(
       sql`CURRENT_TIMESTAMP`
     ),
   },
-  (table) => [unique("user_nft_unique").on(table.userId, table.nftId)]
+  (table) => [unique("user_listing_unique").on(table.userId, table.listingId)]
 );
 
 // NFTs Table
@@ -129,7 +129,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   listings: many(listings),
 }));
 
-export const memesRelations = relations(memes, ({ one, many }) => ({
+export const memesRelations = relations(memes, ({ one }) => ({
   owner: one(users, {
     fields: [memes.ownerId],
     references: [users.id],
@@ -147,11 +147,11 @@ export const templatesRelations = relations(templates, ({ many }) => ({
 export const likesRelations = relations(likes, ({ one }) => ({
   user: one(users, {
     fields: [likes.userId],
-    references: [users.id],
+    references: [users.address],
   }),
-  nft: one(nfts, {
-    fields: [likes.nftId],
-    references: [nfts.id],
+  listing: one(listings, {
+    fields: [likes.listingId],
+    references: [listings.id],
   }),
 }));
 

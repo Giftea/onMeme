@@ -63,27 +63,27 @@ export async function mintNFT(owner: string, metadata: object) {
 }
 
 // Get all likes for an nft
-export async function getLikesForNft(nftId: number) {
-  return await db.select().from(likes).where(eq(likes.nftId, nftId));
+export async function getLikesForListing(listingId: number) {
+  return await db.select().from(likes).where(eq(likes.listingId, listingId));
 }
 
 // Like an nft
-export async function likeNft(nftId: number, userId: string) {
-  // Check if the user has already liked the NFT
+export async function likeListing(listingId: number, userId: string) {
+  // Check if the user has already liked the listing
   const existingLike = await db
     .select()
     .from(likes)
-    .where(and(eq(likes.nftId, nftId), eq(likes.userId, userId)));
+    .where(and(eq(likes.listingId, listingId), eq(likes.userId, userId)));
 
   if (existingLike.length > 0) {
     // If the like exists, delete it (unlike)
     return await db
       .delete(likes)
-      .where(and(eq(likes.nftId, nftId), eq(likes.userId, userId)))
+      .where(and(eq(likes.listingId, listingId), eq(likes.userId, userId)))
       .returning();
   } else {
     // If the like does not exist, insert a new like
-    return await db.insert(likes).values({ nftId, userId }).returning();
+    return await db.insert(likes).values({ listingId, userId }).returning();
   }
 }
 
@@ -94,7 +94,47 @@ export async function getAllListings() {
 
 // Get listings by seller
 export async function getListingsBySeller(seller: string) {
-  return await db.select().from(listings).where(eq(listings.seller, seller));
+  const result = await db
+    .select({
+      listingId: listings.id,
+      price: listings.price,
+      status: listings.status,
+      listedAt: listings.listedAt,
+      nftId: nfts.id,
+      nftToken: nfts.token,
+      nftMetadata: nfts.metadata,
+      sellerId: users.id,
+      sellerAddress: users.address,
+      sellerUsername: users.username,
+    })
+    .from(listings)
+    .innerJoin(nfts, eq(listings.nftId, nfts.id))
+    .innerJoin(users, eq(listings.seller, users.address))
+    .where(eq(listings.seller, seller));
+
+  return result;
+}
+
+export async function getListingByID(id: number) {
+  const result = await db
+    .select({
+      listingId: listings.id,
+      price: listings.price,
+      status: listings.status,
+      listedAt: listings.listedAt,
+      nftId: nfts.id,
+      nftToken: nfts.token,
+      nftMetadata: nfts.metadata,
+      sellerId: users.id,
+      sellerAddress: users.address,
+      sellerUsername: users.username,
+    })
+    .from(listings)
+    .innerJoin(nfts, eq(listings.nftId, nfts.id))
+    .innerJoin(users, eq(listings.seller, users.address))
+    .where(eq(listings.id, id));
+
+  return result.length > 0 ? result[0] : null;
 }
 
 // Create a new listing
@@ -119,6 +159,25 @@ export async function updateListingStatus(
     .set({ status })
     .where(eq(listings.id, id))
     .returning();
+}
+
+export async function getMarketplaceListings() {
+  return await db
+    .select({
+      listingId: listings.id,
+      price: listings.price,
+      status: listings.status,
+      listedAt: listings.listedAt,
+      nftId: nfts.id,
+      nftToken: nfts.token,
+      nftMetadata: nfts.metadata,
+      sellerId: users.id,
+      sellerAddress: users.address,
+      sellerUsername: users.username,
+    })
+    .from(listings)
+    .innerJoin(nfts, eq(listings.nftId, nfts.id))
+    .innerJoin(users, eq(listings.seller, users.address));
 }
 
 // Get all memes

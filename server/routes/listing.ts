@@ -5,6 +5,10 @@ import {
   getListingsBySeller,
   createListing,
   updateListingStatus,
+  likeListing,
+  getLikesForListing,
+  getMarketplaceListings,
+  getListingByID,
 } from "@/lib/queries/dbQueries";
 
 export const listingRouter = router({
@@ -13,9 +17,19 @@ export const listingRouter = router({
     return await getAllListings();
   }),
 
+  getListingByID: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      return await getListingByID(input.id);
+    }),
+
+  getMarketplaceListings: publicProcedure.query(async () => {
+    return await getMarketplaceListings();
+  }),
+
   // Get listings by seller
   getListingsBySeller: publicProcedure
-    .input(z.object({ seller: z.string().length(42) })) // Ensures valid wallet address
+    .input(z.object({ seller: z.string().length(42) }))
     .query(async ({ input }) => {
       return await getListingsBySeller(input.seller);
     }),
@@ -25,7 +39,7 @@ export const listingRouter = router({
     .input(
       z.object({
         nftId: z.number(),
-        seller: z.string().length(42), // Wallet address
+        seller: z.string().length(42),
         price: z.number().min(1),
       })
     )
@@ -43,5 +57,19 @@ export const listingRouter = router({
     )
     .mutation(async ({ input }) => {
       return await updateListingStatus(input.id, input.status);
+    }),
+
+  // Get all likes for an nft
+  getLikesForNft: publicProcedure
+    .input(z.object({ nftId: z.number() }))
+    .query(async ({ input }) => {
+      return await getLikesForListing(input.nftId);
+    }),
+
+  // Like an nft
+  likeNft: publicProcedure
+    .input(z.object({ listingId: z.number(), userId: z.string() }))
+    .mutation(async ({ input }) => {
+      return await likeListing(input.listingId, input.userId);
     }),
 });
