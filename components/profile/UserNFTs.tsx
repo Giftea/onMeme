@@ -1,29 +1,24 @@
 "use client";
+import { FolderClosed } from "lucide-react";
 import NFTCard, { NFTCardLoading } from "./MemeCard";
-import { trpc } from "@/lib/trpc.utils";
-import { useEffect, useState } from "react";
-import { NFT } from "@/lib/types";
+import { ListedNFT, NFT } from "@/lib/types";
 
-export default function UserNFTs({ address }: { address: string | null }) {
-  const [nfts, setNFTs] = useState<NFT[]>();
-
-  const { data, isLoading } = trpc.nft.getNFTsByOwner.useQuery({
-    owner: String(address),
-  });
-
-  useEffect(() => {
-    if (data) {
-      setNFTs(data as NFT[]);
-    }
-  }, [isLoading, data]);
-
+export default function UserNFTs({
+  isLoading,
+  nfts,
+  listedNFTs,
+}: {
+  isLoading: boolean;
+  nfts?: NFT[];
+  listedNFTs?: ListedNFT[];
+}) {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(isLoading || address === null || undefined) &&
+        {isLoading &&
           Array.from({ length: 3 }).map((_, i) => <NFTCardLoading key={i} />)}
 
-        {nfts && address && nfts?.length > 0 && (
+        {nfts && nfts?.length > 0 && (
           <>
             {nfts.map((item) => (
               <div key={item.id}>
@@ -33,8 +28,23 @@ export default function UserNFTs({ address }: { address: string | null }) {
           </>
         )}
 
-        {((!isLoading && data === undefined) || nfts?.length === 0) && (
-          <div>No NFTs found</div>
+        {listedNFTs && listedNFTs?.length > 0 && (
+          <>
+            {listedNFTs.map((item) => (
+              <div key={item.listingId}>
+                <NFTCard listedNFT={item} />
+              </div>
+            ))}
+          </>
+        )}
+
+        {((!isLoading && nfts === undefined && listedNFTs === undefined) ||
+          nfts?.length === 0 ||
+          listedNFTs?.length === 0) && (
+          <div className="w-full col-span-3 py-[5rem] flex flex-col items-center justify-center text-gray-400">
+            <FolderClosed size={40} />
+            No NFTs found
+          </div>
         )}
       </div>
     </>

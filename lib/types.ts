@@ -1,5 +1,5 @@
 import { InferSelectModel, InferInsertModel } from "drizzle-orm";
-import { users, memes, templates, likes, nfts } from "@/lib/db/schema";
+import { users, memes, templates, likes } from "@/lib/db/schema";
 
 // 🔹 User Types
 export type User = InferSelectModel<typeof users>;
@@ -45,3 +45,21 @@ export type NFT = {
     price: string;
   };
 };
+
+export interface ListedNFT {
+  listingId: number;
+  price: number;
+  status: "listed" | "sold" | "cancelled";
+  listedAt: string | null;
+  nftId: number;
+  nftToken: string;
+  nftMetadata: {
+    name: string;
+    image: string;
+    price: number;
+    description: string;
+  };
+  sellerId: string;
+  sellerAddress: string;
+  sellerUsername: string;
+}

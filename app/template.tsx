@@ -12,7 +12,7 @@ export default async function template({
   return (
     <div>
       <Header address={address} />
-      {children}
+      <div className="mt-[2rem] max-w-[1060px] mx-10 lg:mx-auto pb-8">{children}</div>
     </div>
   );
 }

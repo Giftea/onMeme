@@ -8,6 +8,7 @@ import {
   text,
   jsonb,
   primaryKey,
+  unique,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
@@ -48,18 +49,22 @@ export const memes = pgTable("memes", {
 });
 
 // Likes Table
-export const likes = pgTable("likes", {
-  id: serial("id").primaryKey(),
-  memeId: integer("meme_id")
-    .references(() => memes.id)
-    .notNull(),
-  userId: varchar("user_id", { length: 42 })
-    .references(() => users.id)
-    .notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).default(
-    sql`CURRENT_TIMESTAMP`
-  ),
-});
+export const likes = pgTable(
+  "likes",
+  {
+    id: serial("id").primaryKey(),
+    listingId: integer("listing_id")
+      .references(() => listings.id, { onDelete: "cascade" })
+      .notNull(),
+    userId: varchar("user_id", { length: 42 })
+      .references(() => users.address)
+      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).default(
+      sql`CURRENT_TIMESTAMP`
+    ),
+  },
+  (table) => [unique("user_listing_unique").on(table.userId, table.listingId)]
+);
 
 // NFTs Table
 export const nfts = pgTable("nfts", {
@@ -124,7 +129,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   listings: many(listings),
 }));
 
-export const memesRelations = relations(memes, ({ one, many }) => ({
+export const memesRelations = relations(memes, ({ one }) => ({
   owner: one(users, {
     fields: [memes.ownerId],
     references: [users.id],
@@ -133,7 +138,6 @@ export const memesRelations = relations(memes, ({ one, many }) => ({
     fields: [memes.templateId],
     references: [templates.id],
   }),
-  likes: many(likes),
 }));
 
 export const templatesRelations = relations(templates, ({ many }) => ({
@@ -143,11 +147,11 @@ export const templatesRelations = relations(templates, ({ many }) => ({
 export const likesRelations = relations(likes, ({ one }) => ({
   user: one(users, {
     fields: [likes.userId],
-    references: [users.id],
+    references: [users.address],
   }),
-  meme: one(memes, {
-    fields: [likes.memeId],
-    references: [memes.id],
+  listing: one(listings, {
+    fields: [likes.listingId],
+    references: [listings.id],
   }),
 }));
 
@@ -157,6 +161,7 @@ export const nftsRelations = relations(nfts, ({ one, many }) => ({
     references: [users.address],
   }),
   listings: many(listings),
+  likes: many(likes),
 }));
 
 export const listingsRelations = relations(listings, ({ one }) => ({

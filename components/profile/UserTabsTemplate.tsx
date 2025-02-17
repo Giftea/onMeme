@@ -7,7 +7,7 @@ export default function UserTab({
   memes,
   nfts,
 }: {
-  memes: React.ReactNode;
+  memes?: React.ReactNode;
   nfts: React.ReactNode;
 }) {
   const searchParams = useSearchParams();
@@ -31,7 +31,7 @@ export default function UserTab({
       <Tabs
         value={activeTab}
         onValueChange={handleTabChange}
-        className="max-w-[1060px] mx-10 lg:mx-auto my-6"
+        className="  my-6"
       >
         <TabsList className="m-0 rounded-[0] bg-[transparent] p-0 h-auto">
           <TabsTrigger

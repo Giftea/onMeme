@@ -43,6 +43,12 @@ export async function getAllNFTs() {
   return await db.select().from(nfts);
 }
 
+// Get NFT by ID
+export async function getNFTByID(id: number) {
+  const nft = await db.select().from(nfts).where(eq(nfts.id, id));
+  return nft[0];
+}
+
 // Get NFTs owned by a specific user
 export async function getNFTsByOwner(owner: string) {
   return await db.select().from(nfts).where(eq(nfts.owner, owner));
@@ -50,7 +56,35 @@ export async function getNFTsByOwner(owner: string) {
 
 // Mint a new NFT
 export async function mintNFT(owner: string, metadata: object) {
-  return await db.insert(nfts).values({ token: '1', owner, metadata }).returning();
+  return await db
+    .insert(nfts)
+    .values({ token: "1", owner, metadata })
+    .returning();
+}
+
+// Get all likes for an nft
+export async function getLikesForListing(listingId: number) {
+  return await db.select().from(likes).where(eq(likes.listingId, listingId));
+}
+
+// Like an nft
+export async function likeListing(listingId: number, userId: string) {
+  // Check if the user has already liked the listing
+  const existingLike = await db
+    .select()
+    .from(likes)
+    .where(and(eq(likes.listingId, listingId), eq(likes.userId, userId)));
+
+  if (existingLike.length > 0) {
+    // If the like exists, delete it (unlike)
+    return await db
+      .delete(likes)
+      .where(and(eq(likes.listingId, listingId), eq(likes.userId, userId)))
+      .returning();
+  } else {
+    // If the like does not exist, insert a new like
+    return await db.insert(likes).values({ listingId, userId }).returning();
+  }
 }
 
 // Get all listings
@@ -60,7 +94,47 @@ export async function getAllListings() {
 
 // Get listings by seller
 export async function getListingsBySeller(seller: string) {
-  return await db.select().from(listings).where(eq(listings.seller, seller));
+  const result = await db
+    .select({
+      listingId: listings.id,
+      price: listings.price,
+      status: listings.status,
+      listedAt: listings.listedAt,
+      nftId: nfts.id,
+      nftToken: nfts.token,
+      nftMetadata: nfts.metadata,
+      sellerId: users.id,
+      sellerAddress: users.address,
+      sellerUsername: users.username,
+    })
+    .from(listings)
+    .innerJoin(nfts, eq(listings.nftId, nfts.id))
+    .innerJoin(users, eq(listings.seller, users.address))
+    .where(eq(listings.seller, seller));
+
+  return result;
+}
+
+export async function getListingByID(id: number) {
+  const result = await db
+    .select({
+      listingId: listings.id,
+      price: listings.price,
+      status: listings.status,
+      listedAt: listings.listedAt,
+      nftId: nfts.id,
+      nftToken: nfts.token,
+      nftMetadata: nfts.metadata,
+      sellerId: users.id,
+      sellerAddress: users.address,
+      sellerUsername: users.username,
+    })
+    .from(listings)
+    .innerJoin(nfts, eq(listings.nftId, nfts.id))
+    .innerJoin(users, eq(listings.seller, users.address))
+    .where(eq(listings.id, id));
+
+  return result.length > 0 ? result[0] : null;
 }
 
 // Create a new listing
@@ -87,6 +161,25 @@ export async function updateListingStatus(
     .returning();
 }
 
+export async function getMarketplaceListings() {
+  return await db
+    .select({
+      listingId: listings.id,
+      price: listings.price,
+      status: listings.status,
+      listedAt: listings.listedAt,
+      nftId: nfts.id,
+      nftToken: nfts.token,
+      nftMetadata: nfts.metadata,
+      sellerId: users.id,
+      sellerAddress: users.address,
+      sellerUsername: users.username,
+    })
+    .from(listings)
+    .innerJoin(nfts, eq(listings.nftId, nfts.id))
+    .innerJoin(users, eq(listings.seller, users.address));
+}
+
 // Get all memes
 export async function getAllMemes() {
   return await db.select().from(memes);
@@ -110,16 +203,6 @@ export async function createMeme(
     .returning();
 }
 
-// Get all likes for a meme
-export async function getLikesForMeme(memeId: number) {
-  return await db.select().from(likes).where(eq(likes.memeId, memeId));
-}
-
-// Like a meme
-export async function likeMeme(memeId: number, userId: string) {
-  return await db.insert(likes).values({ memeId, userId }).returning();
-}
-
 // Create a token
 export async function createToken(
   creatorAddress: string, // New parameter to check authorization
@@ -132,7 +215,10 @@ export async function createToken(
     throw new Error("Unauthorized: Only the project owner can create tokens");
   }
 
-  return await db.insert(tokens).values({ name, symbol, decimals, maxSupply }).returning();
+  return await db
+    .insert(tokens)
+    .values({ name, symbol, decimals, maxSupply })
+    .returning();
 }
 
 // Get the max supply of a token

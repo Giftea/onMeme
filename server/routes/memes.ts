@@ -4,8 +4,6 @@ import {
   getAllMemes,
   getMemesByOwner,
   createMeme,
-  getLikesForMeme,
-  likeMeme,
 } from "@/lib/queries/dbQueries";
 
 export const memeRouter = router({
@@ -38,19 +36,5 @@ export const memeRouter = router({
         input.imageUrl,
         input.isPublic
       );
-    }),
-
-  // Get all likes for a meme
-  getLikesForMeme: publicProcedure
-    .input(z.object({ memeId: z.number() }))
-    .query(async ({ input }) => {
-      return await getLikesForMeme(input.memeId);
-    }),
-
-  // Like a meme
-  likeMeme: publicProcedure
-    .input(z.object({ memeId: z.number(), userId: z.string().length(42) }))
-    .mutation(async ({ input }) => {
-      return await likeMeme(input.memeId, input.userId);
     }),
 });

@@ -1,12 +1,23 @@
 import { router, publicProcedure } from "@/server/trpc";
 import { z } from "zod";
-import { getAllNFTs, getNFTsByOwner, mintNFT } from "@/lib/queries/dbQueries";
+import {
+  getAllNFTs,
+  getNFTByID,
+  getNFTsByOwner,
+  mintNFT,
+} from "@/lib/queries/dbQueries";
 
 export const nftRouter = router({
   // Get all NFTs
   getAllNFTs: publicProcedure.query(async () => {
     return await getAllNFTs();
   }),
+
+  getNFTByID: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      return await getNFTByID(input.id);
+    }),
 
   // Get NFTs owned by a specific user
   getNFTsByOwner: publicProcedure

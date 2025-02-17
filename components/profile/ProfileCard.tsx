@@ -33,7 +33,6 @@ export default function ProfileCard({
     data: userProfile,
     isLoading,
     isSuccess,
-    isStale,
   } = trpc.user.fetchUser.useQuery({ address: String(initialAddress) });
 
   const { mutateAsync: handleCreateUser } = trpc.user.createUser.useMutation({
@@ -43,11 +42,6 @@ export default function ProfileCard({
     },
   });
 
-  async function createUser() {
-    if (!initialAddress) return;
-    await handleCreateUser({ address: initialAddress });
-  }
-
   useEffect(() => {
     if (
       initialAddress &&
@@ -55,13 +49,17 @@ export default function ProfileCard({
       !isLoading &&
       !isSuccess
     ) {
+      const createUser = async () => {
+        await handleCreateUser({ address: initialAddress });
+      };
+
       createUser();
     }
-  }, [initialAddress, isLoading, isSuccess, userProfile, createUser]);
+  }, [initialAddress, isLoading, isSuccess, userProfile, handleCreateUser]);
 
   useEffect(() => {
     setUser(userProfile);
-  }, [initialAddress, isLoading, isSuccess, userProfile, isStale]);
+  }, [initialAddress, isLoading, isSuccess, userProfile]);
 
   const avatar = useMemo(() => {
     return createAvatar(croodles, {
@@ -71,14 +69,14 @@ export default function ProfileCard({
   }, [initialAddress]);
 
   return (
-    <Card className="max-w-[1060px] mx-10 lg:mx-auto p-6 my-6 flex justify-between items-center">
+    <Card className="  p-6 my-6 flex justify-between items-center">
       <div className="flex space-x-4 items-center">
         <Image
           width={100}
           height={100}
           src={avatar}
           alt="Avatar"
-          className="border-4 bg-muted-foreground p-2 rounded-full"
+          className="border-4 border-secondary bg-muted-foreground p-2 rounded-full"
         />
         <div>
           {user && <p className="text-lg font-semibold">{user.username} </p>}
