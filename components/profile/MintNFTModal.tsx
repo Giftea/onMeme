@@ -92,7 +92,7 @@ export default function MintNFTModal({
           <Image
             src={meme ? meme?.imageUrl : ""}
             alt="meme"
-            className="rounded-lg"
+             className="rounded-lg max-h-60 object-cover object-top"
             width={400}
             height={400}
           />

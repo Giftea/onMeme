@@ -83,7 +83,7 @@ export default function ListNFTModal({ nft }: { nft?: NFT }) {
             <Image
               src={nft?.metadata?.image}
               alt="meme"
-              className="rounded-lg"
+               className="rounded-lg max-h-60 object-cover object-top"
               width={400}
               height={400}
             />

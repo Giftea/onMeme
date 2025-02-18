@@ -40,17 +40,25 @@ export default function MemeGenerator() {
   };
 
   return (
-    <Card className="  p-6 my-6">
+    <Card className="p-6 my-6">
       <h1 className="text-3xl font-bold mb-4">Meme Generator</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-14">
         <div>
           <ImageUploader onImageUpload={handleImageUpload} />
-          <button
-            onClick={handleAddText}
-            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Add Text
-          </button>
+          <div className="flex items-center gap-4 mt-5">
+            <button
+              onClick={handleAddText}
+              className=" px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Add Text
+            </button>
+            <button
+              onClick={handleExport}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              Export Meme
+            </button>
+          </div>
           {texts.map((text) => (
             <TextInput
               key={text.id}
@@ -59,14 +67,8 @@ export default function MemeGenerator() {
               onUpdateText={handleUpdateText}
             />
           ))}
-          <button
-            onClick={handleExport}
-            className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            Export Meme
-          </button>
         </div>
-        <div>
+        <div className="h-full">
           <MemePreview
             ref={memePreviewRef}
             backgroundImage={backgroundImage}

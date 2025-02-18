@@ -25,6 +25,12 @@ export default function Header({ address }: { address: string | null }) {
   //   }
   // }, [theme, systemTheme]);
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   const { data } = trpc.token.getBalance.useQuery({
     address: String(address),
     tokenId: 1,
@@ -37,7 +43,7 @@ export default function Header({ address }: { address: string | null }) {
   }, [data]);
 
   return (
-    <header className="bg-card p-4 px-10">
+    <header className="bg-card p-4 px-5 sm:px-10">
       <div className="flex items-center justify-between mx-auto max-w-[1060px]">
         {/* {theme === "dark" && (
           <Link href={"/"}>
@@ -53,18 +59,35 @@ export default function Header({ address }: { address: string | null }) {
           />
         )} */}
         <Link href={"/"}>
-          <Image src="/images/logo.svg" alt="Logo" width={140} height={140} />
+          <Image src="/images/logo.svg" alt="Logo" className="w-20 sm:w-36" width={140} height={140} />
         </Link>
-        <div className="space-x-3">
+        
+        <div className="hidden md:flex space-x-3">
           {navLinks.map((item, index) => (
             <NavLinks key={index} link={item.link} name={item.name} />
           ))}
         </div>
+        {/* Mobile Menu (Dropdown) */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden absolute top-16 left-0 bg-gray-900 w-full shadow-lg block  p-6 space-y-6 text-center ">
+            {navLinks.map((item, index) => (
+              <div className="">
+              <NavLinks key={index} link={item.link} name={item.name} />
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* <div className="flex items-center space-x-2">
           <Switch id="theme" onCheckedChange={() => toggleTheme()} />
           <label htmlFor="theme">Theme</label>
         </div> */}
         <div>Balance: {balance} MEME </div>
+        <div className="md:hidden">
+          <button onClick={toggleMobileMenu} className="text-2xl">
+            ☰
+          </button>
+        </div>
       </div>
     </header>
   );
@@ -75,7 +98,7 @@ function NavLinks({ link, name }: { name: string; link: string }) {
 
   return (
     <Link
-      className={`${
+      className={`${ 
         pathName === link.split("?")[0]
           ? "bg-secondary text-black px-4 py-2 rounded"
           : ""

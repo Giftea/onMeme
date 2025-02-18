@@ -104,7 +104,7 @@ const MemePreview = forwardRef<{ exportMeme: () => void }, MemePreviewProps>(
     }
 
     return (
-      <div className="relative">
+      <div className="relative h-full">
         <canvas ref={canvasRef} onClick={handleCanvasClick} className="max-w-full h-auto border border-gray-300" />
         {!isImageLoaded && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">

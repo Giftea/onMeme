@@ -69,7 +69,7 @@ export default function ProfileCard({
   }, [initialAddress]);
 
   return (
-    <Card className="  p-6 my-6 flex justify-between items-center">
+    <Card className="p-6 my-6 flex justify-between items-center">
       <div className="flex space-x-4 items-center">
         <Image
           width={100}
@@ -79,23 +79,42 @@ export default function ProfileCard({
           className="border-4 border-secondary bg-muted-foreground p-2 rounded-full"
         />
         <div>
-          {user && <p className="text-lg font-semibold">{user.username} </p>}
-          {initialAddress && (
-            <p className="text-lg">{shortenAddress(String(initialAddress))}</p>
-          )}
+          <div>
+            {user && <p className="text-lg font-semibold">{user.username} </p>}
+            {initialAddress && (
+              <p className="text-lg">
+                {shortenAddress(String(initialAddress))}
+              </p>
+            )}
+          </div>
+          <div className="flex md:hidden">
+            {isProfilePage ? (
+              user && <EditUsernameModal userName={user?.username} />
+            ) : (
+              <Button
+                onClick={() => router.push("/profile")}
+                className="text-lg"
+                variant={"link"}
+              >
+                View Profile
+              </Button>
+            )}
+          </div>
         </div>
       </div>
-      {isProfilePage ? (
-        user && <EditUsernameModal userName={user?.username} />
-      ) : (
-        <Button
-          onClick={() => router.push("/profile")}
-          className="text-lg"
-          variant={"link"}
-        >
-          View Profile
-        </Button>
-      )}
+      <div className="hidden md:flex">
+        {isProfilePage ? (
+          user && <EditUsernameModal userName={user?.username} />
+        ) : (
+          <Button
+            onClick={() => router.push("/profile")}
+            className="text-lg"
+            variant={"link"}
+          >
+            View Profile
+          </Button>
+        )}
+      </div>
     </Card>
   );
 }

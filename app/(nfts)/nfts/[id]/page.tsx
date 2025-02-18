@@ -66,7 +66,7 @@ export default function Page() {
             <LikeNFT nftId={nft.listingId} userId={user?.address} />
             <Image
               src={nft?.nftMetadata.image}
-              className="rounded-lg"
+              className="rounded-lg max-h-60 object-cover object-top"
               alt={nft?.nftMetadata.name}
               width={500}
               height={500}

@@ -31,9 +31,9 @@ export default function UserTab({
       <Tabs
         value={activeTab}
         onValueChange={handleTabChange}
-        className="  my-6"
+        className="my-6"
       >
-        <TabsList className="m-0 rounded-[0] bg-[transparent] p-0 h-auto">
+        <TabsList className="mb-0 rounded-[0] bg-[transparent] p-0 h-auto ">
           <TabsTrigger
             className="text-lg px-6 data-[state=active]:bg-card data-[state=active]:text-primary rounded-[0px] py-[1rem] rounded-t-xl"
             value="memes"
