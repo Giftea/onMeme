@@ -31,7 +31,7 @@ export default function UserTab({
       <Tabs
         value={activeTab}
         onValueChange={handleTabChange}
-        className="  my-6"
+        className="my-6"
       >
         <TabsList className="m-0 rounded-[0] bg-[transparent] p-0 h-auto">
           <TabsTrigger

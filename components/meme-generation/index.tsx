@@ -1,80 +1,230 @@
 "use client";
+import React, { useState, useEffect, useRef } from "react";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardTitle } from "../ui/card";
+import { Input } from "../ui/input";
+import Image from "next/image";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useRouter, useSearchParams } from "next/navigation";
+import Draggable from "react-draggable";
+import html2canvas from "html2canvas";
+import { convertImageToBase64 } from "@/lib/utils";
+import { fabric } from "fabric";
 
-import { Card } from "@/components/ui/card";
-import { useState, useRef } from "react";
-import TextInput from "@/components/meme-generation/TextInput";
-import MemePreview from "@/components/meme-generation/MemePreview";
-import ImageUploader from "@/components/meme-generation/ImageUploader";
+type Meme = {
+  id: string;
+  name: string;
+  url: string;
+  width: number;
+  height: number;
+};
 
-const PLACEHOLDER_IMAGE = "/uploads/placeholder.jpg";
+type Caption = {
+  id: string;
+  text: string;
+  x: number;
+  y: number;
+};
 
 export default function MemeGenerator() {
-  const [backgroundImage, setBackgroundImage] = useState(PLACEHOLDER_IMAGE);
-  const [texts, setTexts] = useState<
-    { id: number; text: string; x: number; y: number }[]
-  >([]);
-  const memePreviewRef = useRef<{ exportMeme: () => void } | null>(null);
+  const [memes, setMemes] = useState<Meme[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [captions, setCaptions] = useState<Caption[]>([
+    { id: "1", text: "", x: 50, y: 50 },
+  ]);
+  const [captionInputValues, setCaptionInputValues] = useState<{
+    [key: string]: string;
+  }>({});
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const nodeRef = useRef(null);
 
-  const handleImageUpload = (imageUrl: string) => {
-    setBackgroundImage(imageUrl);
+  const selectedMemeId = searchParams.get("meme");
+  const selectedMeme =
+    memes.find((meme) => {
+      return meme.id === selectedMemeId;
+    }) || null;
+  const canvasRef = useRef<fabric.Canvas | null>(null);
+  const [fabricCanvas, setFabricCanvas] = useState<fabric.Canvas | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  const initializeCanvas = (imageUrl: string) => {
+    const canvas = new fabric.Canvas("memeCanvas", {
+      width: 500,
+      height: selectedMeme?.height || 500,
+      selection: true,
+    });
+
+    fabric.Image.fromURL(imageUrl, (img) => {
+      img.scaleToWidth(500);
+      canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+    });
+    setFabricCanvas(canvas);
+    canvasRef.current = canvas;
   };
 
-  const handleAddText = () => {
-    setTexts([...texts, { id: Date.now(), text: "New Text", x: 50, y: 50 }]);
+  useEffect(() => {
+    if (!selectedMeme) return;
+    convertImageToBase64(selectedMeme.url, function (base64) {
+      setImageUrl("data:image/jpeg;base64," + base64);
+      return "data:image/jpeg;base64," + base64;
+    });
+  }, [selectedMeme]);
+
+  useEffect(() => {
+    if (!imageUrl) return;
+    initializeCanvas(imageUrl);
+  }, [imageUrl]);
+
+  useEffect(() => {
+    const fetchMemes = async () => {
+      try {
+        const response = await fetch("/api/memes");
+        const data = await response.json();
+        setMemes(data);
+      } catch (error) {
+        console.error("Error fetching memes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMemes();
+  }, []);
+
+  const handleMemeClick = (meme: Meme) => {
+    router.push(`?meme=${meme.id}`, { scroll: false });
   };
 
-  const handleUpdateText = (id: number, newText: string) => {
-    setTexts(
-      texts.map((text) => (text.id === id ? { ...text, text: newText } : text))
-    );
+  const handleAddCaption = () => {
+    const newCaptionId = (captions.length + 1).toString();
+    setCaptions((prev) => [
+      ...prev,
+      { id: newCaptionId, text: "", x: 50, y: -3 },
+    ]);
   };
 
-  const handleMoveText = (id: number, x: number, y: number) => {
-    setTexts(texts.map((text) => (text.id === id ? { ...text, x, y } : text)));
+  const handleCaptionChange = (id: string, text: string) => {
+    setCaptionInputValues((prev) => ({
+      ...prev,
+      [id]: text,
+    }));
   };
 
-  const handleExport = () => {
-    if (memePreviewRef.current) {
-      memePreviewRef.current.exportMeme();
+  const handleDownloadMeme = async () => {
+    if (!fabricCanvas) return;
+
+    const canvasElement = document.getElementById("memeContainer");
+    if (!canvasElement) return;
+
+    try {
+      const canvasImage = await html2canvas(canvasElement);
+      const link = document.createElement("a");
+      link.href = canvasImage.toDataURL("image/png");
+      link.download = "meme.png";
+      link.click();
+    } catch (error) {
+      const dataURL = fabricCanvas.toDataURL({
+        format: "png",
+        quality: 1,
+      });
+
+      const link = document.createElement("a");
+      link.href = dataURL;
+      link.download = "meme.png";
+      link.click();
     }
   };
 
   return (
-    <Card className="  p-6 my-6">
-      <h1 className="text-3xl font-bold mb-4">Meme Generator</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <ImageUploader onImageUpload={handleImageUpload} />
-          <button
-            onClick={handleAddText}
-            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Add Text
-          </button>
-          {texts.map((text) => (
-            <TextInput
-              key={text.id}
-              id={text.id}
-              text={text.text}
-              onUpdateText={handleUpdateText}
-            />
+    <Card className="p-6 my-6">
+      <CardTitle className="text-2xl">Meme Generator</CardTitle>
+
+      <CardContent className="grid grid-cols-2 gap-x-4 p-0 mt-5">
+        <div id="memeContainer" className="relative mt-6">
+          <canvas id="memeCanvas" className="border shadow-lg" />
+          {captions.map((caption) => (
+            <Draggable
+              nodeRef={nodeRef}
+              key={caption.id}
+              defaultPosition={{ x: caption.x, y: caption.y }}
+              onStop={(e, data) => {
+                const updatedCaptions = captions.map((cap) =>
+                  cap.id === caption.id ? { ...cap, x: data.x, y: data.y } : cap
+                );
+                setCaptions(updatedCaptions);
+              }}
+            >
+              <div ref={nodeRef} className="absolute cursor-pointer">
+                <span className="bg-white text-black text-3xl p-2">
+                  {captionInputValues[caption.id] || caption.text}
+                </span>
+              </div>
+            </Draggable>
           ))}
-          <button
-            onClick={handleExport}
-            className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            Export Meme
-          </button>
         </div>
+
         <div>
-          <MemePreview
-            ref={memePreviewRef}
-            backgroundImage={backgroundImage}
-            texts={texts}
-            onMoveText={handleMoveText}
-          />
+          <Button variant="outline">Upload new template</Button>
+          <p className="text-lg font-semibold border-b my-4">
+            {selectedMeme ? selectedMeme.name : "Select a meme template"}
+          </p>
+
+          {/* Meme selection area */}
+          <ScrollArea className="w-120 whitespace-nowrap rounded-md border">
+            {loading ? (
+              <p>Loading memes...</p>
+            ) : (
+              <div className="flex w-max space-x-4 p-4">
+                {memes.map((meme) => (
+                  <figure
+                    key={meme.id}
+                    className={`border cursor-pointer rounded-lg p-2 transition-all ${
+                      selectedMemeId === meme.id && "border-primary"
+                    }`}
+                    onClick={() => handleMemeClick(meme)}
+                  >
+                    <div className="overflow-hidden">
+                      <Image
+                        className="aspect-[3/4] h-fit w-fit object-cover"
+                        width={50}
+                        height={150}
+                        src={meme.url}
+                        alt={meme.name}
+                      />
+                    </div>
+                  </figure>
+                ))}
+              </div>
+            )}
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+
+          {/* Meme caption input */}
+          <div className="border rounded-lg p-4 my-3 space-y-2">
+            <p>Add Meme Captions</p>
+            {captions.map((caption) => (
+              <Input
+                key={caption.id}
+                value={captionInputValues[caption.id] || caption.text}
+                onChange={(e) =>
+                  handleCaptionChange(caption.id, e.target.value)
+                }
+                placeholder="Enter Caption Text"
+              />
+            ))}
+            <div className="flex justify-end">
+              <Button variant={"outline"} onClick={handleAddCaption}>
+                Add Caption
+              </Button>
+            </div>
+          </div>
+
+          <Button onClick={handleDownloadMeme} className="w-full font-semibold">
+            Generate Meme
+          </Button>
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 }

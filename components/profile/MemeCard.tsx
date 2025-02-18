@@ -37,7 +37,7 @@ export default function NFTCard({
             <Image
               src={nft?.metadata?.image}
               alt="meme"
-              className="rounded-lg"
+              className="rounded-lg h-[300px]"
               width={300}
               height={300}
             />
