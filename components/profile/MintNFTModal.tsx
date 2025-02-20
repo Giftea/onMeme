@@ -50,7 +50,7 @@ export default function MintNFTModal({
   const { mutateAsync: mintNFT, isPending } = trpc.nft.mintNFT.useMutation({
     onSuccess: () => {
       toast({
-        variant: "success",
+        variant: "default",
         title: "NFT Successfully Minted! 😎",
       });
       trpcUtils.nft.getNFTsByOwner.invalidate();

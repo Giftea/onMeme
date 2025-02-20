@@ -71,9 +71,7 @@ export default function Header({ address }: { address: string | null }) {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-16 left-0 bg-gray-900 w-full shadow-lg block  p-6 space-y-6 text-center ">
             {navLinks.map((item, index) => (
-              <div className="">
               <NavLinks key={index} link={item.link} name={item.name} />
-              </div>
             ))}
           </div>
         )}

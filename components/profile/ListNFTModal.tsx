@@ -44,7 +44,7 @@ export default function ListNFTModal({ nft }: { nft?: NFT }) {
     trpc.listing.createListing.useMutation({
       onSuccess: () => {
         toast({
-          variant: "success",
+          variant: "default",
           title: "NFT Successfully Listed! 😎",
         });
         trpcUtils.nft.getNFTsByOwner.invalidate();
