@@ -4,7 +4,7 @@ import { Skeleton } from "../ui/skeleton";
 interface Props {
   enabled?: boolean;
   children?: ReactElement | ReactElement[];
-  skeleton?: JSXElementConstructor<any>;
+  skeleton?: JSXElementConstructor<unknown>;
 }
 
 export default function LoadSkeleton({
