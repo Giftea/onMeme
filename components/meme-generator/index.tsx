@@ -357,23 +357,6 @@ export default function MemeGeneratorX({
     }
   };
 
-  // FETCH MEMES
-  useEffect(() => {
-    const fetchMemes = async () => {
-      try {
-        const response = await fetch("/api/memes");
-        const data = await response.json();
-        setMemes(data);
-      } catch (error) {
-        console.error("Error fetching memes:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMemes();
-  }, []);
-
   // Update preview whenever text elements change
   useEffect(() => {
     if (image) {
