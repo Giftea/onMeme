@@ -72,7 +72,6 @@ export const keepTextInBounds = (
   image: HTMLImageElement
 ): { x: number; y: number } => {
   if (!image) return { x, y };
-console.log('boundedX', 'boundedY');
 
   const { width, height } = getTextDimensions(
     text,

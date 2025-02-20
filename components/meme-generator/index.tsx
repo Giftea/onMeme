@@ -5,13 +5,11 @@ import { Card, CardContent, CardTitle } from "../ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { preventDefaults } from "@/utils/prevent-default.utils";
 import { convertImageToBase64 } from "@/lib/utils";
-// import { trpc } from "@/lib/trpc.utils";
 import UploadTemplate from "../composed/upload-template";
 import Canvas from "../composed/canvas";
 import MemeSelection from "../composed/meme-selection";
 import MemeCaptionInput from "../composed/meme-caption-input";
 import Status from "../composed/status";
-import { downloadMeme } from "@/utils/download.utils";
 import { handleTextDragMove } from "@/utils/text.utils";
 import {
   generateCanvas,
@@ -19,8 +17,14 @@ import {
 } from "@/utils/generate-canvas.utils.";
 import { config } from "@/config/font.config";
 import { Meme, StatusMessage, TextElement } from "@/lib/types/index";
+import { trpc } from "@/lib/trpc.utils";
+import { toast } from "@/hooks/use-toast";
 
-export default function MemeGeneratorX() {
+export default function MemeGeneratorX({
+  address,
+}: {
+  address: string | null;
+}) {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [selectedTextId, setSelectedTextId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -35,6 +39,7 @@ export default function MemeGeneratorX() {
 
   const searchParams = useSearchParams();
   const router = useRouter();
+  const trpcUtils = trpc.useUtils();
 
   const selectedMemeId = searchParams.get("meme");
   const selectedMeme =
@@ -65,6 +70,22 @@ export default function MemeGeneratorX() {
 
   // const { data: mx } = trpc.meme.fetchMemes.useQuery();
   // console.log("data", mx);
+
+  const { mutateAsync: createMeme } = trpc.meme.createMeme.useMutation({
+    onSuccess: () => {
+      trpcUtils.meme.getMemesByOwner.invalidate();
+      toast({
+        variant: "success",
+        title: "Meme Successfully Generated! 😎",
+      });
+    },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Failed to generate meme! 😞",
+      });
+    },
+  });
 
   useEffect(() => {
     function getSelectedMeme() {
@@ -276,7 +297,7 @@ export default function MemeGeneratorX() {
   };
 
   // Main function to generate the final meme // generateCanvas
-  const generateMeme = () => {
+  const generateMeme = async () => {
     if (!image || !canvasRef.current) {
       // Todo: Replace the status component with a toast to display status messages
       setStatus({ message: "Please upload an image first", type: "error" });
@@ -289,6 +310,7 @@ export default function MemeGeneratorX() {
     const ctx = canvas.getContext("2d");
 
     generateCanvas(canvas, image, ctx, textElements, selectedTextId);
+
     if (!ctx) {
       setStatus({ message: "Canvas context not available", type: "error" });
       setIsLoading(false);
@@ -298,12 +320,39 @@ export default function MemeGeneratorX() {
     // Convert canvas to URL
     try {
       const url = canvas.toDataURL("image/png");
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "meme.png";
+      link.click();
+
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const file = new File([blob], "meme.png", { type: "image/png" });
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const uploadResponse = await fetch("/api/files", {
+        method: "POST",
+        body: formData,
+      });
+
+      const ipfsUrl = await uploadResponse.json();
+
+      if (ipfsUrl && address) {
+        await createMeme({
+          ownerAddress: address,
+          imageUrl: ipfsUrl,
+          templateId: String(selectedMemeId),
+        });
+      }
+    } catch (e) {
       // Todo: Replace the status component with a toast to display status messages
-      setStatus({ message: "Meme generated successfully", type: "success" });
-      downloadMeme(url);
-    } catch (err: unknown) {
-      // Todo: Replace the status component with a toast to display status messages
-      setStatus({ message: `Error generating meme: ${err}`, type: "error" });
+      toast({
+        variant: "destructive",
+        title: "Failed to upload to IPFS meme! 😞",
+      });
     } finally {
       setIsLoading(false);
     }
