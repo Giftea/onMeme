@@ -25,6 +25,27 @@ export default function MemeGeneratorX({
 }: {
   address: string | null;
 }) {
+  const trpcUtils = trpc.useUtils();
+  const { data: memeData } = trpc.meme.fetchMemes.useQuery();
+  const { mutateAsync: createMeme, isPending } =
+    trpc.meme.createMeme.useMutation({
+      onSuccess: () => {
+        trpcUtils.meme.getMemesByOwner.invalidate();
+        toast({
+          variant: "success",
+          title: "Meme Successfully Generated! 😎",
+        });
+        setIsLoading(false);
+      },
+      onError: () => {
+        toast({
+          variant: "destructive",
+          title: "Failed to generate meme! 😞",
+        });
+      },
+    });
+  const memes = memeData?.data?.memes ?? [];
+
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [selectedTextId, setSelectedTextId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,13 +54,11 @@ export default function MemeGeneratorX({
     type: "",
   });
 
-  const [memes, setMemes] = useState<Meme[]>([]);
   const [loading, setLoading] = useState(true);
   const [showTemplate, setShowTemplate] = useState(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
-  const trpcUtils = trpc.useUtils();
 
   const selectedMemeId = searchParams.get("meme");
   const selectedMeme =
@@ -67,25 +86,6 @@ export default function MemeGeneratorX({
   const dragStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
-
-  // const { data: mx } = trpc.meme.fetchMemes.useQuery();
-  // console.log("data", mx);
-
-  const { mutateAsync: createMeme } = trpc.meme.createMeme.useMutation({
-    onSuccess: () => {
-      trpcUtils.meme.getMemesByOwner.invalidate();
-      toast({
-        variant: "success",
-        title: "Meme Successfully Generated! 😎",
-      });
-    },
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "Failed to generate meme! 😞",
-      });
-    },
-  });
 
   useEffect(() => {
     function getSelectedMeme() {
@@ -299,8 +299,10 @@ export default function MemeGeneratorX({
   // Main function to generate the final meme // generateCanvas
   const generateMeme = async () => {
     if (!image || !canvasRef.current) {
-      // Todo: Replace the status component with a toast to display status messages
-      setStatus({ message: "Please upload an image first", type: "error" });
+      toast({
+        variant: "destructive",
+        title: `Please upload an image first! `,
+      });
       return;
     }
 
@@ -348,13 +350,10 @@ export default function MemeGeneratorX({
         });
       }
     } catch (e) {
-      // Todo: Replace the status component with a toast to display status messages
       toast({
         variant: "destructive",
-        title: "Failed to upload to IPFS meme! 😞",
+        title: `Failed to upload to IPFS meme! 😞 ${e}`,
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -482,7 +481,7 @@ export default function MemeGeneratorX({
 
           <Button
             onClick={generateMeme}
-            disabled={isLoading}
+            disabled={isLoading || isPending}
             className="w-full font-semibold"
           >
             Generate Meme
