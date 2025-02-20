@@ -26,7 +26,7 @@ export default function MemeGeneratorX({
   address: string | null;
 }) {
   const trpcUtils = trpc.useUtils();
-  const { data: memeData } = trpc.meme.fetchMemes.useQuery();
+  const { data: memeData, isLoading: loading } = trpc.meme.fetchMemes.useQuery();
   const { mutateAsync: createMeme, isPending } =
     trpc.meme.createMeme.useMutation({
       onSuccess: () => {
@@ -54,7 +54,6 @@ export default function MemeGeneratorX({
     type: "",
   });
 
-  const [loading, setLoading] = useState(true);
   const [showTemplate, setShowTemplate] = useState(false);
 
   const searchParams = useSearchParams();
