@@ -1,4 +1,5 @@
-import MemeGenerator from "@/components/meme-generation";
+// import MemeGenerator from "@/components/meme-generation";
+import MemeGeneratorX from "@/components/meme-generator";
 import ProfileCard from "@/components/profile/ProfileCard";
 import TopMemes from "@/components/TopMemes";
 import TopTemplates from "@/components/TopTemplates";
@@ -16,7 +17,7 @@ export default async function Home() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProfileCard initialAddress={address} />
-      <MemeGenerator />
+      <MemeGeneratorX />
       <TopTemplates />
       <TopMemes />
     </HydrationBoundary>
