@@ -8,21 +8,11 @@ import { NFT } from "@/lib/types";
 
 export default function Page({ address }: { address: string | null }) {
   const [nfts, setNFTs] = useState<NFT[]>();
-  const [userId, setUserId] = useState<string | null>(null);
-  const { data: userProfile, isLoading } = trpc.user.fetchUser.useQuery({
-    address: String(address),
-  });
 
   const { data: nftsData, isLoading: isNFTsLoading } =
     trpc.nft.getNFTsByOwner.useQuery({
       owner: String(address),
     });
-
-  useEffect(() => {
-    if (userProfile) {
-      setUserId(userProfile?.id);
-    }
-  }, [isLoading, userProfile]);
 
   useEffect(() => {
     if (nftsData) {
@@ -33,10 +23,8 @@ export default function Page({ address }: { address: string | null }) {
   return (
     <>
       <UserMemesTemplate
-        nfts={
-          <UserNFTs isLoading={isNFTsLoading} nfts={nfts} />
-        }
-        memes={<UserMemes address={address} userId={userId} />}
+        nfts={<UserNFTs isLoading={isNFTsLoading} nfts={nfts} />}
+        memes={<UserMemes address={address} />}
       />
     </>
   );

@@ -16,7 +16,7 @@ export default async function Home() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProfileCard initialAddress={address} />
-      <MemeGenerator />
+      <MemeGenerator address={address} />
       <TopTemplates />
       <TopMemes />
     </HydrationBoundary>

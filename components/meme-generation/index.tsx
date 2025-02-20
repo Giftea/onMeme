@@ -10,6 +10,8 @@ import Draggable from "react-draggable";
 import html2canvas from "html2canvas";
 import { convertImageToBase64 } from "@/lib/utils";
 import { fabric } from "fabric";
+import { trpc } from "@/lib/trpc.utils";
+import { useToast } from "@/hooks/use-toast";
 
 type Meme = {
   id: string;
@@ -26,18 +28,20 @@ type Caption = {
   y: number;
 };
 
-export default function MemeGenerator() {
+export default function MemeGenerator({ address }: { address: string | null }) {
   const [memes, setMemes] = useState<Meme[]>([]);
   const [loading, setLoading] = useState(true);
   const [captions, setCaptions] = useState<Caption[]>([
     { id: "1", text: "", x: 50, y: 50 },
   ]);
+  const { toast } = useToast();
   const [captionInputValues, setCaptionInputValues] = useState<{
     [key: string]: string;
   }>({});
   const searchParams = useSearchParams();
   const router = useRouter();
   const nodeRef = useRef(null);
+  const trpcUtils = trpc.useUtils();
 
   const selectedMemeId = searchParams.get("meme");
   const selectedMeme =
@@ -111,6 +115,19 @@ export default function MemeGenerator() {
     }));
   };
 
+  const { mutateAsync: createMeme } = trpc.meme.createMeme.useMutation({
+    onSuccess: () => {
+      trpcUtils.meme.getMemesByOwner.invalidate();
+      toast({
+        variant: "success",
+        title: "Meme Successfully Generated! 😎",
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   const handleDownloadMeme = async () => {
     if (!fabricCanvas) return;
 
@@ -119,20 +136,36 @@ export default function MemeGenerator() {
 
     try {
       const canvasImage = await html2canvas(canvasElement);
-      const link = document.createElement("a");
-      link.href = canvasImage.toDataURL("image/png");
-      link.download = "meme.png";
-      link.click();
-    } catch (error) {
-      const dataURL = fabricCanvas.toDataURL({
-        format: "png",
-        quality: 1,
-      });
+      const dataUrl = canvasImage.toDataURL("image/png");
 
       const link = document.createElement("a");
-      link.href = dataURL;
+      link.href = dataUrl;
       link.download = "meme.png";
       link.click();
+
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      const file = new File([blob], "meme.png", { type: "image/png" });
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const uploadResponse = await fetch("/api/files", {
+        method: "POST",
+        body: formData,
+      });
+
+      const ipfsUrl = await uploadResponse.json();
+
+      if (ipfsUrl && address) {
+        await createMeme({
+          ownerAddress: address,
+          imageUrl: ipfsUrl,
+          templateId: String(selectedMemeId),
+        });
+      }
+    } catch (error) {
+      console.error("Error generating/uploading meme:", error);
     }
   };
 

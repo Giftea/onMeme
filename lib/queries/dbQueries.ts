@@ -186,20 +186,20 @@ export async function getAllMemes() {
 }
 
 // Get memes by user
-export async function getMemesByOwner(ownerId: string) {
-  return await db.select().from(memes).where(eq(memes.ownerId, ownerId));
+export async function getMemesByOwner(ownerAddress: string) {
+  return await db.select().from(memes).where(eq(memes.ownerAddress, ownerAddress));
 }
 
 // Create a new meme
 export async function createMeme(
-  ownerId: string,
-  templateId: number,
+  ownerAddress: string,
+  templateId: string,
   imageUrl: string,
   isPublic = true
 ) {
   return await db
     .insert(memes)
-    .values({ ownerId, templateId, imageUrl, isPublic })
+    .values({ ownerAddress, templateId, imageUrl, isPublic })
     .returning();
 }
 

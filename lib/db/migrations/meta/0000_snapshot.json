@@ -1,9 +1,76 @@
 {
-  "id": "d274737c-d224-4157-a053-639bd6db94dc",
+  "id": "e5158028-4147-46aa-acbd-43d9a875cc48",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.balances": {
+      "name": "balances",
+      "schema": "",
+      "columns": {
+        "address": {
+          "name": "address",
+          "type": "varchar(42)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token_id": {
+          "name": "token_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "balance": {
+          "name": "balance",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "balances_address_users_address_fk": {
+          "name": "balances_address_users_address_fk",
+          "tableFrom": "balances",
+          "tableTo": "users",
+          "columnsFrom": [
+            "address"
+          ],
+          "columnsTo": [
+            "address"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "balances_token_id_tokens_id_fk": {
+          "name": "balances_token_id_tokens_id_fk",
+          "tableFrom": "balances",
+          "tableTo": "tokens",
+          "columnsFrom": [
+            "token_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "balances_address_token_id_pk": {
+          "name": "balances_address_token_id_pk",
+          "columns": [
+            "address",
+            "token_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.likes": {
       "name": "likes",
       "schema": "",
@@ -14,8 +81,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "meme_id": {
-          "name": "meme_id",
+        "listing_id": {
+          "name": "listing_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -36,35 +103,44 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "likes_meme_id_memes_id_fk": {
-          "name": "likes_meme_id_memes_id_fk",
+        "likes_listing_id_listings_id_fk": {
+          "name": "likes_listing_id_listings_id_fk",
           "tableFrom": "likes",
-          "tableTo": "memes",
+          "tableTo": "listings",
           "columnsFrom": [
-            "meme_id"
+            "listing_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "likes_user_id_users_id_fk": {
-          "name": "likes_user_id_users_id_fk",
+        "likes_user_id_users_address_fk": {
+          "name": "likes_user_id_users_address_fk",
           "tableFrom": "likes",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
           "columnsTo": [
-            "id"
+            "address"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "user_listing_unique": {
+          "name": "user_listing_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id",
+            "listing_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -156,17 +232,17 @@
           "primaryKey": true,
           "notNull": true
         },
-        "owner_id": {
-          "name": "owner_id",
+        "owner_address": {
+          "name": "owner_address",
           "type": "varchar(42)",
           "primaryKey": false,
           "notNull": true
         },
         "template_id": {
           "name": "template_id",
-          "type": "integer",
+          "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "image_url": {
           "name": "image_url",
@@ -191,30 +267,17 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "memes_owner_id_users_id_fk": {
-          "name": "memes_owner_id_users_id_fk",
+        "memes_owner_address_users_address_fk": {
+          "name": "memes_owner_address_users_address_fk",
           "tableFrom": "memes",
           "tableTo": "users",
           "columnsFrom": [
-            "owner_id"
+            "owner_address"
           ],
           "columnsTo": [
-            "id"
+            "address"
           ],
           "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "memes_template_id_templates_id_fk": {
-          "name": "memes_template_id_templates_id_fk",
-          "tableFrom": "memes",
-          "tableTo": "templates",
-          "columnsFrom": [
-            "template_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -236,7 +299,7 @@
         },
         "token": {
           "name": "token",
-          "type": "varchar(66)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -277,21 +340,13 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "nfts_token_unique": {
-          "name": "nfts_token_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.templates": {
-      "name": "templates",
+    "public.tokens": {
+      "name": "tokens",
       "schema": "",
       "columns": {
         "id": {
@@ -306,18 +361,23 @@
           "primaryKey": false,
           "notNull": true
         },
-        "image_url": {
-          "name": "image_url",
-          "type": "text",
+        "symbol": {
+          "name": "symbol",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
+        "decimals": {
+          "name": "decimals",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
+          "notNull": true
+        },
+        "max_supply": {
+          "name": "max_supply",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},

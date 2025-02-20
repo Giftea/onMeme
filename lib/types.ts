@@ -1,5 +1,5 @@
 import { InferSelectModel, InferInsertModel } from "drizzle-orm";
-import { users, memes, templates, likes } from "@/lib/db/schema";
+import { users, memes, likes } from "@/lib/db/schema";
 
 // 🔹 User Types
 export type User = InferSelectModel<typeof users>;
@@ -8,10 +8,6 @@ export type NewUser = InferInsertModel<typeof users>;
 // 🔹 Meme Types
 export type Meme = InferSelectModel<typeof memes>;
 export type NewMeme = InferInsertModel<typeof memes>;
-
-// 🔹 Template Types
-export type Template = InferSelectModel<typeof templates>;
-export type NewTemplate = InferInsertModel<typeof templates>;
 
 // 🔹 Likes Types
 export type Like = InferSelectModel<typeof likes>;
@@ -27,8 +23,9 @@ export interface UserType {
 export interface Memes {
   id: number;
   createdAt: string | null;
-  ownerId: string;
-  templateId: number | null;
+  ownerId?: string;
+  ownerAddress: string;
+  templateId: string;
   imageUrl: string;
   isPublic: boolean | null;
 }
