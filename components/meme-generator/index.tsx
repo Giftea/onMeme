@@ -19,6 +19,8 @@ import { config } from "@/config/font.config";
 import { Meme, StatusMessage, TextElement } from "@/lib/types/index";
 import { trpc } from "@/lib/trpc.utils";
 import { toast } from "@/hooks/use-toast";
+import LoadSkeleton from "../skeleton";
+import MemeGeneratorSkeleton from "../skeleton/meme-generator.skeleton";
 
 export default function MemeGeneratorX({
   address,
@@ -26,7 +28,8 @@ export default function MemeGeneratorX({
   address: string | null;
 }) {
   const trpcUtils = trpc.useUtils();
-  const { data: memeData, isLoading: loading } = trpc.meme.fetchMemes.useQuery();
+  const { data: memeData, isLoading: loading } =
+    trpc.meme.fetchMemes.useQuery();
   const { mutateAsync: createMeme, isPending } =
     trpc.meme.createMeme.useMutation({
       onSuccess: () => {
@@ -419,65 +422,67 @@ export default function MemeGeneratorX({
   }, [textElements]);
 
   return (
-    <Card className="p-6 my-6">
-      <div className="flex justify-between">
-        <CardTitle className="text-2xl">Meme Generator</CardTitle>
-        <Button onClick={() => setShowTemplate(!showTemplate)} className="">
-          Upload new template
-        </Button>
-      </div>
-
-      <CardContent className="grid grid-cols-2 gap-x-4 p-0 mt-5">
-        <div className="relative mt-6">
-          <Canvas
-            previewCanvasRef={previewCanvasRef}
-            handleTextDragStart={handleTextDragStart}
-            image={image}
-            setSelectedTextId={setSelectedTextId}
-            textElements={textElements}
-          />
-
-          <UploadTemplate
-            showTemplate={showTemplate}
-            handleImageChange={handleImageChange}
-            fileInputRef={fileInputRef}
-          />
-        </div>
-        <div>
-          <MemeSelection
-            loading={loading}
-            handleMemeClick={handleMemeClick}
-            memes={memes}
-            selectedMeme={selectedMeme}
-            selectedMemeId={selectedMemeId}
-          />
-
-          <MemeCaptionInput
-            addNewTextField={addNewTextField}
-            removeTextField={removeTextField}
-            selectedTextId={selectedTextId}
-            setSelectedTextId={setSelectedTextId}
-            textElements={textElements}
-            updateTextField={updateTextField}
-          />
-
-          <Button
-            onClick={generateMeme}
-            disabled={isLoading || isPending}
-            className="w-full font-semibold"
-          >
-            Generate Meme
+    <LoadSkeleton skeleton={MemeGeneratorSkeleton} enabled={loading}>
+      <Card className="p-6 my-6">
+        <div className="flex justify-between">
+          <CardTitle className="text-2xl">Meme Generator</CardTitle>
+          <Button onClick={() => setShowTemplate(!showTemplate)} className="">
+            Upload new template
           </Button>
+        </div>
 
-          {/*
+        <CardContent className="grid grid-cols-2 gap-x-4 p-0 mt-5">
+          <div className="relative mt-6">
+            <Canvas
+              previewCanvasRef={previewCanvasRef}
+              handleTextDragStart={handleTextDragStart}
+              image={image}
+              setSelectedTextId={setSelectedTextId}
+              textElements={textElements}
+            />
+
+            <UploadTemplate
+              showTemplate={showTemplate}
+              handleImageChange={handleImageChange}
+              fileInputRef={fileInputRef}
+            />
+          </div>
+          <div>
+            <MemeSelection
+              loading={loading}
+              handleMemeClick={handleMemeClick}
+              memes={memes}
+              selectedMeme={selectedMeme}
+              selectedMemeId={selectedMemeId}
+            />
+
+            <MemeCaptionInput
+              addNewTextField={addNewTextField}
+              removeTextField={removeTextField}
+              selectedTextId={selectedTextId}
+              setSelectedTextId={setSelectedTextId}
+              textElements={textElements}
+              updateTextField={updateTextField}
+            />
+
+            <Button
+              onClick={generateMeme}
+              disabled={isLoading || isPending}
+              className="w-full font-semibold"
+            >
+              Generate Meme
+            </Button>
+
+            {/*
           @Todo:
           - Replace the status component with a toast to display status messages
           */}
-          <Status status={status} />
+            <Status status={status} />
 
-          <canvas ref={canvasRef} className="hidden"></canvas>
-        </div>
-      </CardContent>
-    </Card>
+            <canvas ref={canvasRef} className="hidden"></canvas>
+          </div>
+        </CardContent>
+      </Card>
+    </LoadSkeleton>
   );
 }
