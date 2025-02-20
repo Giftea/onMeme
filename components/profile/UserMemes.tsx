@@ -6,16 +6,14 @@ import { Memes } from "@/lib/types";
 import { FolderClosed } from "lucide-react";
 
 export default function UserMemes({
-  userId,
   address,
 }: {
-  userId: string | null;
   address: string | null;
 }) {
   const [memes, setMemes] = useState<Memes[]>();
 
   const { data, isLoading } = trpc.meme.getMemesByOwner.useQuery({
-    ownerId: String(userId),
+    ownerAddress: String(address),
   });
 
   useEffect(() => {

@@ -15,24 +15,24 @@ export const memeRouter = router({
 
   // Get memes by user
   getMemesByOwner: publicProcedure
-    .input(z.object({ ownerId: z.string() }))
+    .input(z.object({ ownerAddress: z.string() }))
     .query(async ({ input }) => {
-      return await getMemesByOwner(input.ownerId);
+      return await getMemesByOwner(input.ownerAddress);
     }),
 
   // Create a new meme
   createMeme: publicProcedure
     .input(
       z.object({
-        ownerId: z.string().length(42),
-        templateId: z.number(),
+        ownerAddress: z.string(),
+        templateId: z.string(),
         imageUrl: z.string().url(),
         isPublic: z.boolean().optional().default(true),
       })
     )
     .mutation(async ({ input }) => {
       return await createMeme(
-        input.ownerId,
+        input.ownerAddress,
         input.templateId,
         input.imageUrl,
         input.isPublic
