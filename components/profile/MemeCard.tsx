@@ -20,11 +20,11 @@ export default function NFTCard({
   return (
     <div className="border flex cursor-pointer justify-center items-center border-gray-400 rounded-lg p-4">
       {meme && address && (
-        <div className="space-y-3">
+        <div className="space-y-3  w-full">
           <Image
             src={meme?.imageUrl}
             alt="meme"
-            className="rounded-lg h-[300px] object-cover"
+            className="rounded-lg h-[300px] w-full object-cover"
             width={300}
             height={300}
           />
@@ -32,12 +32,12 @@ export default function NFTCard({
         </div>
       )}
       {nft && nft?.metadata && (
-        <div className="space-y-3">
+        <div className="space-y-3  w-full">
           <div className="space-y-3">
             <Image
               src={nft?.metadata?.image}
               alt="meme"
-              className="rounded-lg h-[300px] object-cover"
+              className="rounded-lg h-[300px] w-full object-cover"
               width={300}
               height={300}
             />
@@ -51,12 +51,12 @@ export default function NFTCard({
       )}
 
       {listedNFT && listedNFT?.nftMetadata && (
-        <div className="space-y-3">
+        <div className="space-y-3  w-full">
           <Link href={`/nfts/${listedNFT?.listingId}`} className="space-y-3">
             <Image
               src={listedNFT?.nftMetadata?.image}
               alt="meme"
-              className="rounded-lg h-[300px] object-cover"
+              className="rounded-lg h-[300px] w-full object-cover"
               width={300}
               height={300}
             />
