@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc.utils";
 import { ListedNFT } from "@/lib/types";
-import { formatDate } from "@/lib/utils";
+import { formatDate, shortenAddress } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { useToast } from "@/hooks/use-toast";
+import IsLoading from "@/components/composed/loader";
 
 export default function Page() {
   const address = Cookies.get("dev-address");
@@ -73,7 +75,11 @@ export default function Page() {
             />
           </div>
           <div>
-            <NFTDescription owner={nft.sellerAddress} nft={nft} />
+            <NFTDescription
+              address={address}
+              owner={nft.sellerAddress}
+              nft={nft}
+            />
           </div>
         </div>
         <Collections address={nft.sellerAddress} />
@@ -82,7 +88,15 @@ export default function Page() {
   }
 }
 
-function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
+function NFTDescription({
+  owner,
+  nft,
+  address,
+}: {
+  owner: string;
+  nft: ListedNFT;
+  address: string | undefined;
+}) {
   const [nftOwner, setNftOwner] = useState<{
     address: string;
     username: string;
@@ -92,12 +106,46 @@ function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
   const { data, isLoading, isSuccess } = trpc.user.fetchUser.useQuery({
     address: owner,
   });
+  const { toast } = useToast();
+  const trpcUtils = trpc.useUtils();
+  const router = useRouter();
 
   useEffect(() => {
     if (data !== undefined) {
       setNftOwner(data);
     }
   }, [isLoading, isSuccess, data]);
+
+  const { mutateAsync: purchaseNFT, isPending } =
+    trpc.marketplace.purchaseNFT.useMutation({
+      onSuccess: () => {
+        toast({
+          variant: "success",
+          title: "NFT Successfully Purchased! 😎",
+        });
+        trpcUtils.token.getBalance.invalidate();
+        trpcUtils.listing.getListingByID.invalidate();
+        trpcUtils.listing.getMarketplaceListings.invalidate();
+        trpcUtils.nft.getNFTsByOwner.invalidate();
+        trpcUtils.nft.getNFTByID.invalidate();
+        router.push("/profile?tab=nfts");
+      },
+      onError: (error) => {
+        toast({
+          variant: "destructive",
+          title: error.message,
+        });
+      },
+    });
+
+  async function handlePurchaseNFT() {
+    if (!address) return;
+    try {
+      await purchaseNFT({ listingId: nft.listingId, buyerAddress: address });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   if (isLoading)
     return (
@@ -115,7 +163,13 @@ function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
       <div>
         <p className="text-5xl font-bold mt-4">{nft?.nftMetadata?.name} </p>
         <p className="mt-2 text-sm text-gray-400">
-          Owned by <span className="text-primary">@{nftOwner?.username}</span>
+          Owned by{" "}
+          <span className="text-primary">
+            @
+            {nftOwner?.username.length <= 0
+              ? shortenAddress(nftOwner?.address)
+              : nftOwner?.username}
+          </span>
         </p>
         <div>
           <div className="border rounded-lg p-4 mt-4">
@@ -128,9 +182,15 @@ function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
             <div className="flex justify-between mt-6 items-center">
               <p>
                 Price:{" "}
-                <span className="text-xl text-primary">{nft.price} MEME</span>
+                <span className="text-xl text-primary">{nft.price} OMC</span>
               </p>
-              <Button className="px-8 text-lg py-6">Purchase</Button>
+              <Button
+                onClick={handlePurchaseNFT}
+                disabled={isPending}
+                className="text-lg py-6"
+              >
+                {isPending ? <IsLoading /> : "Purchase"}
+              </Button>
             </div>
           </div>
           <div className="border rounded-lg p-4 mt-4 space-y-2">
