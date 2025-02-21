@@ -21,6 +21,10 @@ import { trpc } from "@/lib/trpc.utils";
 import { toast } from "@/hooks/use-toast";
 import LoadSkeleton from "../skeleton";
 import MemeGeneratorSkeleton from "../skeleton/meme-generator.skeleton";
+import { set } from "zod";
+import { Loader } from "lucide-react";
+import { Oval } from "react-loader-spinner";
+import IsLoading from "../composed/loader";
 
 export default function MemeGeneratorX({
   address,
@@ -49,6 +53,7 @@ export default function MemeGeneratorX({
     });
   const memes = memeData?.data?.memes ?? [];
 
+  const [open, setOpen] = useState(false);
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [selectedTextId, setSelectedTextId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -56,8 +61,6 @@ export default function MemeGeneratorX({
     message: "",
     type: "",
   });
-
-  const [showTemplate, setShowTemplate] = useState(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -192,6 +195,7 @@ export default function MemeGeneratorX({
         }
       };
       reader.readAsDataURL(file);
+      setOpen(false);
     }
   };
 
@@ -426,9 +430,12 @@ export default function MemeGeneratorX({
       <Card className="p-6 my-6">
         <div className="flex justify-between">
           <CardTitle className="text-2xl">Meme Generator</CardTitle>
-          <Button onClick={() => setShowTemplate(!showTemplate)} className="">
-            Upload new template
-          </Button>
+          <UploadTemplate
+            handleImageChange={handleImageChange}
+            fileInputRef={fileInputRef}
+            open={open}
+            setOpen={setOpen}
+          />
         </div>
 
         <CardContent className="grid grid-cols-2 gap-x-4 p-0 mt-5">
@@ -439,12 +446,6 @@ export default function MemeGeneratorX({
               image={image}
               setSelectedTextId={setSelectedTextId}
               textElements={textElements}
-            />
-
-            <UploadTemplate
-              showTemplate={showTemplate}
-              handleImageChange={handleImageChange}
-              fileInputRef={fileInputRef}
             />
           </div>
           <div>
@@ -459,8 +460,6 @@ export default function MemeGeneratorX({
             <MemeCaptionInput
               addNewTextField={addNewTextField}
               removeTextField={removeTextField}
-              selectedTextId={selectedTextId}
-              setSelectedTextId={setSelectedTextId}
               textElements={textElements}
               updateTextField={updateTextField}
             />
@@ -470,7 +469,7 @@ export default function MemeGeneratorX({
               disabled={isLoading || isPending}
               className="w-full font-semibold"
             >
-              Generate Meme
+              {isLoading || isPending ? <IsLoading /> : "Generate Meme"}
             </Button>
 
             {/*
