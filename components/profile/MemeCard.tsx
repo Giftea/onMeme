@@ -24,7 +24,7 @@ export default function NFTCard({
           <Image
             src={meme?.imageUrl}
             alt="meme"
-            className="rounded-lg"
+            className="rounded-lg h-[300px] object-cover"
             width={300}
             height={300}
           />
@@ -37,7 +37,7 @@ export default function NFTCard({
             <Image
               src={nft?.metadata?.image}
               alt="meme"
-              className="rounded-lg h-[300px]"
+              className="rounded-lg h-[300px] object-cover"
               width={300}
               height={300}
             />
@@ -56,7 +56,7 @@ export default function NFTCard({
             <Image
               src={listedNFT?.nftMetadata?.image}
               alt="meme"
-              className="rounded-lg"
+              className="rounded-lg h-[300px] object-cover"
               width={300}
               height={300}
             />
