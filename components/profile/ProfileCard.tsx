@@ -70,7 +70,7 @@ export default function ProfileCard({
 
   return (
     <Card className="p-6 my-6 flex justify-between items-center">
-      <div className="flex space-x-4 items-center">
+      <div className="flex space-x-1 md:space-x-2 items-center w-full">
         <Image
           width={100}
           height={100}
@@ -78,42 +78,25 @@ export default function ProfileCard({
           alt="Avatar"
           className="border-4 border-secondary bg-muted-foreground p-2 rounded-full"
         />
-        <div>
-          {user && <p className="text-lg font-semibold">{user.username} </p>}
-          <div>
-            {initialAddress && (
-              <p className="text-lg">
-                {shortenAddress(String(initialAddress))}
-              </p>
+        {user && <p className="text-lg font-semibold">{user.username} </p>}
+        <div className="flex flex-col md:flex-row justify-between flex-1 ">
+          {initialAddress && (
+            <p className="text-lg">{shortenAddress(String(initialAddress))}</p>
+          )}
+          <div className="">
+            {isProfilePage ? (
+              user && <EditUsernameModal userName={user?.username} />
+            ) : (
+              <Button
+                onClick={() => router.push("/profile")}
+                className="text-lg"
+                variant={"link"}
+              >
+                View Profile
+              </Button>
             )}
-            <div className="flex md:hidden">
-              {isProfilePage ? (
-                user && <EditUsernameModal userName={user?.username} />
-              ) : (
-                <Button
-                  onClick={() => router.push("/profile")}
-                  className="text-lg"
-                  variant={"link"}
-                >
-                  View Profile
-                </Button>
-              )}
-            </div>
           </div>
         </div>
-      </div>
-      <div className="hidden md:flex">
-        {isProfilePage ? (
-          user && <EditUsernameModal userName={user?.username} />
-        ) : (
-          <Button
-            onClick={() => router.push("/profile")}
-            className="text-lg"
-            variant={"link"}
-          >
-            View Profile
-          </Button>
-        )}
       </div>
     </Card>
   );

@@ -426,7 +426,7 @@ export default function MemeGeneratorX({
   return (
     <LoadSkeleton skeleton={MemeGeneratorSkeleton} enabled={loading}>
       <Card className="p-6 my-6">
-        <div className="flex justify-between">
+        <div className="flex  justify-between">
           <CardTitle className="text-2xl">Meme Generator</CardTitle>
           <UploadTemplate
             handleImageChange={handleImageChange}
