@@ -83,23 +83,15 @@ export default function Page() {
 }
 
 function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
-  const [nftOwner, setNftOwner] = useState<{
-    address: string;
-    username: string;
-    id: string;
-    createdAt: string | null;
-  }>();
-  const { data, isLoading, isSuccess } = trpc.user.fetchUser.useQuery({
+  const {
+    data: nftOwner,
+    isLoading,
+    isSuccess,
+  } = trpc.user.fetchUser.useQuery({
     address: owner,
   });
 
   const { short } = formatDate(String(nft?.listedAt));
-
-  useEffect(() => {
-    if (data !== undefined) {
-      setNftOwner(data);
-    }
-  }, [isLoading, isSuccess, data]);
 
   return (
     <React.Fragment>
