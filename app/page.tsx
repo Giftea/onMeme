@@ -1,7 +1,5 @@
 import MemeGeneratorX from "@/components/meme-generator";
 import ProfileCard from "@/components/profile/ProfileCard";
-import TopMemes from "@/components/TopMemes";
-import TopTemplates from "@/components/TopTemplates";
 import { getAddress } from "@/lib/chopin-server";
 import {
   HydrationBoundary,
@@ -17,8 +15,6 @@ export default async function Home() {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProfileCard initialAddress={address} />
       <MemeGeneratorX address={address} />
-      <TopTemplates />
-      <TopMemes />
     </HydrationBoundary>
   );
 }
