@@ -21,7 +21,7 @@ export default function Header({ address }: { address: string | null }) {
   }, [data]);
 
   return (
-    <header className="bg-card p-4 px-10">
+    <header className="bg-card p-4 md:px-10">
       <div className="flex items-center justify-between mx-auto max-w-[1060px]">
         <Link href={"/"}>
           <Image src="/images/logo.svg" alt="Logo" width={140} height={140} />
