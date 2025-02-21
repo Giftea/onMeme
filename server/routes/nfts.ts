@@ -6,6 +6,7 @@ import {
   getNFTsByOwner,
   mintNFT,
 } from "@/lib/queries/dbQueries";
+import { NFT } from "@/lib/types";
 
 export const nftRouter = router({
   // Get all NFTs
@@ -23,7 +24,7 @@ export const nftRouter = router({
   getNFTsByOwner: publicProcedure
     .input(z.object({ owner: z.string().length(42) }))
     .query(async ({ input }) => {
-      return await getNFTsByOwner(input.owner);
+      return await getNFTsByOwner(input.owner) as  NFT[];
     }),
 
   // Mint a new NFT

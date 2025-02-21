@@ -22,25 +22,13 @@ export const users = pgTable("users", {
   ),
 });
 
-// Templates Table
-export const templates = pgTable("templates", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  imageUrl: text("image_url").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).default(
-    sql`CURRENT_TIMESTAMP`
-  ),
-});
-
 // Memes Table
 export const memes = pgTable("memes", {
   id: serial("id").primaryKey(),
-  ownerId: varchar("owner_id", { length: 42 })
-    .references(() => users.id)
+  ownerAddress: varchar("owner_address", { length: 42 })
+    .references(() => users.address)
     .notNull(),
-  templateId: integer("template_id").references(() => templates.id, {
-    onDelete: "set null",
-  }),
+  templateId: varchar("template_id", { length: 255 }).notNull(),
   imageUrl: text("image_url").notNull(),
   isPublic: boolean("is_public").default(true),
   createdAt: timestamp("created_at", { withTimezone: true }).default(
@@ -131,17 +119,9 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const memesRelations = relations(memes, ({ one }) => ({
   owner: one(users, {
-    fields: [memes.ownerId],
+    fields: [memes.ownerAddress],
     references: [users.id],
   }),
-  template: one(templates, {
-    fields: [memes.templateId],
-    references: [templates.id],
-  }),
-}));
-
-export const templatesRelations = relations(templates, ({ many }) => ({
-  memes: many(memes),
 }));
 
 export const likesRelations = relations(likes, ({ one }) => ({

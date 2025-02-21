@@ -1,7 +1,8 @@
 "use client";
 import { FolderClosed } from "lucide-react";
-import NFTCard, { NFTCardLoading } from "./MemeCard";
+import NFTCard from "./MemeCard";
 import { ListedNFT, NFT } from "@/lib/types";
+import React from "react";
 
 export default function UserNFTs({
   isLoading,
@@ -13,11 +14,8 @@ export default function UserNFTs({
   listedNFTs?: ListedNFT[];
 }) {
   return (
-    <>
+    <React.Fragment>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {isLoading &&
-          Array.from({ length: 3 }).map((_, i) => <NFTCardLoading key={i} />)}
-
         {nfts && nfts?.length > 0 && (
           <>
             {nfts.map((item) => (
@@ -47,6 +45,6 @@ export default function UserNFTs({
           </div>
         )}
       </div>
-    </>
+    </React.Fragment>
   );
 }

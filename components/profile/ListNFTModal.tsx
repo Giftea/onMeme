@@ -28,6 +28,7 @@ import { ListingSchema, ListingSchemaType } from "@/lib/zod-schemas/nft";
 import { useToast } from "@/hooks/use-toast";
 import { Oval } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
+import IsLoading from "../composed/loader";
 
 export default function ListNFTModal({ nft }: { nft?: NFT }) {
   const router = useRouter();
@@ -114,21 +115,7 @@ export default function ListNFTModal({ nft }: { nft?: NFT }) {
                   className="font-semibold text-lg w-full py-5 mt-5"
                   type="submit"
                 >
-                  {isPending ? (
-                    <Oval
-                      visible={true}
-                      height="120"
-                      width="120"
-                      color="#ffffff"
-                      ariaLabel="oval-loading"
-                      wrapperStyle={{}}
-                      wrapperClass=""
-                      strokeWidth={4}
-                      secondaryColor="#ffffff70"
-                    />
-                  ) : (
-                    "List Now"
-                  )}
+                  {isPending ? <IsLoading /> : "List Now"}
                 </Button>
               </DialogFooter>
             </form>

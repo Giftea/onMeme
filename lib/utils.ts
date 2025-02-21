@@ -44,3 +44,24 @@ export function formatDate(dateString: string): {
 export function shortenText(text: string): string {
   return text.length > 30 ? `${text.slice(0, 30)}...` : text;
 }
+
+export function convertImageToBase64(
+  imageUrl: string,
+  callback: (base64: string) => void
+): void {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", imageUrl, true);
+  xhr.responseType = "arraybuffer";
+
+  xhr.onload = function () {
+    const bytes = new Uint8Array(xhr.response);
+    let binary = "";
+    for (let i = 0; i < bytes.byteLength; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    const base64 = btoa(binary);
+    callback(base64);
+  };
+
+  xhr.send();
+}
