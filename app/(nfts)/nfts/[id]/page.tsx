@@ -1,24 +1,26 @@
 "use client";
+
+import React from "react";
 import Collections from "@/components/nfts/Collections";
 import LikeNFT from "@/components/nfts/LikeNFT";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc.utils";
 import { ListedNFT } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import LoadSkeleton from "@/components/skeleton";
-import NFTDescriptionSkeleton from "@/components/skeleton/nft-description.skeleton";
+import {
+  MarketplaceViewNFTSkeleton,
+  NFTDescriptionSkeleton,
+} from "@/components/skeleton/nft.skeleton";
 
 export default function Page() {
   const address = Cookies.get("dev-address");
   const pathName = usePathname();
   const router = useRouter();
   const nftId = pathName.split("/nfts/")[1];
-  const [nft, setNft] = useState<ListedNFT>();
 
   const {
     data: nftData,
@@ -32,59 +34,58 @@ export default function Page() {
     address: String(address),
   });
 
-  useEffect(() => {
-    if (nftData !== undefined) {
-      setNft(nftData as ListedNFT);
-    }
-  }, [isLoading, isSuccess, nft, nftData]);
-
-  if (isLoading)
-    return (
-      <div className="grid grid-cols-2 gap-4">
-        <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
-          <Skeleton className="w-full h-[500px] rounded-lg bg-slate-600 " />
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="w-[140px] h-10 rounded-full bg-slate-600 " />
-          <Skeleton className="w-[200px] h-10 rounded-full bg-slate-600 " />
-          <Skeleton className="w-full h-[200px] rounded-lg bg-slate-600 " />
-          <Skeleton className="w-full h-[200px] rounded-lg bg-slate-600 " />
-        </div>
-      </div>
-    );
-  if (!isSuccess) return <div>Failed to load NFT</div>;
-  if (nft !== undefined && nft?.nftMetadata) {
-    return (
-      <div>
-        <Button
-          onClick={() => router.back()}
-          className="mb-3"
-          variant={"outline"}
-        >
-          Go Back
-        </Button>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="border rounded-lg flex flex-col space-y-2 justify-center items-end p-4">
-            <LikeNFT nftId={nft.listingId} userId={user?.address} />
-            <Image
-              src={nft?.nftMetadata.image}
-              className="rounded-lg"
-              alt={nft?.nftMetadata.name}
-              width={500}
-              height={500}
-            />
-          </div>
-          <div>
-            <NFTDescription owner={nft.sellerAddress} nft={nft} />
-          </div>
-        </div>
-        <Collections address={nft.sellerAddress} />
-      </div>
-    );
-  }
+  return (
+    <div>
+      {nftData != undefined && nftData?.nftMetadata ? (
+        <React.Fragment>
+          <Button
+            onClick={() => router.back()}
+            className="mb-3"
+            variant={"outline"}
+          >
+            Go Back
+          </Button>
+          <LoadSkeleton
+            enabled={isLoading}
+            skeleton={MarketplaceViewNFTSkeleton}
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <div className="border rounded-lg flex flex-col space-y-2 justify-center items-end p-4">
+                <LikeNFT nftId={nftData.listingId} userId={user?.address} />
+                <Image
+                  src={nftData?.nftMetadata.image}
+                  className="rounded-lg"
+                  alt={nftData?.nftMetadata.name}
+                  width={500}
+                  height={500}
+                />
+              </div>
+              <div>
+                <NFTDescription
+                  owner={nftData.sellerAddress}
+                  nft={nftData}
+                  isLoadingList={isLoading}
+                />
+              </div>
+            </div>
+          </LoadSkeleton>
+          {!isSuccess && !isLoading && <div>Failed to load NFT owner</div>}
+          <Collections address={nftData.sellerAddress} />
+        </React.Fragment>
+      ) : null}
+    </div>
+  );
 }
 
-function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
+function NFTDescription({
+  owner,
+  nft,
+  isLoadingList,
+}: {
+  owner: string;
+  nft: ListedNFT;
+  isLoadingList: boolean;
+}) {
   const {
     data: nftOwner,
     isLoading,
@@ -96,7 +97,10 @@ function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
   const { short } = formatDate(String(nft?.listedAt));
 
   return (
-    <LoadSkeleton enabled={isLoading} skeleton={NFTDescriptionSkeleton}>
+    <LoadSkeleton
+      enabled={isLoading || isLoadingList}
+      skeleton={NFTDescriptionSkeleton}
+    >
       <React.Fragment>
         {!nftOwner !== undefined && (
           <div>
@@ -137,7 +141,7 @@ function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
             </div>
           </div>
         )}
-        {!isSuccess && <div>Failed to load NFT owner</div>}
+        {!isSuccess && !isLoading && <div>Failed to load NFT owner</div>}
       </React.Fragment>
     </LoadSkeleton>
   );
