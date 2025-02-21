@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Sidebar } from "../composed/sidebar";
 
 export default function Header({ address }: { address: string | null }) {
   const [balance, setBalance] = useState(0);
@@ -26,18 +27,23 @@ export default function Header({ address }: { address: string | null }) {
           <Image src="/images/logo.svg" alt="Logo" width={140} height={140} />
         </Link>
 
-        <div className="space-x-3">
-          {navLinks.map((item, index) => (
-            <NavLinks key={index} link={item.link} name={item.name} />
-          ))}
+        <div className="hidden md:flex items-center justify-between">
+          <div className="space-x-3 ">
+            {navLinks.map((item, index) => (
+              <NavLinks key={index} link={item.link} name={item.name} />
+            ))}
+          </div>
+          <div>Balance: {balance} OMC </div>
         </div>
-        <div>Balance: {balance} OMC </div>
+        <div className="flex md:hidden">
+          <Sidebar address={address} />
+        </div>
       </div>
     </header>
   );
 }
 
-function NavLinks({ link, name }: { name: string; link: string }) {
+export function NavLinks({ link, name }: { name: string; link: string }) {
   const pathName = usePathname();
 
   return (
@@ -54,7 +60,7 @@ function NavLinks({ link, name }: { name: string; link: string }) {
   );
 }
 
-const navLinks = [
+export const navLinks = [
   {
     name: "Home",
     link: "/",
