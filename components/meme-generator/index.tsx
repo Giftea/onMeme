@@ -48,7 +48,8 @@ export default function MemeGeneratorX({
         });
       },
     });
-  const memes = memeData?.data?.memes ?? [];
+
+  const memes = memeData ?? [];
 
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState<HTMLImageElement | null>(null);
@@ -119,10 +120,10 @@ export default function MemeGeneratorX({
     }
 
     function getMeme() {
-      const memesx = memes.length > 0 ? memes[0] : null;
+      const memes_ = memes.length > 0 ? memes[0] : null;
 
-      if (!memesx) return;
-      convertImageToBase64(memesx.url, function (base64) {
+      if (!memes_) return;
+      convertImageToBase64(memes_.url, function (base64) {
         const patchTo64 = "data:image/jpeg;base64," + base64;
 
         const img = new Image();
