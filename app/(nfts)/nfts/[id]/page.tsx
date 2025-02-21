@@ -73,8 +73,7 @@ export default function Page() {
             />
           </div>
           <div>
-            {/* <NFTDescription owner={nft.sellerAddress} nft={nft} /> */}
-            {NFTDescription({ owner: nft.sellerAddress, nft: nft })}
+            <NFTDescription owner={nft.sellerAddress} nft={nft} />
           </div>
         </div>
         <Collections address={nft.sellerAddress} />
@@ -94,59 +93,61 @@ function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
     address: owner,
   });
 
+  const { short } = formatDate(String(nft?.listedAt));
+
   useEffect(() => {
     if (data !== undefined) {
       setNftOwner(data);
     }
   }, [isLoading, isSuccess, data]);
 
-  if (isLoading)
-    return (
-      <div className="space-y-2">
-        <Skeleton className="w-[140px] h-10 rounded-full bg-slate-600 " />
-        <Skeleton className="w-[200px] h-10 rounded-full bg-slate-600 " />
-        <Skeleton className="w-full h-[200px] rounded-lg bg-slate-600 " />
-        <Skeleton className="w-full h-[200px] rounded-lg bg-slate-600 " />
-      </div>
-    );
-  if (!isSuccess) return <div>Failed to load NFT owner</div>;
-  if (nftOwner !== undefined) {
-    const { short } = formatDate(String(nft?.listedAt));
-    return (
-      <div>
-        <p className="text-5xl font-bold mt-4">{nft?.nftMetadata?.name} </p>
-        <p className="mt-2 text-sm text-gray-400">
-          Owned by <span className="text-primary">@{nftOwner?.username}</span>
-        </p>
+  return (
+    <React.Fragment>
+      {isLoading && (
+        <div className="space-y-2">
+          <Skeleton className="w-[140px] h-10 rounded-full bg-slate-600 " />
+          <Skeleton className="w-[200px] h-10 rounded-full bg-slate-600 " />
+          <Skeleton className="w-full h-[200px] rounded-lg bg-slate-600 " />
+          <Skeleton className="w-full h-[200px] rounded-lg bg-slate-600 " />
+        </div>
+      )}
+      {!isSuccess && <div>Failed to load NFT owner</div>}
+      {!nftOwner !== undefined && (
         <div>
-          <div className="border rounded-lg p-4 mt-4">
-            <div>
-              <p className="text-xl font-semibold">Description</p>
-              <p className="text-gray-400 tracking-wide font-thin my-2">
-                {nft.nftMetadata?.description}
-              </p>
+          <p className="text-5xl font-bold mt-4">{nft?.nftMetadata?.name} </p>
+          <p className="mt-2 text-sm text-gray-400">
+            Owned by <span className="text-primary">@{nftOwner?.username}</span>
+          </p>
+          <div>
+            <div className="border rounded-lg p-4 mt-4">
+              <div>
+                <p className="text-xl font-semibold">Description</p>
+                <p className="text-gray-400 tracking-wide font-thin my-2">
+                  {nft.nftMetadata?.description}
+                </p>
+              </div>
+              <div className="flex justify-between mt-6 items-center">
+                <p>
+                  Price:{" "}
+                  <span className="text-xl text-primary">{nft.price} MEME</span>
+                </p>
+                <Button className="px-8 text-lg py-6">Purchase</Button>
+              </div>
             </div>
-            <div className="flex justify-between mt-6 items-center">
-              <p>
-                Price:{" "}
-                <span className="text-xl text-primary">{nft.price} MEME</span>
-              </p>
-              <Button className="px-8 text-lg py-6">Purchase</Button>
-            </div>
-          </div>
-          <div className="border rounded-lg p-4 mt-4 space-y-2">
-            <div className="flex justify-between">
-              <p>Token ID</p> <p>{nft?.listingId}</p>
-            </div>{" "}
-            <div className="flex justify-between">
-              <p>Offers</p> <p>0</p>
-            </div>{" "}
-            <div className="flex justify-between">
-              <p>Minted</p> <p>{short}</p>
+            <div className="border rounded-lg p-4 mt-4 space-y-2">
+              <div className="flex justify-between">
+                <p>Token ID</p> <p>{nft?.listingId}</p>
+              </div>{" "}
+              <div className="flex justify-between">
+                <p>Offers</p> <p>0</p>
+              </div>{" "}
+              <div className="flex justify-between">
+                <p>Minted</p> <p>{short}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      )}
+    </React.Fragment>
+  );
 }
