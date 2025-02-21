@@ -63,6 +63,7 @@ export default function Page() {
               </div>
               <div>
                 <NFTDescription
+                  address={address}
                   owner={nftData.sellerAddress}
                   nft={nftData}
                   isLoadingList={isLoading}
@@ -137,11 +138,11 @@ function NFTDescription({
       skeleton={NFTDescriptionSkeleton}
     >
       <React.Fragment>
-        {!nftOwner !== undefined && (
+        {nftOwner !== undefined && (
           <div>
             <p className="text-5xl font-bold mt-4">{nft?.nftMetadata?.name} </p>
             <p className="mt-2 text-sm text-gray-400">
-              Owned by
+              Owned by{" "}
               <span className="text-primary">
                 @
                 {nftOwner?.username?.length <= 0
