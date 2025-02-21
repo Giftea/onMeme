@@ -20,10 +20,10 @@ const Canvas = ({
   setSelectedTextId,
 }: Props) => {
   return (
-    <div className="relative overflow-hidden aspect-auto h-fit w-fit rounded">
+    <div className="relative overflow-hidden aspect-auto h-fit w-full md:w-fit rounded">
       <canvas
         ref={previewCanvasRef}
-        className="cursor-move max-w-full border w-full h-80 shadow-lg "
+        className="cursor-move min-w-full md:max-w-full border w-full h-80 shadow-lg "
         onMouseDown={(e) => {
           if (!image || !previewCanvasRef.current) return;
 

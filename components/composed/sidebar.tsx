@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetFooter,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { navLinks, NavLinks } from "../layout/Header"
 import { trpc } from "@/lib/trpc.utils";
 import { useEffect, useState } from "react";
+import { AlignRight } from 'lucide-react';
 
 export function Sidebar({ address }: { address: string | null }) {
      const [balance, setBalance] = useState(0);
@@ -26,7 +25,7 @@ export function Sidebar({ address }: { address: string | null }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <AlignRight />
       </SheetTrigger>
       <SheetContent>
         <div className="flex flex-col items-center gap-10 py-4">
