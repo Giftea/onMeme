@@ -31,7 +31,7 @@ export default function Header({ address }: { address: string | null }) {
             <NavLinks key={index} link={item.link} name={item.name} />
           ))}
         </div>
-        <div>Balance: {balance} MEME </div>
+        <div>Balance: {balance} OMC </div>
       </div>
     </header>
   );

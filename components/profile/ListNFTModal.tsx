@@ -26,7 +26,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { ListingSchema, ListingSchemaType } from "@/lib/zod-schemas/nft";
 import { useToast } from "@/hooks/use-toast";
-import { Oval } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
 import IsLoading from "../composed/loader";
 
