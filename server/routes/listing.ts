@@ -10,6 +10,7 @@ import {
   getMarketplaceListings,
   getListingByID,
 } from "@/lib/queries/dbQueries";
+import { ListedNFT } from "@/lib/types";
 
 export const listingRouter = router({
   // Get all listings
@@ -20,7 +21,7 @@ export const listingRouter = router({
   getListingByID: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
-      return await getListingByID(input.id);
+      return await getListingByID(input.id) as ListedNFT;
     }),
 
   getMarketplaceListings: publicProcedure.query(async () => {

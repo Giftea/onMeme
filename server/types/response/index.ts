@@ -7,3 +7,10 @@ export type GetMemeTemplateResponse = {
   };
   message?: string;
 };
+
+export type FetchUserResponse = {
+  address: string;
+  username: string;
+  id: string;
+  createdAt: string | null;
+};
