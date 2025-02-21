@@ -70,6 +70,9 @@ dependencies:
   '@trpc/server':
     specifier: ^11.0.0-rc.604
     version: 11.0.0-rc.604
+  '@types/pg':
+    specifier: ^8.11.11
+    version: 8.11.11
   axios:
     specifier: ^1.7.9
     version: 1.7.9
@@ -84,7 +87,7 @@ dependencies:
     version: 4.1.0
   drizzle-orm:
     specifier: ^0.39.2
-    version: 0.39.2(@neondatabase/serverless@0.10.4)(@types/react@19.0.0)(react@19.0.0)
+    version: 0.39.2(@neondatabase/serverless@0.10.4)(@types/pg@8.11.11)(@types/react@19.0.0)(pg@8.13.3)(react@19.0.0)
   drizzle-zod:
     specifier: ^0.7.0
     version: 0.7.0(drizzle-orm@0.39.2)(zod@3.24.1)
@@ -109,6 +112,9 @@ dependencies:
   next-themes:
     specifier: ^0.4.4
     version: 0.4.4(react-dom@19.0.0)(react@19.0.0)
+  pg:
+    specifier: ^8.13.3
+    version: 8.13.3
   pinata-web3:
     specifier: ^0.5.4
     version: 0.5.4
@@ -2593,6 +2599,14 @@ packages:
       undici-types: 6.19.8
     dev: false
 
+  /@types/pg@8.11.11:
+    resolution: {integrity: sha512-kGT1qKM8wJQ5qlawUrEkXgvMSXoV213KfMGXcwfDwUIfUHXqXYXOfS1nE1LINRJVVVx5wCm70XnFlMHaIcQAfw==}
+    dependencies:
+      '@types/node': 20.0.0
+      pg-protocol: 1.7.1
+      pg-types: 4.0.2
+    dev: false
+
   /@types/pg@8.11.6:
     resolution: {integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==}
     dependencies:
@@ -3297,7 +3311,7 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.39.2(@neondatabase/serverless@0.10.4)(@types/react@19.0.0)(react@19.0.0):
+  /drizzle-orm@0.39.2(@neondatabase/serverless@0.10.4)(@types/pg@8.11.11)(@types/react@19.0.0)(pg@8.13.3)(react@19.0.0):
     resolution: {integrity: sha512-cuopo+udkKEGGpSxCML9ZRQ43R01zYCTsbqCrb9kJkabx1QEwFlPIFoQfx6E6tuawtiX930Gwyrkwj4inlpzDg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -3390,7 +3404,9 @@ packages:
         optional: true
     dependencies:
       '@neondatabase/serverless': 0.10.4
+      '@types/pg': 8.11.11
       '@types/react': 19.0.0
+      pg: 8.13.3
       react: 19.0.0
     dev: false
 
@@ -3400,7 +3416,7 @@ packages:
       drizzle-orm: '>=0.36.0'
       zod: '>=3.0.0'
     dependencies:
-      drizzle-orm: 0.39.2(@neondatabase/serverless@0.10.4)(@types/react@19.0.0)(react@19.0.0)
+      drizzle-orm: 0.39.2(@neondatabase/serverless@0.10.4)(@types/pg@8.11.11)(@types/react@19.0.0)(pg@8.13.3)(react@19.0.0)
       zod: 3.24.1
     dev: false
 
@@ -5041,6 +5057,16 @@ packages:
       lru-cache: 10.4.3
       minipass: 7.1.2
 
+  /pg-cloudflare@1.1.1:
+    resolution: {integrity: sha512-xWPagP/4B6BgFO+EKz3JONXv3YDgvkbVrGw2mTo3D6tVDQRh1e7cqVGvyR3BE+eQgAvx1XhW/iEASj4/jCWl3Q==}
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /pg-connection-string@2.7.0:
+    resolution: {integrity: sha512-PI2W9mv53rXJQEOb8xNR8lH7Hr+EKa6oJa38zsK0S/ky2er16ios1wLKhZyxzD7jUReiWokc9WK5nxSnC7W1TA==}
+    dev: false
+
   /pg-int8@1.0.1:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
     engines: {node: '>=4.0.0'}
@@ -5051,8 +5077,27 @@ packages:
     engines: {node: '>=4'}
     dev: false
 
+  /pg-pool@3.7.1(pg@8.13.3):
+    resolution: {integrity: sha512-xIOsFoh7Vdhojas6q3596mXFsR8nwBQBXX5JiV7p9buEVAGqYL4yFzclON5P9vFrpu1u7Zwl2oriyDa89n0wbw==}
+    peerDependencies:
+      pg: '>=8.0'
+    dependencies:
+      pg: 8.13.3
+    dev: false
+
   /pg-protocol@1.7.1:
     resolution: {integrity: sha512-gjTHWGYWsEgy9MsY0Gp6ZJxV24IjDqdpTW7Eh0x+WfJLFsm/TJx1MzL6T0D88mBvkpxotCQ6TwW6N+Kko7lhgQ==}
+    dev: false
+
+  /pg-types@2.2.0:
+    resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
+    engines: {node: '>=4'}
+    dependencies:
+      pg-int8: 1.0.1
+      postgres-array: 2.0.0
+      postgres-bytea: 1.0.0
+      postgres-date: 1.0.7
+      postgres-interval: 1.2.0
     dev: false
 
   /pg-types@4.0.2:
@@ -5066,6 +5111,30 @@ packages:
       postgres-date: 2.1.0
       postgres-interval: 3.0.0
       postgres-range: 1.1.4
+    dev: false
+
+  /pg@8.13.3:
+    resolution: {integrity: sha512-P6tPt9jXbL9HVu/SSRERNYaYG++MjnscnegFh9pPHihfoBSujsrka0hyuymMzeJKFWrcG8wvCKy8rCe8e5nDUQ==}
+    engines: {node: '>= 8.0.0'}
+    peerDependencies:
+      pg-native: '>=3.0.1'
+    peerDependenciesMeta:
+      pg-native:
+        optional: true
+    dependencies:
+      pg-connection-string: 2.7.0
+      pg-pool: 3.7.1(pg@8.13.3)
+      pg-protocol: 1.7.1
+      pg-types: 2.2.0
+      pgpass: 1.0.5
+    optionalDependencies:
+      pg-cloudflare: 1.1.1
+    dev: false
+
+  /pgpass@1.0.5:
+    resolution: {integrity: sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==}
+    dependencies:
+      split2: 4.2.0
     dev: false
 
   /picocolors@1.1.1:
@@ -5195,9 +5264,19 @@ packages:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  /postgres-array@2.0.0:
+    resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
+    engines: {node: '>=4'}
+    dev: false
+
   /postgres-array@3.0.2:
     resolution: {integrity: sha512-6faShkdFugNQCLwucjPcY5ARoW1SlbnrZjmGl0IrrqewpvxvhSLHimCVzqeuULCbG0fQv7Dtk1yDbG3xv7Veog==}
     engines: {node: '>=12'}
+    dev: false
+
+  /postgres-bytea@1.0.0:
+    resolution: {integrity: sha512-xy3pmLuQqRBZBXDULy7KbaitYqLcmxigw14Q5sj8QBVLqEwXfeybIKVWiqAXTlcvdvb0+xkOtDbfQMOf4lST1w==}
+    engines: {node: '>=0.10.0'}
     dev: false
 
   /postgres-bytea@3.0.0:
@@ -5207,9 +5286,21 @@ packages:
       obuf: 1.1.2
     dev: false
 
+  /postgres-date@1.0.7:
+    resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /postgres-date@2.1.0:
     resolution: {integrity: sha512-K7Juri8gtgXVcDfZttFKVmhglp7epKb1K4pgrkLxehjqkrgPhfG6OO8LHLkfaqkbpjNRnra018XwAr1yQFWGcA==}
     engines: {node: '>=12'}
+    dev: false
+
+  /postgres-interval@1.2.0:
+    resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      xtend: 4.0.2
     dev: false
 
   /postgres-interval@3.0.0:
@@ -5648,6 +5739,11 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /split2@4.2.0:
+    resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
+    engines: {node: '>= 10.x'}
+    dev: false
 
   /stable-hash@0.0.4:
     resolution: {integrity: sha512-LjdcbuBeLcdETCrPn9i8AYAZ1eCtu4ECAWtP7UleOiZ9LzVxRzzUZEoZ8zB24nhkQnDWyET0I+3sWokSDS3E7g==}
@@ -6184,6 +6280,11 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
+
+  /xtend@4.0.2:
+    resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
+    engines: {node: '>=0.4'}
     dev: false
 
   /yaml@2.7.0:

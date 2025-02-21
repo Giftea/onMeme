@@ -21,9 +21,6 @@ import { trpc } from "@/lib/trpc.utils";
 import { toast } from "@/hooks/use-toast";
 import LoadSkeleton from "../skeleton";
 import MemeGeneratorSkeleton from "../skeleton/meme-generator.skeleton";
-import { set } from "zod";
-import { Loader } from "lucide-react";
-import { Oval } from "react-loader-spinner";
 import IsLoading from "../composed/loader";
 
 export default function MemeGeneratorX({

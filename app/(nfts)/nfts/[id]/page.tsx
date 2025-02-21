@@ -8,7 +8,7 @@ import { ListedNFT } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 export default function Page() {
@@ -73,7 +73,8 @@ export default function Page() {
             />
           </div>
           <div>
-            <NFTDescription owner={nft.sellerAddress} nft={nft} />
+            {/* <NFTDescription owner={nft.sellerAddress} nft={nft} /> */}
+            {NFTDescription({ owner: nft.sellerAddress, nft: nft })}
           </div>
         </div>
         <Collections address={nft.sellerAddress} />
