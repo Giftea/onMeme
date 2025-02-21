@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "start:dev": "npx chopd 4000 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
