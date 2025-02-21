@@ -1,6 +1,6 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { createAvatar } from "@dicebear/core";
 import { croodles } from "@dicebear/collection";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import EditUsernameModal from "./EditUsernameModal";
 import { trpc } from "@/lib/trpc.utils";
+import { AddressSchemaType } from "@/lib/zod-schemas/user";
 
 interface ProfileCardProps {
   initialAddress: string | null;
@@ -21,29 +22,10 @@ export default function ProfileCard({
 }: ProfileCardProps) {
   const router = useRouter();
 
-  const {
-    data: userProfile,
-    isLoading,
-    isSuccess,
-  } = trpc.user.fetchUser.useQuery({ address: String(initialAddress) });
-
-  const { mutateAsync: handleCreateUser } = trpc.user.createUser.useMutation({
-    onSuccess: () => {},
-    onError: (error) => {
-      console.error(error);
-    },
+  const { data: userProfile } = trpc.user.fetchUser.useQuery({
+    address: String(initialAddress),
+    initialAddress: initialAddress as AddressSchemaType,
   });
-
-  useEffect(() => {
-    if (
-      initialAddress &&
-      (userProfile === undefined || null) &&
-      !isLoading &&
-      !isSuccess
-    ) {
-      handleCreateUser({ address: initialAddress });
-    }
-  }, [initialAddress, isLoading, isSuccess, userProfile, handleCreateUser]);
 
   const avatar = useMemo(() => {
     return createAvatar(croodles, {
