@@ -10,6 +10,8 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import LoadSkeleton from "@/components/skeleton";
+import NFTDescriptionSkeleton from "@/components/skeleton/nft-description.skeleton";
 
 export default function Page() {
   const address = Cookies.get("dev-address");
@@ -94,52 +96,49 @@ function NFTDescription({ owner, nft }: { owner: string; nft: ListedNFT }) {
   const { short } = formatDate(String(nft?.listedAt));
 
   return (
-    <React.Fragment>
-      {isLoading && (
-        <div className="space-y-2">
-          <Skeleton className="w-[140px] h-10 rounded-full bg-slate-600 " />
-          <Skeleton className="w-[200px] h-10 rounded-full bg-slate-600 " />
-          <Skeleton className="w-full h-[200px] rounded-lg bg-slate-600 " />
-          <Skeleton className="w-full h-[200px] rounded-lg bg-slate-600 " />
-        </div>
-      )}
-      {!isSuccess && <div>Failed to load NFT owner</div>}
-      {!nftOwner !== undefined && (
-        <div>
-          <p className="text-5xl font-bold mt-4">{nft?.nftMetadata?.name} </p>
-          <p className="mt-2 text-sm text-gray-400">
-            Owned by <span className="text-primary">@{nftOwner?.username}</span>
-          </p>
+    <LoadSkeleton enabled={isLoading} skeleton={NFTDescriptionSkeleton}>
+      <React.Fragment>
+        {!nftOwner !== undefined && (
           <div>
-            <div className="border rounded-lg p-4 mt-4">
-              <div>
-                <p className="text-xl font-semibold">Description</p>
-                <p className="text-gray-400 tracking-wide font-thin my-2">
-                  {nft.nftMetadata?.description}
-                </p>
+            <p className="text-5xl font-bold mt-4">{nft?.nftMetadata?.name} </p>
+            <p className="mt-2 text-sm text-gray-400">
+              Owned by{" "}
+              <span className="text-primary">@{nftOwner?.username}</span>
+            </p>
+            <div>
+              <div className="border rounded-lg p-4 mt-4">
+                <div>
+                  <p className="text-xl font-semibold">Description</p>
+                  <p className="text-gray-400 tracking-wide font-thin my-2">
+                    {nft.nftMetadata?.description}
+                  </p>
+                </div>
+                <div className="flex justify-between mt-6 items-center">
+                  <p>
+                    Price:{" "}
+                    <span className="text-xl text-primary">
+                      {nft.price} MEME
+                    </span>
+                  </p>
+                  <Button className="px-8 text-lg py-6">Purchase</Button>
+                </div>
               </div>
-              <div className="flex justify-between mt-6 items-center">
-                <p>
-                  Price:{" "}
-                  <span className="text-xl text-primary">{nft.price} MEME</span>
-                </p>
-                <Button className="px-8 text-lg py-6">Purchase</Button>
-              </div>
-            </div>
-            <div className="border rounded-lg p-4 mt-4 space-y-2">
-              <div className="flex justify-between">
-                <p>Token ID</p> <p>{nft?.listingId}</p>
-              </div>{" "}
-              <div className="flex justify-between">
-                <p>Offers</p> <p>0</p>
-              </div>{" "}
-              <div className="flex justify-between">
-                <p>Minted</p> <p>{short}</p>
+              <div className="border rounded-lg p-4 mt-4 space-y-2">
+                <div className="flex justify-between">
+                  <p>Token ID</p> <p>{nft?.listingId}</p>
+                </div>{" "}
+                <div className="flex justify-between">
+                  <p>Offers</p> <p>0</p>
+                </div>{" "}
+                <div className="flex justify-between">
+                  <p>Minted</p> <p>{short}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </React.Fragment>
+        )}
+        {!isSuccess && <div>Failed to load NFT owner</div>}
+      </React.Fragment>
+    </LoadSkeleton>
   );
 }
