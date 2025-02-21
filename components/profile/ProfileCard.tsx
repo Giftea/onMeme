@@ -1,6 +1,6 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { createAvatar } from "@dicebear/core";
 import { croodles } from "@dicebear/collection";
 import Image from "next/image";
@@ -15,18 +15,10 @@ interface ProfileCardProps {
   isProfilePage?: boolean;
 }
 
-interface UserType {
-  username: string;
-  address: string;
-  id: string;
-  createdAt: string | null;
-}
-
 export default function ProfileCard({
   initialAddress,
   isProfilePage,
 }: ProfileCardProps) {
-  const [user, setUser] = useState<undefined | UserType>(undefined);
   const router = useRouter();
 
   const {
@@ -49,17 +41,9 @@ export default function ProfileCard({
       !isLoading &&
       !isSuccess
     ) {
-      const createUser = async () => {
-        await handleCreateUser({ address: initialAddress });
-      };
-
-      createUser();
+      handleCreateUser({ address: initialAddress });
     }
   }, [initialAddress, isLoading, isSuccess, userProfile, handleCreateUser]);
-
-  useEffect(() => {
-    setUser(userProfile);
-  }, [initialAddress, isLoading, isSuccess, userProfile]);
 
   const avatar = useMemo(() => {
     return createAvatar(croodles, {
@@ -79,14 +63,16 @@ export default function ProfileCard({
           className="border-4 border-secondary bg-muted-foreground p-2 rounded-full"
         />
         <div>
-          {user && <p className="text-lg font-semibold">{user.username} </p>}
+          {userProfile && (
+            <p className="text-lg font-semibold">{userProfile?.username} </p>
+          )}
           {initialAddress && (
             <p className="text-lg">{shortenAddress(String(initialAddress))}</p>
           )}
         </div>
       </div>
       {isProfilePage ? (
-        user && <EditUsernameModal userName={user?.username} />
+        userProfile && <EditUsernameModal userName={userProfile.username} />
       ) : (
         <Button
           onClick={() => router.push("/profile")}
