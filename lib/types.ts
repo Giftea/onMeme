@@ -43,6 +43,13 @@ export type NFT = {
   };
 };
 
+export interface NftMetaData {
+  name: string;
+  image: string;
+  price: number;
+  description: string;
+}
+
 export interface ListedNFT {
   listingId: number;
   price: number;
@@ -50,12 +57,7 @@ export interface ListedNFT {
   listedAt: string | null;
   nftId: number;
   nftToken: string;
-  nftMetadata: {
-    name: string;
-    image: string;
-    price: number;
-    description: string;
-  };
+  nftMetadata: NftMetaData;
   sellerId: string;
   sellerAddress: string;
   sellerUsername: string;
