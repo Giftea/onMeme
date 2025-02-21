@@ -7,6 +7,7 @@ import {
 } from "@/lib/queries/dbQueries";
 import { TRPCError } from "@trpc/server";
 import { GetMemeTemplateResponse } from "../types/response";
+import { BLANK_MEME_TEMPLATE } from "@/config/meme.config";
 
 export const memeRouter = router({
   // Get all memes
@@ -51,7 +52,9 @@ export const memeRouter = router({
       }
       const data = (await response.json()) as GetMemeTemplateResponse;
 
-      return data;
+      const joinTemplates = [BLANK_MEME_TEMPLATE, ...data.data?.memes ?? []];
+
+      return joinTemplates;
     } catch (err: unknown) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
