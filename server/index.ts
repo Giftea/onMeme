@@ -1,4 +1,5 @@
 import { listingRouter } from "./routes/listing";
+import { marketplaceRouter } from "./routes/marketplace";
 import { memeRouter } from "./routes/memes";
 import { nftRouter } from "./routes/nfts";
 import { tokenRouter } from "./routes/token";
@@ -11,6 +12,7 @@ export const appRouter = router({
   meme: memeRouter,
   nft: nftRouter,
   listing: listingRouter,
+  marketplace: marketplaceRouter,
 });
 
 export type AppRouter = typeof appRouter;

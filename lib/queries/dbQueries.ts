@@ -23,10 +23,28 @@ export async function getUserByAddress(address: string) {
 
 // Create a new user
 export async function createUser(id: string, address: string) {
-  return await db
+  const [existingUser] = await db
+    .select()
+    .from(users)
+    .where(eq(users.address, address))
+    .limit(1);
+  if (existingUser) return existingUser;
+
+  const [newUser] = await db
     .insert(users)
-    .values({ id, username: "", address })
+    .values({ address, username: "", id })
     .returning();
+
+  await db
+    .insert(balances)
+    .values({
+      address,
+      tokenId: 1,
+      balance: 10,
+    })
+    .onConflictDoNothing(); // Prevent duplicate entries
+
+  return newUser;
 }
 
 // Update user by address
@@ -85,6 +103,88 @@ export async function likeListing(listingId: number, userId: string) {
     // If the like does not exist, insert a new like
     return await db.insert(likes).values({ listingId, userId }).returning();
   }
+}
+
+// Purchase NFT
+export async function purchaseNFT(listingId: number, buyerAddress: string) {
+  // Ensure buyer has an account balance (if missing, create it with 10 ONC)
+  await db
+    .insert(balances)
+    .values({
+      address: buyerAddress,
+      tokenId: 1,
+      balance: 10, // Default balance
+    })
+    .onConflictDoNothing();
+
+  // Ensure seller has an account balance (if missing, create it with 10 ONC)
+  const [listing] = await db
+    .select()
+    .from(listings)
+    .where(eq(listings.id, listingId))
+    .limit(1);
+  if (!listing) throw new Error("Listing not found.");
+
+  await db
+    .insert(balances)
+    .values({
+      address: listing.seller,
+      tokenId: 1,
+      balance: 10,
+    })
+    .onConflictDoNothing();
+
+  // Fetch buyer's balance
+  const [buyerBalance] = await db
+    .select()
+    .from(balances)
+    .where(and(eq(balances.address, buyerAddress), eq(balances.tokenId, 1)))
+    .limit(1);
+
+  if (!buyerBalance || buyerBalance.balance < listing.price) {
+    throw new Error("Insufficient balance.");
+  }
+
+  // Fetch seller's balance
+  const [sellerBalance] = await db
+    .select()
+    .from(balances)
+    .where(and(eq(balances.address, listing.seller), eq(balances.tokenId, 1)))
+    .limit(1);
+
+  if (!sellerBalance)
+    throw new Error("Seller does not have an account balance.");
+
+  // Start transaction to ensure atomic updates
+  await db.transaction(async (tx) => {
+    // Transfer NFT ownership
+    await tx
+      .update(nfts)
+      .set({ owner: buyerAddress }) // Change owner to buyer
+      .where(eq(nfts.id, listing.nftId));
+
+    // Deduct price from buyer's balance
+    await tx
+      .update(balances)
+      .set({ balance: buyerBalance.balance - listing.price })
+      .where(and(eq(balances.address, buyerAddress), eq(balances.tokenId, 1)));
+
+    // Add price to seller's balance
+    await tx
+      .update(balances)
+      .set({ balance: sellerBalance.balance + listing.price })
+      .where(
+        and(eq(balances.address, listing.seller), eq(balances.tokenId, 1))
+      );
+
+    //  Update listing status to "sold"
+    await tx
+      .update(listings)
+      .set({ status: "sold" })
+      .where(eq(listings.id, listingId));
+  });
+
+  return { message: "NFT purchased successfully!", newOwner: buyerAddress };
 }
 
 // Get all listings
@@ -177,7 +277,8 @@ export async function getMarketplaceListings() {
     })
     .from(listings)
     .innerJoin(nfts, eq(listings.nftId, nfts.id))
-    .innerJoin(users, eq(listings.seller, users.address));
+    .innerJoin(users, eq(listings.seller, users.address))
+    .where(eq(listings.status, "listed"));
 }
 
 // Get all memes
@@ -187,7 +288,10 @@ export async function getAllMemes() {
 
 // Get memes by user
 export async function getMemesByOwner(ownerAddress: string) {
-  return await db.select().from(memes).where(eq(memes.ownerAddress, ownerAddress));
+  return await db
+    .select()
+    .from(memes)
+    .where(eq(memes.ownerAddress, ownerAddress));
 }
 
 // Create a new meme
@@ -254,7 +358,7 @@ export async function mint(address: string, amount: number, tokenId: number) {
   const maxSupply = await getMaxSupply(tokenId);
   const currentSupply = await getTotalCirculatingSupply(tokenId);
 
-  if (currentSupply + amount > maxSupply) {
+  if (Number(currentSupply) + Number(amount) > maxSupply) {
     throw new Error("Minting would exceed max supply");
   }
 
