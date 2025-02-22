@@ -16,9 +16,9 @@ export default function Page() {
 
   return (
     <React.Fragment>
-      <h4 className="text-4xl border-b pb-2 font-semibold text-gray-400 mb-6">
+      <p className="text-2xl md:text-4xl border-b pb-2 font-semibold text-gray-400 mb-6">
         NFT Memes
-      </h4>
+      </p>
       <LoadSkeleton enabled={isNFTsLoading} skeleton={ProfileMemeSkeleton}>
         <UserNFTs isLoading={isNFTsLoading} listedNFTs={listedNFTs} />
       </LoadSkeleton>

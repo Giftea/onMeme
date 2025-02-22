@@ -439,7 +439,7 @@ export default function MemeGeneratorX({
   return (
     <LoadSkeleton skeleton={MemeGeneratorSkeleton} enabled={loading}>
       <Card className="p-6 my-6">
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row w-fit md:w-full gap-2 justify-between">
           <CardTitle className="text-2xl">Meme Generator</CardTitle>
           <UploadTemplate
             handleImageChange={handleImageChange}
@@ -449,7 +449,7 @@ export default function MemeGeneratorX({
           />
         </div>
 
-        <CardContent className="grid grid-cols-2 gap-x-4 p-0 mt-5">
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-4 p-0 mt-5">
           <div className="relative mt-6">
             <Canvas
               previewCanvasRef={previewCanvasRef}
