@@ -5,11 +5,7 @@ import { useEffect, useState } from "react";
 import { Memes } from "@/lib/types";
 import { FolderClosed } from "lucide-react";
 
-export default function UserMemes({
-  address,
-}: {
-  address: string | null;
-}) {
+export default function UserMemes({ address }: { address: string | null }) {
   const [memes, setMemes] = useState<Memes[]>();
 
   const { data, isLoading } = trpc.meme.getMemesByOwner.useQuery({
@@ -27,7 +23,7 @@ export default function UserMemes({
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {memes && memes?.length > 0 && (
           <>
-            {memes.map((item) => (
+            {memes.toReversed().map((item) => (
               <div key={item.id}>
                 <NFTCard meme={item} address={address} />
               </div>

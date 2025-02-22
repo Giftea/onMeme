@@ -18,7 +18,7 @@ export default function UserNFTs({
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {nfts && nfts?.length > 0 && (
           <>
-            {nfts.map((item) => (
+            {nfts.toReversed().map((item) => (
               <div key={item.id}>
                 <NFTCard nft={item} />
               </div>
@@ -28,7 +28,7 @@ export default function UserNFTs({
 
         {listedNFTs && listedNFTs?.length > 0 && (
           <>
-            {listedNFTs.map((item) => (
+            {listedNFTs.toReversed().map((item) => (
               <div key={item.listingId}>
                 <NFTCard listedNFT={item} />
               </div>
