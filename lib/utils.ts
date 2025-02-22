@@ -22,3 +22,46 @@ export function generateMockEthereumAddress() {
     ).join("")
   );
 }
+
+export function formatDate(dateString: string): {
+  short: string;
+  full: string;
+} {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = date.toLocaleString("default", { month: "short" });
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const period = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 || 12;
+
+  const short = `${day} ${month}`;
+  const full = `${day} ${month} ${year} | ${formattedHours}:${minutes}${period}`;
+  return { short, full };
+}
+
+export function shortenText(text: string): string {
+  return text.length > 30 ? `${text.slice(0, 30)}...` : text;
+}
+
+export function convertImageToBase64(
+  imageUrl: string,
+  callback: (base64: string) => void
+): void {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", imageUrl, true);
+  xhr.responseType = "arraybuffer";
+
+  xhr.onload = function () {
+    const bytes = new Uint8Array(xhr.response);
+    let binary = "";
+    for (let i = 0; i < bytes.byteLength; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    const base64 = btoa(binary);
+    callback(base64);
+  };
+
+  xhr.send();
+}
