@@ -22,6 +22,7 @@ import { toast } from "@/hooks/use-toast";
 import LoadSkeleton from "../skeleton";
 import MemeGeneratorSkeleton from "../skeleton/meme-generator.skeleton";
 import IsLoading from "../composed/loader";
+import MemeGeneratedModal from "../modals/meme-generated-modal";
 
 export default function MemeGeneratorX({
   address,
@@ -39,6 +40,7 @@ export default function MemeGeneratorX({
           variant: "success",
           title: "Meme Successfully Generated! 😎",
         });
+        setOpenMemeGeneratedModal(true);
         setIsLoading(false);
       },
       onError: () => {
@@ -55,11 +57,12 @@ export default function MemeGeneratorX({
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [selectedTextId, setSelectedTextId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openMemeGeneratedModal, setOpenMemeGeneratedModal] = useState(false);
   const [status, setStatus] = useState<StatusMessage>({
     message: "",
     type: "",
   });
-
+  const [memeImage, setMemeImage] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -327,10 +330,10 @@ export default function MemeGeneratorX({
     try {
       const url = canvas.toDataURL("image/png");
 
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "meme.png";
-      link.click();
+      // const link = document.createElement("a");
+      // link.href = url;
+      // link.download = "meme.png";
+      // link.click();
 
       const response = await fetch(url);
       const blob = await response.blob();
@@ -346,6 +349,16 @@ export default function MemeGeneratorX({
 
       const ipfsUrl = await uploadResponse.json();
 
+      if (ipfsUrl) {
+        const img = new Image();
+        img.src = ipfsUrl;
+
+        img.onload = () => {
+          setMemeImage(ipfsUrl);
+          // setOpenMemeGeneratedModal(true);
+        };
+      }
+
       if (ipfsUrl && address) {
         await createMeme({
           ownerAddress: address,
@@ -356,7 +369,7 @@ export default function MemeGeneratorX({
     } catch (e) {
       toast({
         variant: "destructive",
-        title: `Failed to upload to IPFS meme! 😞 ${e}`,
+        title: `Failed to upload meme to IPFS! 😞 ${e}`,
       });
     }
   };
@@ -480,6 +493,11 @@ export default function MemeGeneratorX({
           </div>
         </CardContent>
       </Card>
+      <MemeGeneratedModal
+        memeImage={memeImage}
+        open={openMemeGeneratedModal}
+        setOpen={setOpenMemeGeneratedModal}
+      />
     </LoadSkeleton>
   );
 }
