@@ -39,7 +39,10 @@ export default function Header({ address }: { address: string | null }) {
           ))}
         </div>
 
-        <div className="hidden md:flex">Balance: <span className="text-cyan-200/70">{balance}</span> OMC </div>
+        <div className="hidden md:flex space-x-1">
+          <span>Balance:</span>{" "}
+          <span className="text-cyan-200/70"> {balance} </span> <span>OMC</span>
+        </div>
 
         <div className="flex md:hidden">
           <Sidebar address={address} />
