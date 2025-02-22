@@ -43,7 +43,7 @@ export const userRouter = router({
           message: "User not found",
         });
       }
-      if (initialAddress && user[0]) {
+      if (initialAddress && !user[0]) {
         await createUserAccount(initialAddress);
       }
 
