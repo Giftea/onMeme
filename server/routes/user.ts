@@ -34,11 +34,11 @@ export const userRouter = router({
   fetchUser: publicProcedure
     .input(UserAddressSchema)
     .query(async ({ input }) => {
-      const { address, initialAddress } = input;
+      const { address, initAccount } = input;
       const user = await getUserByAddress(address);
 
-      if (initialAddress && !user[0]) {
-        await createUserAccount(initialAddress);
+      if (initAccount && !user[0]) {
+        await createUserAccount(address);
       }
 
       if (!user.length) {

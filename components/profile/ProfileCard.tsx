@@ -9,7 +9,6 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import EditUsernameModal from "./EditUsernameModal";
 import { trpc } from "@/lib/trpc.utils";
-import { AddressSchemaType } from "@/lib/zod-schemas/user";
 
 interface ProfileCardProps {
   initialAddress: string | null;
@@ -24,7 +23,7 @@ export default function ProfileCard({
 
   const { data: userProfile } = trpc.user.fetchUser.useQuery({
     address: String(initialAddress),
-    initialAddress: initialAddress as AddressSchemaType,
+    initAccount: true,
   });
 
   const avatar = useMemo(() => {
