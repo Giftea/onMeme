@@ -37,14 +37,15 @@ export const userRouter = router({
       const { address, initialAddress } = input;
       const user = await getUserByAddress(address);
 
+      if (initialAddress && !user[0]) {
+        await createUserAccount(initialAddress);
+      }
+
       if (!user.length) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "User not found",
         });
-      }
-      if (initialAddress && !user[0]) {
-        await createUserAccount(initialAddress);
       }
 
       return user[0] as FetchUserResponse;
