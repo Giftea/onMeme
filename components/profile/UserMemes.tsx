@@ -14,7 +14,7 @@ export default function UserMemes({ address }: { address: string | null }) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {memes && memes?.length > 0 && (
           <>
-            {memes.map((item) => (
+            {memes.toReversed().map((item) => (
               <div key={item.id}>
                 <NFTCard meme={item} address={address} />
               </div>
