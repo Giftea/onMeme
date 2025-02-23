@@ -126,23 +126,20 @@ export async function likeListing(listingId: number, userId: string) {
 
 // Purchase NFT
 export async function purchaseNFT(listingId: number, buyerAddress: string) {
-  // Ensure buyer has an account balance (if missing, create it with 10 ONC)
-  await db
-    .insert(balances)
-    .values({
-      address: buyerAddress,
-      tokenId: 1,
-      balance: 10, // Default balance
-    })
-    .onConflictDoNothing();
-
-  // Ensure seller has an account balance (if missing, create it with 10 ONC)
+  // Get listing details
   const [listing] = await db
     .select()
     .from(listings)
     .where(eq(listings.id, listingId))
     .limit(1);
   if (!listing) throw new Error("Listing not found.");
+  if (listing.status !== "listed")
+    throw new Error("NFT is no longer available.");
+
+  // Prevent users from purchasing their own NFT
+  if (listing.seller === buyerAddress) {
+    throw new Error("You cannot purchase your own NFT.");
+  }
 
   await db
     .insert(balances)
