@@ -486,3 +486,35 @@ export async function transfer(
       });
   });
 }
+
+// Get top users based on combined leaderboard points
+export async function getLeaderboard() {
+  return await db
+    .select({
+      userId: users.id,
+      username: users.username,
+      address: users.address,
+      totalPoints: sql<number>`
+        (COALESCE(COUNT(${listings.id}), 0) * 5) +  -- NFTs Sold (5 points each)
+        (COALESCE(COUNT(${nfts.id}), 0) * 2) +      -- Memes Minted (2 points each)
+        (COALESCE(SUM(${balances.balance}), 0) * 1) + -- OMC Earned (1 point per OMC)
+        (COALESCE(COUNT(${likes.id}), 0) * 1)       -- Likes Received (1 point each)
+      `.as("totalPoints"),
+    })
+    .from(users)
+    .leftJoin(
+      listings,
+      sql`${users.address} = ${listings.seller} AND ${listings.status} = 'sold'`
+    ) // NFTs Sold
+    .leftJoin(nfts, sql`${users.address} = ${nfts.owner}`)
+    .leftJoin(balances, sql`${users.address} = ${balances.address}`)
+    .leftJoin(likes, sql`${users.id} = ${likes.userId}`)
+    .groupBy(users.id)
+    .orderBy(
+      sql`(COALESCE(COUNT(${listings.id}), 0) * 5) +  
+        (COALESCE(COUNT(${nfts.id}), 0) * 2) +  
+        (COALESCE(SUM(${balances.balance}), 0) * 1) +  
+        (COALESCE(COUNT(${likes.id}), 0) * 1) DESC`
+    )
+    .limit(10);
+}
