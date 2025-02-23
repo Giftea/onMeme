@@ -486,3 +486,39 @@ export async function transfer(
       });
   });
 }
+
+// Get top users based on combined leaderboard points
+export async function getLeaderboard() {
+  return await db
+  .select({
+    userId: users.id,
+    username: users.username,
+    address: users.address,
+
+    totalPoints: sql<number>`
+      (COALESCE(COUNT(DISTINCT CASE WHEN ${listings.status} = 'sold' THEN ${listings.id} END), 0) * 5) +  
+      (COALESCE(COUNT(DISTINCT ${nfts.id}), 0) * 2) +  
+      -- (COALESCE(SUM(DISTINCT ${balances.balance}), 0) * 1) +  
+      (COALESCE(COUNT(DISTINCT likes.id), 0) * 1) 
+    `.as("totalPoints"),
+
+    totalNftsSold: sql<number>`COALESCE(COUNT(DISTINCT CASE WHEN ${listings.status} = 'sold' THEN ${listings.id} END), 0)`.as("totalNftsSold"),
+    // userBalance: sql<number>`COALESCE(SUM(DISTINCT ${balances.balance}), 0)`.as("userBalance"),
+    totalLikes: sql<number>`COALESCE(COUNT(DISTINCT likes.id), 0)`.as("totalLikes"), 
+    totalNftsMinted: sql<number>`COALESCE(COUNT(DISTINCT ${nfts.id}), 0)`.as("totalNftsMinted"),
+    totalEarnings: sql<number>`COALESCE(SUM(DISTINCT CASE WHEN ${listings.status} = 'sold' THEN ${listings.price} END), 0)`.as("totalEarnings"),
+  })
+  .from(users)
+    .leftJoin(listings, sql`${users.address} = ${listings.seller}`)
+    .leftJoin(nfts, sql`${users.address} = ${nfts.owner}`)
+    // .leftJoin(balances, sql`${users.address} = ${balances.address}`)
+    .leftJoin(likes, sql`${likes.listingId} = ${listings.id} AND ${listings.seller} = ${users.address}`)
+    .groupBy(users.id, users.username, users.address)
+    .orderBy(
+      sql`(COALESCE(COUNT(${listings.id}), 0) * 5) +  
+        (COALESCE(COUNT(${nfts.id}), 0) * 2) +  
+        -- (COALESCE(SUM(${balances.balance}), 0) * 1) +  
+        (COALESCE(COUNT(${likes.id}), 0) * 1) DESC`
+    )
+    .limit(25);
+}

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Sidebar } from "../composed/sidebar";
+import { Sidebar } from "@/components/layout/sidebar";
 
 export default function Header({ address }: { address: string | null }) {
   const [balance, setBalance] = useState(0);
@@ -77,6 +77,10 @@ export const navLinks = [
   {
     name: "Marketplace",
     link: "/marketplace",
+  },
+  {
+    name: "Leaderboard",
+    link: "/leaderboard",
   },
   {
     name: "My NFTs",
