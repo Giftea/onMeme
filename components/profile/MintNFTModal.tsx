@@ -59,6 +59,11 @@ export default function MintNFTModal({
       router.push("profile?tab=nfts");
     },
     onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: error?.message,
+        description: "You cannot mint an NFT twice!",
+      });
       console.error(error);
     },
   });

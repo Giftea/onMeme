@@ -74,6 +74,15 @@ export async function getNFTsByOwner(owner: string) {
 
 // Mint a new NFT
 export async function mintNFT(owner: string, metadata: object) {
+  const [existingNFT] = await db
+    .select()
+    .from(nfts)
+    .where(eq(nfts.token, "1"))
+    .limit(1);
+  if (existingNFT) {
+    throw new Error("This NFT has already been minted.");
+  }
+
   return await db
     .insert(nfts)
     .values({ token: "1", owner, metadata })
