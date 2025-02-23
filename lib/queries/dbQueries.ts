@@ -319,6 +319,19 @@ export async function updateListingStatus(
     .returning();
 }
 
+export async function updateListingPrice(listingId: number, newPrice: number) {
+  // Ensure a valid price is provided
+  if (newPrice <= 0) {
+    throw new Error("Price must be greater than zero.");
+  }
+
+  return await db
+    .update(listings)
+    .set({ price: newPrice, status: "listed" })
+    .where(eq(listings.id, listingId))
+    .returning();
+}
+
 export async function getMarketplaceListings() {
   return await db
     .select({
