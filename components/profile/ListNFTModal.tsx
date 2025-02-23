@@ -28,8 +28,9 @@ import { ListingSchema, ListingSchemaType } from "@/lib/zod-schemas/nft";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import IsLoading from "../composed/loader";
+import UnListNFT from "./UnListNFT";
 
-export default function ListNFTModal({ nft }: { nft?: NFT }) {
+export default function ListNFTModal({ nft }: { nft: NFT }) {
   const router = useRouter();
   const { toast } = useToast();
   const trpcUtils = trpc.useUtils();
@@ -53,9 +54,17 @@ export default function ListNFTModal({ nft }: { nft?: NFT }) {
         router.push("/marketplace");
       },
       onError: (error) => {
-        console.error(error);
+        toast({
+          variant: "destructive",
+          title: error?.message,
+          description: "You cannot list an NFT twice!",
+        });
       },
     });
+
+  const { data: isNFTListed } = trpc.listing.checkNFTListed.useQuery({
+    nftId: nft?.id,
+  });
 
   const handleOnSubmit = async (data: ListingSchemaType) => {
     const { price } = data;
@@ -67,60 +76,73 @@ export default function ListNFTModal({ nft }: { nft?: NFT }) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="font-semibold float-right text-lg px-8 py-5">
-          List NFT
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="lg:max-w-[700px]">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">List Your NFT for Sale</DialogTitle>
-          <DialogDescription />
-        </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 py-4">
-          {nft?.metadata?.image && (
-            <Image
-              src={nft?.metadata?.image}
-              alt="meme"
-              className="rounded-lg"
-              width={400}
-              height={400}
-            />
-          )}
-          <Form {...form}>
-            <form
-              className="space-y-3"
-              onSubmit={form.handleSubmit(handleOnSubmit)}
-            >
-              <FormField
-                control={form.control}
-                name={"price"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="price" className="text-base">
-                      Price:
-                    </FormLabel>
-                    <FormControl>
-                      <Input id="price" type="number" className="" {...field} />
-                    </FormControl>
-                    <FormMessage className="" />
-                  </FormItem>
-                )}
-              />
-              <DialogFooter>
-                <Button
-                  disabled={isPending}
-                  className="font-semibold text-lg w-full py-5 mt-5"
-                  type="submit"
+    <>
+      {isNFTListed ? (
+        <UnListNFT nft={nft} />
+      ) : (
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className="font-semibold float-right text-lg px-8 py-5">
+              List NFT
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="lg:max-w-[700px]">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">
+                List Your NFT for Sale
+              </DialogTitle>
+              <DialogDescription />
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4 py-4">
+              {nft?.metadata?.image && (
+                <Image
+                  src={nft?.metadata?.image}
+                  alt="meme"
+                  className="rounded-lg"
+                  width={400}
+                  height={400}
+                />
+              )}
+              <Form {...form}>
+                <form
+                  className="space-y-3"
+                  onSubmit={form.handleSubmit(handleOnSubmit)}
                 >
-                  {isPending ? <IsLoading /> : "List Now"}
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </div>
-      </DialogContent>
-    </Dialog>
+                  <FormField
+                    control={form.control}
+                    name={"price"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor="price" className="text-base">
+                          Price:
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="price"
+                            type="number"
+                            className=""
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="" />
+                      </FormItem>
+                    )}
+                  />
+                  <DialogFooter>
+                    <Button
+                      disabled={isPending}
+                      className="font-semibold text-lg w-full py-5 mt-5"
+                      type="submit"
+                    >
+                      {isPending ? <IsLoading /> : "List Now"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 }

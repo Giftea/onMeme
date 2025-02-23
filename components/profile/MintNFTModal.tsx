@@ -34,7 +34,7 @@ export default function MintNFTModal({
   meme,
   address,
 }: {
-  meme?: Memes;
+  meme: Memes;
   address: string;
 }) {
   const router = useRouter();
@@ -45,6 +45,10 @@ export default function MintNFTModal({
   const form = useForm<MintNFTSchemaType>({
     resolver: zodResolver(MintNFTSchema),
     defaultValues,
+  });
+
+  const { data: isMemeListed } = trpc.nft.checkMemeMinted.useQuery({
+    memeId: meme?.id,
   });
 
   const { mutateAsync: mintNFT, isPending } = trpc.nft.mintNFT.useMutation({
@@ -64,11 +68,11 @@ export default function MintNFTModal({
         title: error?.message,
         description: "You cannot mint an NFT twice!",
       });
-      console.error(error);
     },
   });
 
   const handleOnSubmit = async (data: MintNFTSchemaType) => {
+    if (!meme) return;
     const { name, description } = data;
 
     await mintNFT({
@@ -76,80 +80,89 @@ export default function MintNFTModal({
       metadata: {
         name,
         description,
-        image: meme?.imageUrl,
+        image: meme.imageUrl,
       },
+      memeId: meme.id,
     });
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="font-semibold float-right text-lg px-8 py-5">
-          Mint
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="lg:max-w-[700px]">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Mint Meme as NFT</DialogTitle>
-          <DialogDescription />
-        </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 py-4">
-          <Image
-            src={meme ? meme?.imageUrl : ""}
-            alt="meme"
-            className="rounded-lg"
-            width={400}
-            height={400}
-          />
+    <>
+      {isMemeListed ? (
+        <p className="px-6 py-2 float-right border border-dotted border-secondary text-secondary w-fit rounded-lg font-semibold">
+          Minted
+        </p>
+      ) : (
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className="font-semibold float-right text-lg px-8 py-5">
+              Mint
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="lg:max-w-[700px]">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">Mint Meme as NFT</DialogTitle>
+              <DialogDescription />
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4 py-4">
+              <Image
+                src={meme ? meme?.imageUrl : ""}
+                alt="meme"
+                className="rounded-lg"
+                width={400}
+                height={400}
+              />
 
-          <Form {...form}>
-            <form
-              className="space-y-3"
-              onSubmit={form.handleSubmit(handleOnSubmit)}
-            >
-              <FormField
-                control={form.control}
-                name={"name"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="name" className="text-base">
-                      Name:
-                    </FormLabel>
-                    <FormControl>
-                      <Input id="name" className="" {...field} />
-                    </FormControl>
-                    <FormMessage className="" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={"description"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="description" className="text-base">
-                      Description:
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea className="" {...field} />
-                    </FormControl>
-                    <FormMessage className="" />
-                  </FormItem>
-                )}
-              />
-              <DialogFooter>
-                <Button
-                  disabled={isPending}
-                  className="font-semibold text-lg w-full py-5 mt-5"
-                  type="submit"
+              <Form {...form}>
+                <form
+                  className="space-y-3"
+                  onSubmit={form.handleSubmit(handleOnSubmit)}
                 >
-                  {isPending ? <IsLoading /> : "Mint"}
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </div>
-      </DialogContent>
-    </Dialog>
+                  <FormField
+                    control={form.control}
+                    name={"name"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor="name" className="text-base">
+                          Name:
+                        </FormLabel>
+                        <FormControl>
+                          <Input id="name" className="" {...field} />
+                        </FormControl>
+                        <FormMessage className="" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={"description"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor="description" className="text-base">
+                          Description:
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea className="" {...field} />
+                        </FormControl>
+                        <FormMessage className="" />
+                      </FormItem>
+                    )}
+                  />
+                  <DialogFooter>
+                    <Button
+                      disabled={isPending}
+                      className="font-semibold text-lg w-full py-5 mt-5"
+                      type="submit"
+                    >
+                      {isPending ? <IsLoading /> : "Mint"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 }

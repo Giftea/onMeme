@@ -9,6 +9,8 @@ import {
   getLikesForListing,
   getMarketplaceListings,
   getListingByID,
+  isNFTListed,
+  getListingByNFTId,
 } from "@/lib/queries/dbQueries";
 import { ListedNFT } from "@/lib/types";
 
@@ -21,7 +23,13 @@ export const listingRouter = router({
   getListingByID: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
-      return await getListingByID(input.id) as ListedNFT;
+      return (await getListingByID(input.id)) as ListedNFT;
+    }),
+
+  getListingByNFTId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      return (await getListingByNFTId(input.id)) as ListedNFT;
     }),
 
   getMarketplaceListings: publicProcedure.query(async () => {
@@ -72,5 +80,11 @@ export const listingRouter = router({
     .input(z.object({ listingId: z.number(), userId: z.string() }))
     .mutation(async ({ input }) => {
       return await likeListing(input.listingId, input.userId);
+    }),
+
+  checkNFTListed: publicProcedure
+    .input(z.object({ nftId: z.number() }))
+    .query(async ({ input }) => {
+      return await isNFTListed(input.nftId);
     }),
 });

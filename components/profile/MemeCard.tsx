@@ -18,7 +18,7 @@ export default function NFTCard({
   address?: string | null;
 }) {
   return (
-    <div className="border flex cursor-pointer justify-center items-center border-gray-400 rounded-lg p-4">
+    <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
       {meme && address && (
         <div className="space-y-3 w-full">
           <Image
