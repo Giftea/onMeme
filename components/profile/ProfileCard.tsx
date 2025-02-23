@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import EditUsernameModal from "./EditUsernameModal";
 import { trpc } from "@/lib/trpc.utils";
+import { useAddress } from "@/hooks";
 
 interface ProfileCardProps {
   initialAddress: string | null;
@@ -20,18 +21,19 @@ export default function ProfileCard({
   isProfilePage,
 }: ProfileCardProps) {
   const router = useRouter();
+  const { data: userAddress } = useAddress(initialAddress)
 
   const { data: userProfile } = trpc.user.fetchUser.useQuery({
-    address: String(initialAddress),
+    address: String(userAddress),
     initAccount: true,
   });
 
   const avatar = useMemo(() => {
     return createAvatar(croodles, {
       size: 128,
-      seed: initialAddress || "default",
+      seed: userAddress || "default",
     }).toDataUri();
-  }, [initialAddress]);
+  }, [userAddress]);
 
   return (
     <Card className="  p-6 my-6 flex justify-between items-center">
@@ -47,8 +49,8 @@ export default function ProfileCard({
           {userProfile && (
             <p className="text-lg font-semibold">{userProfile?.username} </p>
           )}
-          {initialAddress && (
-            <p className="text-lg">{shortenAddress(String(initialAddress))}</p>
+          {userAddress && (
+            <p className="text-lg">{shortenAddress(String(userAddress))}</p>
           )}
         </div>
       </div>

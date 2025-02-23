@@ -1,0 +1,1 @@
+ALTER TABLE "nfts" ADD COLUMN "meme_id" integer;

@@ -8,6 +8,20 @@
       "when": 1740081927892,
       "tag": "0000_closed_jasper_sitwell",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1740301820057,
+      "tag": "0001_perpetual_scalphunter",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1740304736455,
+      "tag": "0002_tidy_mephisto",
+      "breakpoints": true
     }
   ]
 }

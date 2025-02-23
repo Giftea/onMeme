@@ -4,9 +4,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import MintNFTModal from "./MintNFTModal";
 import Link from "next/link";
 import { shortenText } from "@/lib/utils";
-import ListNFTModal from "./ListNFTModal";
+import NFTCard from "./NFTCard";
 
-export default function NFTCard({
+export default function Card({
   meme,
   nft,
   address,
@@ -18,7 +18,7 @@ export default function NFTCard({
   address?: string | null;
 }) {
   return (
-    <div className="border flex cursor-pointer justify-center items-center border-gray-400 rounded-lg p-4">
+    <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
       {meme && address && (
         <div className="space-y-3 w-full">
           <Image
@@ -32,22 +32,7 @@ export default function NFTCard({
         </div>
       )}
       {nft && nft?.metadata && (
-        <div className="space-y-3 w-full">
-          <div className="space-y-3">
-            <Image
-              src={nft?.metadata?.image}
-              alt="meme"
-              className="rounded-lg h-[300px] w-full object-cover"
-              width={300}
-              height={300}
-            />
-            <p className="font-semibold text-lg">{nft?.metadata?.name}</p>
-            <p className="text-gray-500 !mt-0 ">
-              {shortenText(nft?.metadata?.description)}
-            </p>
-          </div>
-          <ListNFTModal nft={nft as NFT} />
-        </div>
+        <NFTCard nft={nft} />
       )}
 
       {listedNFT && listedNFT?.nftMetadata && (

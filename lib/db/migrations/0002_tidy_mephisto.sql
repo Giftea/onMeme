@@ -1,0 +1,1 @@
+ALTER TABLE "nfts" ALTER COLUMN "meme_id" SET NOT NULL;

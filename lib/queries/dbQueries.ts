@@ -72,11 +72,30 @@ export async function getNFTsByOwner(owner: string) {
   return await db.select().from(nfts).where(eq(nfts.owner, owner));
 }
 
+export async function isMemeMinted(memeId: number) {
+  const [existingNFT] = await db
+    .select()
+    .from(nfts)
+    .where(eq(nfts.memeId, memeId))
+    .limit(1);
+
+  return !!existingNFT;
+}
+
 // Mint a new NFT
-export async function mintNFT(owner: string, metadata: object) {
+export async function mintNFT(owner: string, metadata: object, memeId: number) {
+  const [existingNFT] = await db
+    .select()
+    .from(nfts)
+    .where(eq(nfts.memeId, memeId))
+    .limit(1);
+  if (existingNFT) {
+    throw new Error("This NFT has already been minted.");
+  }
+
   return await db
     .insert(nfts)
-    .values({ token: "1", owner, metadata })
+    .values({ token: "1", owner, metadata, memeId })
     .returning();
 }
 
@@ -107,23 +126,20 @@ export async function likeListing(listingId: number, userId: string) {
 
 // Purchase NFT
 export async function purchaseNFT(listingId: number, buyerAddress: string) {
-  // Ensure buyer has an account balance (if missing, create it with 10 ONC)
-  await db
-    .insert(balances)
-    .values({
-      address: buyerAddress,
-      tokenId: 1,
-      balance: 10, // Default balance
-    })
-    .onConflictDoNothing();
-
-  // Ensure seller has an account balance (if missing, create it with 10 ONC)
+  // Get listing details
   const [listing] = await db
     .select()
     .from(listings)
     .where(eq(listings.id, listingId))
     .limit(1);
   if (!listing) throw new Error("Listing not found.");
+  if (listing.status !== "listed")
+    throw new Error("NFT is no longer available.");
+
+  // Prevent users from purchasing their own NFT
+  if (listing.seller === buyerAddress) {
+    throw new Error("You cannot purchase your own NFT.");
+  }
 
   await db
     .insert(balances)
@@ -215,6 +231,28 @@ export async function getListingsBySeller(seller: string) {
   return result;
 }
 
+export async function getListingByNFTId(id: number) {
+  const result = await db
+    .select({
+      listingId: listings.id,
+      price: listings.price,
+      status: listings.status,
+      listedAt: listings.listedAt,
+      nftId: nfts.id,
+      nftToken: nfts.token,
+      nftMetadata: nfts.metadata,
+      sellerId: users.id,
+      sellerAddress: users.address,
+      sellerUsername: users.username,
+    })
+    .from(listings)
+    .innerJoin(nfts, eq(listings.nftId, nfts.id))
+    .innerJoin(users, eq(listings.seller, users.address))
+    .where(eq(listings.nftId, id));
+
+  return result.length > 0 ? result[0] : null;
+}
+
 export async function getListingByID(id: number) {
   const result = await db
     .select({
@@ -237,12 +275,32 @@ export async function getListingByID(id: number) {
   return result.length > 0 ? result[0] : null;
 }
 
+// Check if NFT is already listed
+export async function isNFTListed(nftId: number) {
+  const [existingNFT] = await db
+    .select()
+    .from(listings)
+    .where(eq(listings.nftId, nftId))
+    .limit(1);
+
+  return !!existingNFT;
+}
+
 // Create a new listing
 export async function createListing(
   nftId: number,
   seller: string,
   price: number
 ) {
+  const [existingListing] = await db
+    .select()
+    .from(listings)
+    .where(eq(listings.nftId, nftId))
+    .limit(1);
+  if (existingListing) {
+    throw new Error("This NFT is already listed for sale.");
+  }
+
   return await db
     .insert(listings)
     .values({ nftId, seller, price, status: "listed" })
@@ -258,6 +316,19 @@ export async function updateListingStatus(
     .update(listings)
     .set({ status })
     .where(eq(listings.id, id))
+    .returning();
+}
+
+export async function updateListingPrice(listingId: number, newPrice: number) {
+  // Ensure a valid price is provided
+  if (newPrice <= 0) {
+    throw new Error("Price must be greater than zero.");
+  }
+
+  return await db
+    .update(listings)
+    .set({ price: newPrice, status: "listed" })
+    .where(eq(listings.id, listingId))
     .returning();
 }
 
