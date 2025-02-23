@@ -1,8 +1,5 @@
-import { getAddress } from "@/lib/chopin-server";
 import LeaderBoard from "@/components/leaderboard";
 
-export default async function LeaderboardPage() {
-  const address = await getAddress();
-
+export default function LeaderboardPage() {
   return <LeaderBoard />;
 }
