@@ -1,13 +1,13 @@
 import ProfileCard from "@/components/profile/ProfileCard";
 import User from "@/components/profile";
-import { getAddress } from "@/lib/chopin-server";
+import { getAddress } from "@chopinframework/next";
 
 export default async function Home() {
   const address = await getAddress();
 
   return (
     <div>
-      <ProfileCard initialAddress={address} isProfilePage />
+      <ProfileCard userAddress={address} isProfilePage />
       <User address={address} />
     </div>
   );
