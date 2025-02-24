@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Sidebar } from "@/components/layout/sidebar";
 
 export default function Header({ address }: { address: string | null }) {
   const [balance, setBalance] = useState(0);
@@ -20,26 +21,38 @@ export default function Header({ address }: { address: string | null }) {
   }, [data]);
 
   return (
-    <header className="bg-card p-4 px-10">
+    <header className="bg-card p-4 md:px-10">
       <div className="flex items-center justify-between mx-auto max-w-[1060px]">
         <Link href={"/"}>
-          <Image src="/images/logo.svg" alt="Logo" width={140} height={140} />
+          <Image
+            src="/images/logo.svg"
+            alt="Logo"
+            className="w-28 md:w-36"
+            width={140}
+            height={140}
+          />
         </Link>
 
-        <div className="space-x-3">
+        <div className="space-x-3 hidden md:flex">
           {navLinks.map((item, index) => (
             <NavLinks key={index} link={item.link} name={item.name} />
           ))}
         </div>
-        <div>
-        Balance:  <span className="text-cyan-200/70">{balance}</span> OMC{" "}
+
+        <div className="hidden md:flex space-x-1">
+          <span>Balance:</span>{" "}
+          <span className="text-cyan-200/70"> {balance} </span> <span>OMC</span>
+        </div>
+
+        <div className="flex md:hidden">
+          <Sidebar address={address} />
         </div>
       </div>
     </header>
   );
 }
 
-function NavLinks({ link, name }: { name: string; link: string }) {
+export function NavLinks({ link, name }: { name: string; link: string }) {
   const pathName = usePathname();
 
   return (
@@ -56,7 +69,7 @@ function NavLinks({ link, name }: { name: string; link: string }) {
   );
 }
 
-const navLinks = [
+export const navLinks = [
   {
     name: "Home",
     link: "/",
@@ -64,6 +77,10 @@ const navLinks = [
   {
     name: "Marketplace",
     link: "/marketplace",
+  },
+  {
+    name: "Leaderboard",
+    link: "/leaderboard",
   },
   {
     name: "My NFTs",

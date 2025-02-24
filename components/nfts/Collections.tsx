@@ -46,7 +46,7 @@ export default function Collections({ address }: { address: string }) {
                 {nfts.map((item) => (
                   <CarouselItem
                     key={item.listingId}
-                    className="md:basis-1/2 lg:basis-1/3"
+                    className="sm:basis-1/2 lg:basis-1/3"
                   >
                     <NFTCard listedNFT={item} />
                   </CarouselItem>

@@ -1,25 +1,16 @@
 "use client";
 import NFTCard from "./MemeCard";
 import { trpc } from "@/lib/trpc.utils";
-import { useEffect, useState } from "react";
-import { Memes } from "@/lib/types";
 import { FolderClosed } from "lucide-react";
+import React from "react";
 
 export default function UserMemes({ address }: { address: string | null }) {
-  const [memes, setMemes] = useState<Memes[]>();
-
-  const { data, isLoading } = trpc.meme.getMemesByOwner.useQuery({
+  const { data: memes, isLoading } = trpc.meme.getMemesByOwner.useQuery({
     ownerAddress: String(address),
   });
 
-  useEffect(() => {
-    if (data) {
-      setMemes(data);
-    }
-  }, [isLoading, data]);
-
   return (
-    <>
+    <React.Fragment>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {memes && memes?.length > 0 && (
           <>
@@ -38,6 +29,6 @@ export default function UserMemes({ address }: { address: string | null }) {
           </div>
         )}
       </div>
-    </>
+    </React.Fragment>
   );
 }

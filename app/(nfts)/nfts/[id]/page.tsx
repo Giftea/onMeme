@@ -50,9 +50,12 @@ export default function Page() {
             enabled={isLoading}
             skeleton={MarketplaceViewNFTSkeleton}
           >
-            <div className="grid grid-cols-2 gap-4">
-              <div className="border rounded-lg flex flex-col space-y-2 justify-center items-end p-4">
-                <LikeNFT nftId={nftData.listingId} userId={user?.address} />
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="border rounded-lg flex flex-col space-y-2 items-center h-fit w-fit p-4">
+                <div className="flex justify-end w-full">
+                  {" "}
+                  <LikeNFT nftId={nftData.listingId} userId={user?.address} />
+                </div>
                 <Image
                   src={nftData?.nftMetadata.image}
                   className="rounded-lg"
@@ -140,7 +143,9 @@ function NFTDescription({
       <React.Fragment>
         {nftOwner !== undefined && (
           <div>
-            <p className="text-5xl font-bold mt-4">{nft?.nftMetadata?.name} </p>
+            <p className="text-3xl md:text-5xl font-bold mt-4">
+              {nft?.nftMetadata?.name}{" "}
+            </p>
             <p className="mt-2 text-sm text-gray-400">
               Owned by{" "}
               <span className="text-primary">

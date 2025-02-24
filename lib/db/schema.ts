@@ -58,6 +58,7 @@ export const likes = pgTable(
 export const nfts = pgTable("nfts", {
   id: serial("id").primaryKey(),
   token: varchar("token").notNull(),
+  memeId: integer("meme_id").notNull(),
   owner: varchar("owner", { length: 42 })
     .references(() => users.address)
     .notNull(),
