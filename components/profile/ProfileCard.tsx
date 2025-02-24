@@ -5,21 +5,19 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import EditUsernameModal from "./EditUsernameModal";
 import { trpc } from "@/lib/trpc.utils";
-import { useAddress } from "@/hooks";
 import Avatar from "../composed/avatar";
 import { SquareUserRound } from "lucide-react";
 
 interface ProfileCardProps {
-  initialAddress: string | null;
   isProfilePage?: boolean;
+  userAddress: string | null;
 }
 
 export default function ProfileCard({
-  initialAddress,
   isProfilePage,
+  userAddress,
 }: ProfileCardProps) {
   const router = useRouter();
-  const { data: userAddress } = useAddress(initialAddress);
 
   const { data: userProfile } = trpc.user.fetchUser.useQuery({
     address: String(userAddress),

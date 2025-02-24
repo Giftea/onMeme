@@ -1,11 +1,11 @@
 import MemeGeneratorX from "@/components/meme-generator";
 import ProfileCard from "@/components/profile/ProfileCard";
-import { getAddress } from "@/lib/chopin-server";
 import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
+import { getAddress } from "@chopinframework/next";
 
 export default async function Home() {
   const address = await getAddress();
@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProfileCard initialAddress={address} />
+      <ProfileCard userAddress={address} />
       <MemeGeneratorX address={address} />
     </HydrationBoundary>
   );
