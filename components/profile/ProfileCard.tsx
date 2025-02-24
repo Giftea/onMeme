@@ -7,6 +7,7 @@ import EditUsernameModal from "./EditUsernameModal";
 import { trpc } from "@/lib/trpc.utils";
 import { useAddress } from "@/hooks";
 import Avatar from "../composed/avatar";
+import { SquareUserRound } from "lucide-react";
 
 interface ProfileCardProps {
   initialAddress: string | null;
@@ -41,13 +42,16 @@ export default function ProfileCard({
       {isProfilePage ? (
         userProfile && <EditUsernameModal userName={userProfile.username} />
       ) : (
-        <Button
-          onClick={() => router.push("/profile")}
-          className="text-lg"
-          variant={"link"}
-        >
-          View Profile
-        </Button>
+        <div>
+          <SquareUserRound className="text-sky-500 flex md:hidden" />
+          <Button
+            onClick={() => router.push("/profile")}
+            className="text-lg hidden md:flex"
+            variant={"link"}
+          >
+            View Profile
+          </Button>
+        </div>
       )}
     </Card>
   );
