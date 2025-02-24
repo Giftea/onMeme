@@ -10,10 +10,10 @@ const LeaderBoard = () => {
 
   return (
     <div className="md:p-6">
-      <h1 className="text-xl md:text-4xl font-bold mb-4">🏆 Top Memers Leaderboard</h1>
+      <h1 className="text-2xl md:text-4xl font-bold mb-4">🏆 Top Memers Leaderboard</h1>
 
       <div className="overflow-x-auto">
-        <div className="p-2 border-b last:border-none grid grid-cols-2 py-4 text-lg md:text-xl min-w-[600px]">
+        <div className="p-2 border-b last:border-none grid grid-cols-2 py-4 text-base md:text-xl min-w-[600px]">
           <p>Top Users</p>
 
           <div className="grid grid-cols-4 place-items-center">
