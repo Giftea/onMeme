@@ -7,15 +7,18 @@ import EditUsernameModal from "./EditUsernameModal";
 import { trpc } from "@/lib/trpc.utils";
 import Avatar from "../composed/avatar";
 import { SquareUserRound } from "lucide-react";
-import { useAddress } from "@chopinframework/react";
 
 interface ProfileCardProps {
   isProfilePage?: boolean;
+  isUserPublicPage?: boolean;
+  userAddress: string;
 }
 
-export default function ProfileCard({ isProfilePage }: ProfileCardProps) {
+export default function ProfileCard({
+  isProfilePage,
+  isUserPublicPage, userAddress
+}: ProfileCardProps) {
   const router = useRouter();
-  const { address: userAddress } = useAddress();
 
   const { data: userProfile } = trpc.user.fetchUser.useQuery({
     address: String(userAddress),
@@ -28,27 +31,28 @@ export default function ProfileCard({ isProfilePage }: ProfileCardProps) {
         <Avatar userAddress={String(userAddress)} />
         <div>
           {userProfile && (
-            <p className="text-lg font-semibold">{userProfile?.username} </p>
+            <p className="text-lg font-semibold capitalize">{userProfile?.username} </p>
           )}
           {userAddress && (
             <p className="text-lg">{shortenAddress(String(userAddress))}</p>
           )}
         </div>
       </div>
-      {isProfilePage ? (
-        userProfile && <EditUsernameModal userName={userProfile.username} />
-      ) : (
-        <div>
-          <SquareUserRound className="text-sky-500 flex md:hidden" />
-          <Button
-            onClick={() => router.push("/profile")}
-            className="text-lg hidden md:flex"
-            variant={"link"}
-          >
-            View Profile
-          </Button>
-        </div>
-      )}
+      {!isUserPublicPage &&
+        (isProfilePage ? (
+          userProfile && <EditUsernameModal userName={userProfile.username} />
+        ) : (
+          <div>
+            <SquareUserRound className="text-sky-500 flex md:hidden" />
+            <Button
+              onClick={() => router.push("/profile")}
+              className="text-lg hidden md:flex"
+              variant={"link"}
+            >
+              View Profile
+            </Button>
+          </div>
+        ))}
     </Card>
   );
 }

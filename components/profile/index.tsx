@@ -6,10 +6,8 @@ import UserNFTs from "./UserNFTs";
 import React from "react";
 import LoadSkeleton from "../skeleton";
 import ProfileMemeSkeleton from "../skeleton/profile.skeleton";
-import { useAddress } from "@chopinframework/react";
 
-export default function Page() {
-  const { address } = useAddress();
+export default function Page({ address }: { address: string | null }) {
   const { data, isLoading } = trpc.nft.getNFTsByOwner.useQuery({
     owner: String(address),
   });

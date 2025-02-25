@@ -26,6 +26,9 @@ export default function Header() {
     address: String(address),
     tokenId: 1,
   });
+  const { data: userProfile } = trpc.user.fetchUser.useQuery({
+    address: String(address),
+  });
 
   useEffect(() => {
     if (data) {
@@ -71,7 +74,9 @@ export default function Header() {
                   <div className="flex space-x-2 items-center cursor-pointer">
                     <Avatar userAddress={address} size={50} />
                     <div>
-                      <p className="text-sm text-slate-400">My_Shayla</p>
+                      <p className="text-sm text-slate-400 capitalize">
+                        {userProfile?.username}
+                      </p>
                       <p className="text-sm text-primary">
                         {shortenAddress(address)}
                       </p>
