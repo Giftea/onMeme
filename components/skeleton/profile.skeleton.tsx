@@ -11,8 +11,8 @@ export default function ProfileMemeSkeleton() {
         {skeletons.map((_, index) => (
           <div key={index} className="space-y-4 rounded-lg border p-4">
             <div className="flex flex-col items-end gap-4">
-              <Skeleton className="h-72 w-full rounded-lg bg-slate-600" />
-              <Skeleton className="h-10 w-24 bg-slate-600" />
+              <Skeleton className="h-72 w-full rounded-lg bg-muted" />
+              <Skeleton className="h-10 w-24 bg-muted" />
             </div>
           </div>
         ))}

@@ -1,11 +1,13 @@
 import { ListedNFT, Memes, NFT } from "@/lib/types";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import MintNFTModal from "./MintNFTModal";
+import MintNFTModal from "../modals/mint-nft-modal";
 import Link from "next/link";
 import { shortenText } from "@/lib/utils";
-import NFTCard from "./NFTCard";
+import NFTCard from "./nft-card";
 import { useAddress } from "@chopinframework/react";
+import { useTheme } from "next-themes";
+import LikeNFT from "../nfts/like-nft";
 
 export default function Card({
   meme,
@@ -19,6 +21,7 @@ export default function Card({
   address?: string | null;
 }) {
   const { address: userAddress } = useAddress();
+  const { theme } = useTheme();
   return (
     <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
       {meme && address && (
@@ -54,6 +57,21 @@ export default function Card({
               {shortenText(listedNFT?.nftMetadata?.description)}
             </p>
           </Link>
+          <div className="border border-muted rounded-full" />
+          <div className="flex justify-between items-center">
+            {" "}
+            <p className="text-gray-300: font-semibold">
+              Price:{" "}
+              <span
+                className={`${
+                  theme === "dark" ? "text-secondary" : "text-primary"
+                }  text-lg`}
+              >
+                {listedNFT?.price} OMC
+              </span>
+            </p>
+            <LikeNFT nftId={listedNFT?.listingId} userId={userAddress} />
+          </div>
         </div>
       )}
     </div>
@@ -63,7 +81,7 @@ export default function Card({
 export function NFTCardLoading() {
   return (
     <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
-      <Skeleton className="w-[300px] h-[300px] rounded-lg bg-slate-600 " />
+      <Skeleton className="w-[300px] h-[300px] rounded-lg bg-muted " />
     </div>
   );
 }

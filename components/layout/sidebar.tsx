@@ -6,14 +6,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { navLinks, NavLinks } from "../layout/Header";
-import { trpc } from "@/lib/trpc.utils";
+import { navLinks, NavLinks } from "./header";
+import { trpc } from "@/lib/utils/trpc.utils";
 import { useEffect, useState } from "react";
 import { AlignRight } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
 import { useAddress } from "@chopinframework/react";
 import { Button } from "../ui/button";
+import Logo from "../composed/logo";
 
 export function Sidebar({ address }: { address: string | null }) {
   const [balance, setBalance] = useState(0);
@@ -48,15 +47,7 @@ export function Sidebar({ address }: { address: string | null }) {
           <SheetDescription></SheetDescription>
         </SheetHeader>
         <div className="flex flex-col items-start gap-7 py-4">
-          <Link href={"/"}>
-            <Image
-              src="/images/logo.svg"
-              alt="Logo"
-              className="w-28"
-              width={140}
-              height={140}
-            />
-          </Link>
+          <Logo />
 
           <div className="flex flex-col gap-3 ">
             {navLinks.map((item, index) => (

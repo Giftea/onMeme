@@ -1,13 +1,13 @@
-import { AddressSchemaType } from "./../../lib/zod-schemas/user";
+import { AddressSchemaType } from "../../lib/types";
 import {
   createUser,
   getUserByAddress,
   updateUser,
-} from "@/lib/queries/dbQueries";
+} from "@/lib/database/dbQueries";
 import { generateMockEthereumAddress } from "@/lib/utils";
-import { UserAddressSchema, UserSchema } from "@/lib/zod-schemas/user";
+import { UserAddressSchema, UserSchema } from "@/lib/types";
 import { publicProcedure, router } from "@/server/trpc";
-import { getAddress } from "@/lib/chopin-server";
+import { getAddress } from "@/lib/chopin/chopin-server";
 import { FetchUserResponse } from "../types/response";
 import { TRPCError } from "@trpc/server";
 

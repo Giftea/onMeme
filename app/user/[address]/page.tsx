@@ -1,5 +1,5 @@
 "use client";
-import ProfileCard from "@/components/profile/ProfileCard";
+import ProfileCard from "@/components/composed/profile-card";
 import User from "@/components/profile";
 import { usePathname } from "next/navigation";
 

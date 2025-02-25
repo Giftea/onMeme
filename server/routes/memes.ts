@@ -4,7 +4,7 @@ import {
   getAllMemes,
   getMemesByOwner,
   createMeme,
-} from "@/lib/queries/dbQueries";
+} from "@/lib/database/dbQueries";
 import { TRPCError } from "@trpc/server";
 import { GetMemeTemplateResponse } from "../types/response";
 import { BLANK_MEME_TEMPLATE } from "@/config/meme.config";
@@ -52,7 +52,7 @@ export const memeRouter = router({
       }
       const data = (await response.json()) as GetMemeTemplateResponse;
 
-      const joinTemplates = [BLANK_MEME_TEMPLATE, ...data.data?.memes ?? []];
+      const joinTemplates = [BLANK_MEME_TEMPLATE, ...(data.data?.memes ?? [])];
 
       return joinTemplates;
     } catch (err: unknown) {

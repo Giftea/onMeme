@@ -21,19 +21,21 @@ import {
   FormMessage,
 } from "../ui/form";
 import { useForm } from "react-hook-form";
-import { trpc } from "@/lib/trpc.utils";
+import { trpc } from "@/lib/utils/trpc.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useCallback, useMemo } from "react";
-import { ListingSchema, ListingSchemaType } from "@/lib/zod-schemas/nft";
-import { useToast } from "@/hooks/use-toast";
+import { ListingSchema, ListingSchemaType } from "@/lib/types";
+import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import IsLoading from "../composed/loader";
+import { useTheme } from "next-themes";
 
 export default function ListNFTModal({ nft }: { nft: NFT }) {
   const router = useRouter();
-  const { toast } = useToast();
+
   const trpcUtils = trpc.useUtils();
   const [open, setOpen] = useState(false);
+  const { theme } = useTheme();
 
   const { data: listedNFT } = trpc.listing.getListingByNFTId.useQuery({
     id: nft?.id,
@@ -119,8 +121,12 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
         return (
           <div className="flex justify-between items-center">
             <p className="text-gray-300: font-semibold">
-              Price{" "}
-              <span className="text-secondary text-lg">
+              Price:{" "}
+              <span
+                className={`${
+                  theme === "dark" ? "text-secondary" : "text-primary"
+                }  text-lg`}
+              >
                 {listedNFT.price} OMC
               </span>
             </p>
@@ -131,8 +137,12 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
         return (
           <div className="flex justify-between items-center">
             <p className="text-gray-300: font-semibold">
-              Price{" "}
-              <span className="text-secondary text-lg">
+              Price:{" "}
+              <span
+                className={`${
+                  theme === "dark" ? "text-secondary" : "text-primary"
+                }  text-lg`}
+              >
                 {listedNFT.price} OMC
               </span>
             </p>
