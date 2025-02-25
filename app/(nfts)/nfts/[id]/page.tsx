@@ -1,5 +1,5 @@
 "use client";
-import Collections from "@/components/nfts/collections";
+import Collections from "@/components/nfts/user-collections";
 import LikeNFT from "@/components/nfts/like-nft";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/utils/trpc.utils";
