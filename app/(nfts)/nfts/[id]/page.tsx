@@ -13,13 +13,13 @@ import {
   MarketplaceViewNFTSkeleton,
   NFTDescriptionSkeleton,
 } from "@/components/skeleton/nft.skeleton";
-import Cookies from "js-cookie";
 import { useToast } from "@/hooks/use-toast";
 import IsLoading from "@/components/composed/loader";
 import Link from "next/link";
+import { useAddress } from "@chopinframework/react";
 
 export default function Page() {
-  const address = Cookies.get("dev-address");
+  const { address } = useAddress();
   const pathName = usePathname();
   const router = useRouter();
   const nftId = pathName.split("/nfts/")[1];
@@ -149,7 +149,10 @@ function NFTDescription({
             </p>
             <p className="mt-2 text-sm text-gray-400">
               Owned by{" "}
-              <Link href={`/user/${nftOwner?.address}`} className="text-primary">
+              <Link
+                href={`/user/${nftOwner?.address}`}
+                className="text-primary"
+              >
                 @
                 {nftOwner?.username?.length <= 0
                   ? shortenAddress(nftOwner?.address)
