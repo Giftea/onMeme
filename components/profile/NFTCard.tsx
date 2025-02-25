@@ -5,11 +5,16 @@ import ListNFTModal from "./ListNFTModal";
 import Image from "next/image";
 import { shortenText } from "@/lib/utils";
 import { trpc } from "@/lib/trpc.utils";
+import { useAddress } from "@chopinframework/react";
+import { usePathname } from "next/navigation";
 
 export default function NFTCard({ nft }: { nft: NFT }) {
   const { data: listedNFT } = trpc.listing.getListingByNFTId.useQuery({
     id: nft?.id,
   });
+  const { address: userAddress } = useAddress();
+  const pathName = usePathname();
+  const addressPathname = pathName.split("/user/")[1];
 
   const { data: isNFTListed } = trpc.listing.checkNFTListed.useQuery({
     nftId: nft?.id,
@@ -45,7 +50,14 @@ export default function NFTCard({ nft }: { nft: NFT }) {
           {nft?.metadata && shortenText(nft?.metadata?.description)}
         </p>
       </div>
-      <ListNFTModal nft={nft as NFT} />
+      {addressPathname === userAddress ? (
+        <ListNFTModal nft={nft as NFT} />
+      ) : (
+        <p className="text-gray-300: font-semibold">
+          Price{" "}
+          <span className="text-secondary text-lg">{listedNFT?.price} OMC</span>
+        </p>
+      )}
     </div>
   );
 }

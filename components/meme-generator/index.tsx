@@ -23,12 +23,10 @@ import LoadSkeleton from "../skeleton";
 import MemeGeneratorSkeleton from "../skeleton/meme-generator.skeleton";
 import IsLoading from "../composed/loader";
 import MemeGeneratedModal from "../modals/meme-generated-modal";
+import { useAddress } from "@chopinframework/react";
 
-export default function MemeGeneratorX({
-  address,
-}: {
-  address: string | null;
-}) {
+export default function MemeGeneratorX() {
+  const { address } = useAddress();
   const trpcUtils = trpc.useUtils();
   const { data: memeData, isLoading: loading } =
     trpc.meme.fetchMemes.useQuery();

@@ -3,6 +3,7 @@ import { trpc } from "@/lib/trpc.utils";
 import { shortenAddress } from "@/lib/utils";
 import LoadSkeleton from "../skeleton";
 import LeaderboardSkeleton from "../skeleton/leaderboard.skeleton";
+import Link from "next/link";
 
 const LeaderBoard = () => {
   const { data: leaderboard, isLoading } =
@@ -10,7 +11,9 @@ const LeaderBoard = () => {
 
   return (
     <div className="md:p-6">
-      <h1 className="text-2xl md:text-4xl font-bold mb-4">🏆 Top Memers Leaderboard</h1>
+      <h1 className="text-2xl md:text-4xl font-bold mb-4">
+        🏆 Top Memers Leaderboard
+      </h1>
 
       <div className="overflow-x-auto">
         <div className="p-2 border-b last:border-none grid grid-cols-2 py-4 text-base md:text-xl min-w-[600px]">
@@ -31,7 +34,9 @@ const LeaderBoard = () => {
             >
               <span className="font-semibold">
                 #{index + 1}{" "}
-                {user.username ? user.username : shortenAddress(user.address)}
+                <Link className="text-primary" href={`/user/${user.address}`}>
+                  {user.username ? user.username : shortenAddress(user.address)}
+                </Link>
               </span>
 
               <div className="grid grid-cols-4 md:place-items-center">

@@ -1,13 +1,14 @@
+'use client'
 import ProfileCard from "@/components/profile/ProfileCard";
 import User from "@/components/profile";
-import { getAddress } from "@/lib/chopin-server";
+import { useAddress } from "@chopinframework/react";
 
-export default async function Home() {
-  const address = await getAddress();
+export default function Home() {
+  const { address } = useAddress();
 
   return (
     <div>
-      <ProfileCard initialAddress={address} isProfilePage />
+      <ProfileCard userAddress={address} isProfilePage />
       <User address={address} />
     </div>
   );

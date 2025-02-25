@@ -15,15 +15,15 @@ export default function Avatar({
       size: size || 128,
       seed: userAddress || "default",
     }).toDataUri();
-  }, [userAddress]);
+  }, [userAddress, size]);
 
   return (
     <Image
-      width={100}
-      height={100}
+      width={size ||100}
+      height={size || 100}
       src={avatar}
       alt="Avatar"
-      className="border-4 border-secondary bg-muted-foreground p-2 rounded-full"
+      className="border border-secondary bg-muted-foreground p-1 rounded-full"
     />
   );
 }

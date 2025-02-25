@@ -5,6 +5,7 @@ import MintNFTModal from "./MintNFTModal";
 import Link from "next/link";
 import { shortenText } from "@/lib/utils";
 import NFTCard from "./NFTCard";
+import { useAddress } from "@chopinframework/react";
 
 export default function Card({
   meme,
@@ -17,6 +18,7 @@ export default function Card({
   listedNFT?: ListedNFT;
   address?: string | null;
 }) {
+  const { address: userAddress } = useAddress();
   return (
     <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
       {meme && address && (
@@ -28,12 +30,12 @@ export default function Card({
             width={300}
             height={300}
           />
-          <MintNFTModal meme={meme} address={address} />
+          {address === userAddress && (
+            <MintNFTModal meme={meme} address={address} />
+          )}
         </div>
       )}
-      {nft && nft?.metadata && (
-        <NFTCard nft={nft} />
-      )}
+      {nft && nft?.metadata && <NFTCard nft={nft} />}
 
       {listedNFT && listedNFT?.nftMetadata && (
         <div className="space-y-3 w-full">
