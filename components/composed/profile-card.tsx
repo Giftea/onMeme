@@ -4,7 +4,7 @@ import { shortenAddress } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import EditUsernameModal from "../modals/edit-username-modal";
-import { trpc } from "@/lib/trpc.utils";
+import { trpc } from "@/utils/trpc.utils";
 import Avatar from "../composed/avatar";
 import { SquareUserRound } from "lucide-react";
 
@@ -16,7 +16,8 @@ interface ProfileCardProps {
 
 export default function ProfileCard({
   isProfilePage,
-  isUserPublicPage, userAddress
+  isUserPublicPage,
+  userAddress,
 }: ProfileCardProps) {
   const router = useRouter();
 
@@ -31,7 +32,9 @@ export default function ProfileCard({
         <Avatar userAddress={String(userAddress)} />
         <div>
           {userProfile && (
-            <p className="text-lg font-semibold capitalize">{userProfile?.username} </p>
+            <p className="text-lg font-semibold capitalize">
+              {userProfile?.username}{" "}
+            </p>
           )}
           {userAddress && (
             <p className="text-lg">{shortenAddress(String(userAddress))}</p>

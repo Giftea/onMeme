@@ -21,10 +21,10 @@ import {
   FormMessage,
 } from "../ui/form";
 import { useForm } from "react-hook-form";
-import { trpc } from "@/lib/trpc.utils";
+import { trpc } from "@/utils/trpc.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useCallback, useMemo } from "react";
-import { ListingSchema, ListingSchemaType } from "@/lib/zod-schemas/nft";
+import { ListingSchema, ListingSchemaType } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import IsLoading from "../composed/loader";

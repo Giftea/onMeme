@@ -1,5 +1,5 @@
 "use client";
-import { trpc } from "@/lib/trpc.utils";
+import { trpc } from "@/utils/trpc.utils";
 import { useEffect, useState } from "react";
 
 export default function LikeNFT({

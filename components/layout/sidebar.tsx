@@ -7,7 +7,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { navLinks, NavLinks } from "./header";
-import { trpc } from "@/lib/trpc.utils";
+import { trpc } from "@/utils/trpc.utils";
 import { useEffect, useState } from "react";
 import { AlignRight } from "lucide-react";
 import Link from "next/link";

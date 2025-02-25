@@ -6,7 +6,7 @@ import {
   getNFTsByOwner,
   isMemeMinted,
   mintNFT,
-} from "@/lib/queries/dbQueries";
+} from "@/lib/database/dbQueries";
 import { NFT } from "@/lib/types";
 
 export const nftRouter = router({

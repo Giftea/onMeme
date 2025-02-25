@@ -1,5 +1,5 @@
 "use client";
-import { trpc } from "@/lib/trpc.utils";
+import { trpc } from "@/utils/trpc.utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

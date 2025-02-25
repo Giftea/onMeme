@@ -3,21 +3,21 @@ import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
-import { preventDefaults } from "@/utils/prevent-default.utils";
+import { preventDefaults } from "@/utils/canvas/prevent-default.utils";
 import { convertImageToBase64 } from "@/lib/utils";
 import UploadTemplate from "../composed/upload-template";
 import Canvas from "../composed/canvas";
 import MemeSelection from "../composed/meme-selection";
 import MemeCaptionInput from "../composed/meme-caption-input";
 import Status from "../composed/status";
-import { handleTextDragMove } from "@/utils/text.utils";
+import { handleTextDragMove } from "@/utils/canvas/text.utils";
 import {
   generateCanvas,
   updatePreviewCanvas,
-} from "@/utils/generate-canvas.utils.";
+} from "@/utils/canvas/generate-canvas.utils.";
 import { config } from "@/config/font.config";
 import { Meme, StatusMessage, TextElement } from "@/lib/types/index";
-import { trpc } from "@/lib/trpc.utils";
+import { trpc } from "@/utils/trpc.utils";
 import { toast } from "@/hooks/use-toast";
 import LoadSkeleton from "../skeleton";
 import MemeGeneratorSkeleton from "../skeleton/meme-generator.skeleton";

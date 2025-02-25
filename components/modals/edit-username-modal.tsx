@@ -19,8 +19,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { useForm } from "react-hook-form";
-import { trpc } from "@/lib/trpc.utils";
-import { UserSchema, UserSchemaType } from "@/lib/zod-schemas/user";
+import { trpc } from "@/utils/trpc.utils";
+import { UserSchema, UserSchemaType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
 import { useState } from "react";
