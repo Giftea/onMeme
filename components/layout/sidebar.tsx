@@ -12,15 +12,25 @@ import { useEffect, useState } from "react";
 import { AlignRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAddress } from "@chopinframework/react";
+import { Button } from "../ui/button";
 
 export function Sidebar({ address }: { address: string | null }) {
   const [balance, setBalance] = useState(0);
+  const { login, logout } = useAddress();
 
   const { data } = trpc.token.getBalance.useQuery({
     address: String(address),
     tokenId: 1,
   });
+  const handleLogin = async () => {
+    const response = await login();
+    console.log(response);
+  };
 
+  const handleLogout = () => {
+    logout();
+  };
   useEffect(() => {
     if (data) {
       setBalance(data);
@@ -35,8 +45,7 @@ export function Sidebar({ address }: { address: string | null }) {
       <SheetContent>
         <SheetHeader className="hidden">
           <SheetTitle></SheetTitle>
-          <SheetDescription>
-          </SheetDescription>
+          <SheetDescription></SheetDescription>
         </SheetHeader>
         <div className="flex flex-col items-start gap-7 py-4">
           <Link href={"/"}>
@@ -54,13 +63,15 @@ export function Sidebar({ address }: { address: string | null }) {
               <NavLinks key={index} link={item.link} name={item.name} />
             ))}
           </div>
+          <span>Balance: {balance} OMC</span>
           <div>
-            {" "}
-            <span className="text-2xl ml-4 text-cyan-200/70">
-              {" "}
-              {balance}
-            </span>{" "}
-            OMC{" "}
+            {address ? (
+              <Button onClick={handleLogout}>Logout</Button>
+            ) : (
+              <Button className="px-8 font-semibold" onClick={handleLogin}>
+                Login
+              </Button>
+            )}
           </div>
         </div>
       </SheetContent>

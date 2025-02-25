@@ -5,16 +5,14 @@ import {
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
-import { getAddress } from "@chopinframework/next";
 
 export default async function Home() {
-  const address = await getAddress();
   const queryClient = new QueryClient();
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProfileCard userAddress={address} />
-      <MemeGeneratorX address={address} />
+      <ProfileCard />
+      <MemeGeneratorX />
     </HydrationBoundary>
   );
 }

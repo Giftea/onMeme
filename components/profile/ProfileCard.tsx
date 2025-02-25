@@ -7,17 +7,15 @@ import EditUsernameModal from "./EditUsernameModal";
 import { trpc } from "@/lib/trpc.utils";
 import Avatar from "../composed/avatar";
 import { SquareUserRound } from "lucide-react";
+import { useAddress } from "@chopinframework/react";
 
 interface ProfileCardProps {
   isProfilePage?: boolean;
-  userAddress: string | null;
 }
 
-export default function ProfileCard({
-  isProfilePage,
-  userAddress,
-}: ProfileCardProps) {
+export default function ProfileCard({ isProfilePage }: ProfileCardProps) {
   const router = useRouter();
+  const { address: userAddress } = useAddress();
 
   const { data: userProfile } = trpc.user.fetchUser.useQuery({
     address: String(userAddress),
