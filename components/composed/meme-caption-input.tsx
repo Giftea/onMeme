@@ -63,7 +63,7 @@ const MemeCaptionInput = ({
                 <PopoverContent>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div>
-                      <label className="block text-sm text-gray-300 mb-1">
+                      <label className="block text-sm mb-1">
                         Font Size: {textElement.fontSize}px
                       </label>
                       <input
@@ -83,9 +83,7 @@ const MemeCaptionInput = ({
                     </div>
 
                     <div>
-                      <label className="block text-sm text-gray-300 mb-1">
-                        Font Family:
-                      </label>
+                      <label className="block text-sm mb-1">Font Family:</label>
                       <select
                         value={textElement.fontFamily}
                         onChange={(e) =>
@@ -106,9 +104,7 @@ const MemeCaptionInput = ({
                     </div>
 
                     <div>
-                      <label className="block text-sm text-gray-300 mb-1">
-                        Text Color:
-                      </label>
+                      <label className="block text-sm mb-1">Text Color:</label>
                       <input
                         type="color"
                         value={textElement.fontColor}
@@ -124,7 +120,7 @@ const MemeCaptionInput = ({
                     </div>
 
                     <div>
-                      <label className="block text-sm text-gray-300 mb-1">
+                      <label className="block text-sm mb-1">
                         Stroke Color:
                       </label>
                       <input

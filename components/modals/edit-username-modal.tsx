@@ -24,6 +24,7 @@ import { UserSchema, UserSchemaType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
 import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 export default function EditUsernameModal({ userName }: { userName: string }) {
   const trpcUtils = trpc.useUtils();
@@ -39,6 +40,10 @@ export default function EditUsernameModal({ userName }: { userName: string }) {
       onSuccess: () => {
         trpcUtils.user.fetchUser.invalidate();
         setOpen(false);
+        toast({
+          variant: "success",
+          title: "Username updated successfully",
+        });
       },
       onError: (error) => {
         console.error(error);
