@@ -121,7 +121,7 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
         return (
           <div className="flex justify-between items-center">
             <p className="text-gray-300: font-semibold">
-              Price{" "}
+              Price:{" "}
               <span
                 className={`${
                   theme === "dark" ? "text-secondary" : "text-primary"
@@ -137,7 +137,7 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
         return (
           <div className="flex justify-between items-center">
             <p className="text-gray-300: font-semibold">
-              Price{" "}
+              Price:{" "}
               <span
                 className={`${
                   theme === "dark" ? "text-secondary" : "text-primary"

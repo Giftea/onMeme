@@ -7,6 +7,7 @@ import EditUsernameModal from "../modals/edit-username-modal";
 import { trpc } from "@/lib/utils/trpc.utils";
 import Avatar from "../composed/avatar";
 import { SquareUserRound } from "lucide-react";
+import Link from "next/link";
 
 interface ProfileCardProps {
   isProfilePage?: boolean;
@@ -45,7 +46,7 @@ export default function ProfileCard({
         (isProfilePage ? (
           userProfile && <EditUsernameModal userName={userProfile.username} />
         ) : (
-          <div>
+          <Link href="/profile">
             <SquareUserRound className="text-sky-500 flex md:hidden" />
             <Button
               onClick={() => router.push("/profile")}
@@ -54,7 +55,7 @@ export default function ProfileCard({
             >
               View Profile
             </Button>
-          </div>
+          </Link>
         ))}
     </Card>
   );

@@ -4,6 +4,7 @@ import { shortenAddress } from "@/lib/utils";
 import LoadSkeleton from "../skeleton";
 import LeaderboardSkeleton from "../skeleton/leaderboard.skeleton";
 import Link from "next/link";
+import Avatar from "../composed/avatar";
 
 const LeaderBoard = () => {
   const { data: leaderboard, isLoading } =
@@ -32,9 +33,10 @@ const LeaderBoard = () => {
               key={user.userId}
               className="p-2 border-b last:border-none grid grid-cols-2 py-4 min-w-[600px]"
             >
-              <span className="font-semibold">
-                #{index + 1}{" "}
-                <Link className="text-primary" href={`/user/${user.address}`}>
+              <span className="font-semibold flex space-x-2 items-center">
+                <span>#{index + 1}</span>{" "}
+                <Avatar size={38} userAddress={user.address} />
+                <Link className="text-primary capitalize" href={`/user/${user.address}`}>
                   {user.username ? user.username : shortenAddress(user.address)}
                 </Link>
               </span>

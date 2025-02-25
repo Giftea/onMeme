@@ -64,7 +64,7 @@ export default function NFTCard({ nft }: { nft: NFT }) {
           <ListNFTModal nft={nft as NFT} />
         ) : (
           <p className="text-gray-300: font-semibold">
-            Price{" "}
+            Price:{" "}
             <span
               className={`${
                 theme === "dark" ? "text-secondary" : "text-primary"
