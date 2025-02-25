@@ -26,7 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { MintNFTSchema, MintNFTSchemaType } from "@/lib/types";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import IsLoading from "../composed/loader";
 import { useTheme } from "next-themes";
@@ -39,7 +39,7 @@ export default function MintNFTModal({
   address: string;
 }) {
   const router = useRouter();
-  const { toast } = useToast();
+
   const trpcUtils = trpc.useUtils();
   const [open, setOpen] = useState(false);
   const defaultValues = { name: "", description: "", price: undefined };

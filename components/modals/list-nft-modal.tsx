@@ -25,14 +25,14 @@ import { trpc } from "@/lib/utils/trpc.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useCallback, useMemo } from "react";
 import { ListingSchema, ListingSchemaType } from "@/lib/types";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import IsLoading from "../composed/loader";
 import { useTheme } from "next-themes";
 
 export default function ListNFTModal({ nft }: { nft: NFT }) {
   const router = useRouter();
-  const { toast } = useToast();
+
   const trpcUtils = trpc.useUtils();
   const [open, setOpen] = useState(false);
   const { theme } = useTheme();

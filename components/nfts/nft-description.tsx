@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import LoadSkeleton from "@/components/skeleton";
 import { NFTDescriptionSkeleton } from "@/components/skeleton/nft.skeleton";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import IsLoading from "@/components/composed/loader";
 import Link from "next/link";
 
@@ -29,7 +29,7 @@ export default function NFTDescription({
   } = trpc.user.fetchUser.useQuery({
     address: owner,
   });
-  const { toast } = useToast();
+
   const trpcUtils = trpc.useUtils();
   const router = useRouter();
   const { short } = formatDate(String(nft?.listedAt));
