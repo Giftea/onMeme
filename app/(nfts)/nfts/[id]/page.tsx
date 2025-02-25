@@ -2,7 +2,7 @@
 import Collections from "@/components/nfts/collections";
 import LikeNFT from "@/components/nfts/like-nft";
 import { Button } from "@/components/ui/button";
-import { trpc } from "@/utils/trpc.utils";
+import { trpc } from "@/lib/utils/trpc.utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";

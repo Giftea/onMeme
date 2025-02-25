@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { useForm } from "react-hook-form";
-import { trpc } from "@/utils/trpc.utils";
+import { trpc } from "@/lib/utils/trpc.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";

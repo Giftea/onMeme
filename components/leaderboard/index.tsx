@@ -1,5 +1,5 @@
 "use client";
-import { trpc } from "@/utils/trpc.utils";
+import { trpc } from "@/lib/utils/trpc.utils";
 import { shortenAddress } from "@/lib/utils";
 import LoadSkeleton from "../skeleton";
 import LeaderboardSkeleton from "../skeleton/leaderboard.skeleton";

@@ -4,7 +4,7 @@ import { shortenAddress } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import EditUsernameModal from "../modals/edit-username-modal";
-import { trpc } from "@/utils/trpc.utils";
+import { trpc } from "@/lib/utils/trpc.utils";
 import Avatar from "../composed/avatar";
 import { SquareUserRound } from "lucide-react";
 

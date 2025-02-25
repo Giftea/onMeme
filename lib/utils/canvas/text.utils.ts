@@ -1,4 +1,4 @@
-import { TextElement } from "../../lib/types/index";
+import { TextElement } from "../../types/index";
 
 export const drawText = (
   ctx: CanvasRenderingContext2D,

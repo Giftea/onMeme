@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { trpc } from "@/utils/trpc.utils";
+import { trpc } from "@/lib/utils/trpc.utils";
 import { ListedNFT } from "@/lib/types";
 import { formatDate, shortenAddress } from "@/lib/utils";
 import { useRouter } from "next/navigation";

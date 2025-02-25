@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Copy, ExternalLink } from "lucide-react";
 import {
@@ -13,6 +14,7 @@ import FacebookIcon from "../icons/facebook";
 import Reddit from "../icons/reddit";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
+import { useAddress } from "@chopinframework/react";
 
 type Props = {
   open: boolean;
@@ -25,6 +27,7 @@ export default function MemeGeneratedModal({
   setOpen,
   memeImage,
 }: Props) {
+  const { address } = useAddress();
   const shareText = encodeURIComponent(
     "Check out this meme I created on onMeme! 🔥"
   );
@@ -93,14 +96,16 @@ export default function MemeGeneratedModal({
             <Copy />
           </Button>
         </div>
-        <div className="mt-4">
-          <Link
-            className="text-primary underline text-center flex items-center justify-self-center"
-            href="/profile"
-          >
-            View on Dashboard <ExternalLink size={16} className="ml-[2px]" />
-          </Link>
-        </div>
+        {address && (
+          <div className="mt-4">
+            <Link
+              className="text-primary underline text-center flex items-center justify-self-center"
+              href="/profile"
+            >
+              View on Dashboard <ExternalLink size={16} className="ml-[2px]" />
+            </Link>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
