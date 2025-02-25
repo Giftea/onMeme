@@ -1,6 +1,6 @@
 "use client";
 import { FolderClosed } from "lucide-react";
-import NFTCard from "./MemeCard";
+import NFTCard from "./meme-card";
 import { ListedNFT, NFT } from "@/lib/types";
 import React from "react";
 

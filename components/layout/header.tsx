@@ -1,6 +1,5 @@
 "use client";
-import { trpc } from "@/lib/trpc.utils";
-import Image from "next/image";
+import { trpc } from "@/lib/utils/trpc.utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,10 +17,14 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import Logo from "../composed/logo";
 
 export default function Header() {
   const [balance, setBalance] = useState(0);
   const { address, isLoading, login, logout } = useAddress();
+  const { setTheme, theme } = useTheme();
   const { data } = trpc.token.getBalance.useQuery({
     address: String(address),
     tokenId: 1,
@@ -48,26 +51,22 @@ export default function Header() {
   return (
     <header className="bg-card p-4 md:px-10">
       <div className="flex items-center justify-between mx-auto max-w-[1060px]">
-        <Link href={"/"}>
-          <Image
-            src="/images/logo.svg"
-            alt="Logo"
-            className="w-28 md:w-36"
-            width={140}
-            height={140}
-          />
-        </Link>
-
+        <Logo />
         <div className="space-x-3 hidden md:flex">
           {navLinks.map((item, index) => (
-            <NavLinks key={index} link={item.link} name={item.name} />
+            <NavLinks
+              theme={theme}
+              key={index}
+              link={item.link}
+              name={item.name}
+            />
           ))}
         </div>
         <div className="max-md:hidden">
           {isLoading ? (
-            <Skeleton className="w-20 h-10 bg-slate-700" />
+            <Skeleton className="w-20 h-10 bg-muted" />
           ) : address ? (
-            <Menubar className="bg-transparent border-0">
+            <Menubar className="bg-transparent shadow-none border-0">
               <MenubarMenu>
                 <MenubarTrigger className="focus:bg-transparent data-[state=open]:bg-transparent">
                   {" "}
@@ -90,6 +89,35 @@ export default function Header() {
                   <MenubarSeparator />
                   <MenubarItem>
                     <span>Balance: {balance} OMC</span>
+                  </MenubarItem>
+                  <MenubarSeparator />
+                  <MenubarItem className="focus:text-foreground">
+                    <div className="flex items-center justify-between w-full bg-card text-card-foreground rounded-full p-2">
+                      <button
+                        onClick={() => setTheme("dark")}
+                        className={`${
+                          theme === "dark" && "bg-gray-400 rounded-full"
+                        } py-1 px-2`}
+                      >
+                        <Moon />
+                      </button>
+                      <button
+                        onClick={() => setTheme("dark")}
+                        className={`${
+                          theme === "system" && "bg-gray-400 rounded-full"
+                        } py-1 px-2`}
+                      >
+                        auto
+                      </button>
+                      <button
+                        onClick={() => setTheme("light")}
+                        className={`${
+                          theme === "light" && "bg-gray-400 rounded-full"
+                        } py-1 px-2`}
+                      >
+                        <Sun />
+                      </button>
+                    </div>
                   </MenubarItem>
                   <MenubarSeparator />
                   <MenubarItem
@@ -116,14 +144,26 @@ export default function Header() {
   );
 }
 
-export function NavLinks({ link, name }: { name: string; link: string }) {
+export function NavLinks({
+  link,
+  name,
+  theme,
+}: {
+  name: string;
+  link: string;
+  theme?: string;
+}) {
   const pathName = usePathname();
 
   return (
     <Link
       className={`lg:px-4 ${
-        pathName === link.split("?")[0] ? "text-secondary" : ""
-      } hover:text-cyan-200/70`}
+        pathName === link.split("?")[0] && theme === "dark" && "text-secondary"
+      } ${
+        pathName === link.split("?")[0] && theme === "light" && "text-primary"
+      } ${
+        theme === "dark" ? "hover:text-cyan-200/70" : "hover:text-blue-300"
+      }`}
       href={link}
     >
       {name}

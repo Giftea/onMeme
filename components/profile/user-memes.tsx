@@ -1,6 +1,6 @@
 "use client";
-import NFTCard from "./MemeCard";
-import { trpc } from "@/lib/trpc.utils";
+import NFTCard from "./meme-card";
+import { trpc } from "@/lib/utils/trpc.utils";
 import { FolderClosed } from "lucide-react";
 import React from "react";
 

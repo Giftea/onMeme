@@ -12,7 +12,7 @@ import {
   isNFTListed,
   getListingByNFTId,
   updateListingPrice,
-} from "@/lib/queries/dbQueries";
+} from "@/lib/database/dbQueries";
 import { ListedNFT } from "@/lib/types";
 
 export const listingRouter = router({

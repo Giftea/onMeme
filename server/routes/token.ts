@@ -6,7 +6,7 @@ import {
   burn,
   transfer,
   getBalance,
-} from "@/lib/queries/dbQueries";
+} from "@/lib/database/dbQueries";
 import "dotenv/config";
 
 export const tokenRouter = router({

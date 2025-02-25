@@ -3,10 +3,11 @@ import { Card } from "@/components/ui/card";
 import { shortenAddress } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import EditUsernameModal from "./EditUsernameModal";
-import { trpc } from "@/lib/trpc.utils";
+import EditUsernameModal from "../modals/edit-username-modal";
+import { trpc } from "@/lib/utils/trpc.utils";
 import Avatar from "../composed/avatar";
 import { SquareUserRound } from "lucide-react";
+import Link from "next/link";
 
 interface ProfileCardProps {
   isProfilePage?: boolean;
@@ -16,7 +17,8 @@ interface ProfileCardProps {
 
 export default function ProfileCard({
   isProfilePage,
-  isUserPublicPage, userAddress
+  isUserPublicPage,
+  userAddress,
 }: ProfileCardProps) {
   const router = useRouter();
 
@@ -31,7 +33,9 @@ export default function ProfileCard({
         <Avatar userAddress={String(userAddress)} />
         <div>
           {userProfile && (
-            <p className="text-lg font-semibold capitalize">{userProfile?.username} </p>
+            <p className="text-lg font-semibold capitalize">
+              {userProfile?.username}{" "}
+            </p>
           )}
           {userAddress && (
             <p className="text-lg">{shortenAddress(String(userAddress))}</p>
@@ -42,7 +46,7 @@ export default function ProfileCard({
         (isProfilePage ? (
           userProfile && <EditUsernameModal userName={userProfile.username} />
         ) : (
-          <div>
+          <Link href="/profile">
             <SquareUserRound className="text-sky-500 flex md:hidden" />
             <Button
               onClick={() => router.push("/profile")}
@@ -51,7 +55,7 @@ export default function ProfileCard({
             >
               View Profile
             </Button>
-          </div>
+          </Link>
         ))}
     </Card>
   );

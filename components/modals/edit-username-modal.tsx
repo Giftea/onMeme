@@ -19,11 +19,12 @@ import {
   FormMessage,
 } from "../ui/form";
 import { useForm } from "react-hook-form";
-import { trpc } from "@/lib/trpc.utils";
-import { UserSchema, UserSchemaType } from "@/lib/zod-schemas/user";
+import { trpc } from "@/lib/utils/trpc.utils";
+import { UserSchema, UserSchemaType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
 import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 export default function EditUsernameModal({ userName }: { userName: string }) {
   const trpcUtils = trpc.useUtils();
@@ -39,6 +40,10 @@ export default function EditUsernameModal({ userName }: { userName: string }) {
       onSuccess: () => {
         trpcUtils.user.fetchUser.invalidate();
         setOpen(false);
+        toast({
+          variant: "success",
+          title: "Username updated successfully",
+        });
       },
       onError: (error) => {
         console.error(error);
@@ -54,7 +59,7 @@ export default function EditUsernameModal({ userName }: { userName: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
+        <Button variant="outline">Add Username</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] ">
         <DialogHeader>

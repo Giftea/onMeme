@@ -1,4 +1,4 @@
-import Header from "@/components/layout/Header";
+import Header from "@/components/layout/header";
 import React from "react";
 
 export default async function template({
@@ -6,11 +6,12 @@ export default async function template({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <div>
       <Header />
-      <div className="mt-[2rem] max-w-[1060px] mx-4 md:mx-10 lg:mx-auto pb-8">{children}</div>
+      <div className="mt-[2rem] max-w-[1060px] mx-4 md:mx-10 lg:mx-auto pb-8">
+        {children}
+      </div>
     </div>
   );
 }

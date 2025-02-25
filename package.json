@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx ./lib/db/migrate.ts"
+    "db:migrate": "tsx ./lib/database/migrate.ts"
   },
   "dependencies": {
     "@chopinframework/next": "1.1.3",

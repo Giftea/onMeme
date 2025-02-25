@@ -1,4 +1,4 @@
-import { purchaseNFT } from "@/lib/queries/dbQueries";
+import { purchaseNFT } from "@/lib/database/dbQueries";
 import { publicProcedure, router } from "@/server/trpc";
 import { z } from "zod";
 

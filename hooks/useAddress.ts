@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { login } from "@/lib/chopin-client";
+import { login } from "@/lib/chopin/chopin-client";
 
 export function useAddress(initialAddress: string | null) {
   return useQuery({
