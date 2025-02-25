@@ -1,7 +1,7 @@
 import { ListedNFT, Memes, NFT } from "@/lib/types";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import MintNFTModal from "./mint-nft-modal";
+import MintNFTModal from "../modals/mint-nft-modal";
 import Link from "next/link";
 import { shortenText } from "@/lib/utils";
 import NFTCard from "./nft-card";

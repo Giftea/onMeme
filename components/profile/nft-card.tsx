@@ -1,7 +1,7 @@
 "use client";
 
 import { NFT } from "@/lib/types";
-import ListNFTModal from "./list-nft-modal";
+import ListNFTModal from "../modals/list-nft-modal";
 import Image from "next/image";
 import { shortenText } from "@/lib/utils";
 import { trpc } from "@/lib/trpc.utils";
