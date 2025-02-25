@@ -16,6 +16,7 @@ import {
 import Cookies from "js-cookie";
 import { useToast } from "@/hooks/use-toast";
 import IsLoading from "@/components/composed/loader";
+import Link from "next/link";
 
 export default function Page() {
   const address = Cookies.get("dev-address");
@@ -148,12 +149,12 @@ function NFTDescription({
             </p>
             <p className="mt-2 text-sm text-gray-400">
               Owned by{" "}
-              <span className="text-primary">
+              <Link href={`/user/${nftOwner?.address}`} className="text-primary">
                 @
                 {nftOwner?.username?.length <= 0
                   ? shortenAddress(nftOwner?.address)
                   : nftOwner?.username}
-              </span>
+              </Link>
             </p>
             <div>
               <div className="border rounded-lg p-4 mt-4">
