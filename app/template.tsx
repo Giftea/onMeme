@@ -1,4 +1,4 @@
-import Header from "@/components/layout/header-component";
+import Header from "@/components/layout/header";
 import React from "react";
 
 export default async function template({
