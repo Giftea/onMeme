@@ -35,13 +35,13 @@ export default function UserTab({
       >
         <TabsList className="m-0 rounded-[0] bg-[transparent] p-0 h-auto">
           <TabsTrigger
-            className="text-lg px-6 data-[state=active]:bg-card data-[state=active]:text-primary rounded-[0px] py-[1rem] rounded-t-xl"
+            className="text-lg data-[state=active]:shadow-none px-6 data-[state=active]:bg-card data-[state=active]:text-primary rounded-[0px] py-[1rem] rounded-t-xl"
             value="memes"
           >
             Memes
           </TabsTrigger>
           <TabsTrigger
-            className="text-lg px-8 data-[state=active]:bg-card data-[state=active]:text-primary rounded-[0px] py-[1rem] rounded-t-xl"
+            className="text-lg data-[state=active]:shadow-none px-8 data-[state=active]:bg-card data-[state=active]:text-primary rounded-[0px] py-[1rem] rounded-t-xl"
             value="nfts"
           >
             NFTs

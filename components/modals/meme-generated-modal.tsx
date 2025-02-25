@@ -61,7 +61,7 @@ export default function MemeGeneratedModal({
             alt="onMeme generated meme"
           />
         ) : (
-          <Skeleton className="w-full rounded-lg h-[400px] bg-slate-800" />
+          <Skeleton className="w-full rounded-lg h-[400px] bg-muted" />
         )}
 
         <div className="mt-4 flex justify-center gap-4">

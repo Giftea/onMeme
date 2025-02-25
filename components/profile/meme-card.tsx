@@ -63,7 +63,7 @@ export default function Card({
 export function NFTCardLoading() {
   return (
     <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
-      <Skeleton className="w-[300px] h-[300px] rounded-lg bg-slate-600 " />
+      <Skeleton className="w-[300px] h-[300px] rounded-lg bg-muted " />
     </div>
   );
 }
