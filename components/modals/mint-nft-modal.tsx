@@ -29,6 +29,7 @@ import { MintNFTSchema, MintNFTSchemaType } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import IsLoading from "../composed/loader";
+import { useTheme } from "next-themes";
 
 export default function MintNFTModal({
   meme,
@@ -46,6 +47,7 @@ export default function MintNFTModal({
     resolver: zodResolver(MintNFTSchema),
     defaultValues,
   });
+  const { theme } = useTheme();
 
   const { data: isMemeListed } = trpc.nft.checkMemeMinted.useQuery({
     memeId: meme?.id,
@@ -89,7 +91,13 @@ export default function MintNFTModal({
   return (
     <>
       {isMemeListed ? (
-        <p className="px-6 py-2 float-right border border-dotted border-secondary text-secondary w-fit rounded-lg font-semibold">
+        <p
+          className={`px-6 py-2 float-right border border-dotted ${
+            theme === "dark"
+              ? "border-secondary text-secondary"
+              : "border-primary text-primary"
+          }  w-fit rounded-lg font-semibold`}
+        >
           Minted
         </p>
       ) : (

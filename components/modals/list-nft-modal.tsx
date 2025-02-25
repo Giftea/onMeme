@@ -28,12 +28,14 @@ import { ListingSchema, ListingSchemaType } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import IsLoading from "../composed/loader";
+import { useTheme } from "next-themes";
 
 export default function ListNFTModal({ nft }: { nft: NFT }) {
   const router = useRouter();
   const { toast } = useToast();
   const trpcUtils = trpc.useUtils();
   const [open, setOpen] = useState(false);
+  const { theme } = useTheme();
 
   const { data: listedNFT } = trpc.listing.getListingByNFTId.useQuery({
     id: nft?.id,
@@ -120,7 +122,11 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
           <div className="flex justify-between items-center">
             <p className="text-gray-300: font-semibold">
               Price{" "}
-              <span className="text-secondary text-lg">
+              <span
+                className={`${
+                  theme === "dark" ? "text-secondary" : "text-primary"
+                }  text-lg`}
+              >
                 {listedNFT.price} OMC
               </span>
             </p>
@@ -132,7 +138,11 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
           <div className="flex justify-between items-center">
             <p className="text-gray-300: font-semibold">
               Price{" "}
-              <span className="text-secondary text-lg">
+              <span
+                className={`${
+                  theme === "dark" ? "text-secondary" : "text-primary"
+                }  text-lg`}
+              >
                 {listedNFT.price} OMC
               </span>
             </p>
