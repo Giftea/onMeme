@@ -1,6 +1,6 @@
 "use client";
 import { trpc } from "@/lib/trpc.utils";
-import UserNFTs from "@/components/profile/UserNFTs";
+import UserNFTs from "@/components/profile/user-nfts";
 import { ListedNFT } from "@/lib/types";
 import LoadSkeleton from "@/components/skeleton";
 import ProfileMemeSkeleton from "@/components/skeleton/profile.skeleton";

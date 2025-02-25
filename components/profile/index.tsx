@@ -1,8 +1,8 @@
 "use client";
-import UserMemesTemplate from "@/components/profile/UserTabsTemplate";
-import UserMemes from "@/components/profile/UserMemes";
+import UserMemesTemplate from "@/components/profile/user-tabs-template";
+import UserMemes from "@/components/profile/user-memes";
 import { trpc } from "@/lib/trpc.utils";
-import UserNFTs from "./UserNFTs";
+import UserNFTs from "./user-nfts";
 import React from "react";
 import LoadSkeleton from "../skeleton";
 import ProfileMemeSkeleton from "../skeleton/profile.skeleton";

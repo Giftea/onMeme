@@ -1,5 +1,5 @@
 "use client";
-import NFTCard, { NFTCardLoading } from "@/components/profile/MemeCard";
+import NFTCard, { NFTCardLoading } from "@/components/profile/meme-card";
 import { trpc } from "@/lib/trpc.utils";
 import { useEffect, useState } from "react";
 import { ListedNFT } from "@/lib/types";

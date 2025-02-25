@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { shortenAddress } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import EditUsernameModal from "./EditUsernameModal";
+import EditUsernameModal from "./edit-username-modal";
 import { trpc } from "@/lib/trpc.utils";
 import Avatar from "../composed/avatar";
 import { SquareUserRound } from "lucide-react";

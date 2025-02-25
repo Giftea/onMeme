@@ -1,5 +1,5 @@
 import MemeGeneratorX from "@/components/meme-generator";
-import ProfileCard from "@/components/profile/ProfileCard";
+import ProfileCard from "@/components/profile/profile-card";
 import {
   HydrationBoundary,
   QueryClient,

@@ -1,5 +1,5 @@
-'use client'
-import ProfileCard from "@/components/profile/ProfileCard";
+"use client";
+import ProfileCard from "@/components/profile/profile-card";
 import User from "@/components/profile";
 import { useAddress } from "@chopinframework/react";
 

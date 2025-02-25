@@ -1,10 +1,10 @@
 import { ListedNFT, Memes, NFT } from "@/lib/types";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import MintNFTModal from "./MintNFTModal";
+import MintNFTModal from "./mint-nft-modal";
 import Link from "next/link";
 import { shortenText } from "@/lib/utils";
-import NFTCard from "./NFTCard";
+import NFTCard from "./nft-card";
 import { useAddress } from "@chopinframework/react";
 
 export default function Card({
