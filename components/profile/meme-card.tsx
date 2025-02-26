@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ListedNFT, Memes, NFT } from "@/lib/types";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -8,6 +9,7 @@ import NFTCard from "./nft-card";
 import { useAddress } from "@chopinframework/react";
 import { useTheme } from "next-themes";
 import LikeNFT from "../nfts/like-nft";
+import { NFTDetailModal } from "../modals/nft-detail-modal";
 
 export default function Card({
   meme,
@@ -22,10 +24,22 @@ export default function Card({
 }) {
   const { address: userAddress } = useAddress();
   const { theme } = useTheme();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCardClick = () => {
+    if (meme) {
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
       {meme && address && (
-        <div className="space-y-3 w-full">
+        <div className="space-y-3 w-full" onClick={handleCardClick}>
           <Image
             src={meme?.imageUrl}
             alt="meme"
@@ -72,6 +86,17 @@ export default function Card({
             </p>
             <LikeNFT nftId={listedNFT?.listingId} userId={userAddress} />
           </div>
+        </div>
+      )}
+      {meme && (
+        <div>
+        <NFTDetailModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          imageUrl={meme.imageUrl}
+          meme={meme} // Pass the meme object
+          address={address || null} 
+        />
         </div>
       )}
     </div>
