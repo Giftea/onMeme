@@ -7,9 +7,9 @@ import {
 import { generateMockEthereumAddress } from "@/lib/utils";
 import { UserAddressSchema, UserSchema } from "@/lib/types";
 import { publicProcedure, router } from "@/server/trpc";
-import { getAddress } from "@/lib/chopin/chopin-server";
 import { FetchUserResponse } from "../types/response";
 import { TRPCError } from "@trpc/server";
+import { getAddress } from "@chopinframework/next";
 
 export const userRouter = router({
   updateUser: publicProcedure.input(UserSchema).mutation(async ({ input }) => {
