@@ -12,6 +12,7 @@ import {
   isNFTListed,
   getListingByNFTId,
   updateListingPrice,
+  getNFTTransfersByNFTId,
 } from "@/lib/database/dbQueries";
 import { ListedNFT } from "@/lib/types";
 
@@ -25,6 +26,12 @@ export const listingRouter = router({
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
       return (await getListingByID(input.id)) as ListedNFT;
+    }),
+
+  getNFTTransfersByNFTId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      return await getNFTTransfersByNFTId(input.id);
     }),
 
   getListingByNFTId: publicProcedure

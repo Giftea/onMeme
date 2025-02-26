@@ -10,6 +10,7 @@ import LoadSkeleton from "@/components/skeleton";
 import { MarketplaceViewNFTSkeleton } from "@/components/skeleton/nft.skeleton";
 import { useAddress } from "@chopinframework/react";
 import NFTDescription from "@/components/nfts/nft-description";
+import { PreviousOwnersAccordion } from "@/components/nfts/nft-sale-history";
 
 export default function Page() {
   const { address } = useAddress();
@@ -28,6 +29,12 @@ export default function Page() {
   const { data: user } = trpc.user.fetchUser.useQuery({
     address: String(address),
   });
+
+  const { data: NFTSaleHistory } = trpc.listing.getNFTTransfersByNFTId.useQuery(
+    {
+      id: Number(nftData?.nftId),
+    }
+  );
 
   return (
     <div>
@@ -68,6 +75,10 @@ export default function Page() {
               </div>
             </div>
           </LoadSkeleton>
+
+          {NFTSaleHistory && NFTSaleHistory?.length > 0 && (
+            <PreviousOwnersAccordion transfers={NFTSaleHistory} />
+          )}
           {!isSuccess && !isLoading && <div>Failed to load NFT owner</div>}
           <Collections address={nftData.sellerAddress} />
         </React.Fragment>
