@@ -42,7 +42,8 @@ export default function EditUsernameModal({ userName }: { userName: string }) {
         setOpen(false);
         toast({
           variant: "success",
-          title: "Username updated successfully",
+          title: "Success",
+          description: "Username updated successfully"
         });
       },
       onError: (error) => {

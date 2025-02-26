@@ -54,7 +54,8 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
       trpcUtils.listing.getListingByNFTId.invalidate();
       toast({
         variant: "success",
-        title: message,
+        title: "Success",
+        description: message
       });
       setOpen(false);
     },
@@ -76,7 +77,8 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
       onError: (error) => {
         toast({
           variant: "destructive",
-          title: error.message,
+          title: "Error",
+          description: error.message
         });
       },
     });

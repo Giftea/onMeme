@@ -36,7 +36,8 @@ export default function MemeGeneratorX() {
         trpcUtils.meme.getMemesByOwner.invalidate();
         toast({
           variant: "success",
-          title: "Meme Successfully Generated! 😎",
+          title: "Success",
+          description: "Meme Successfully Generated! 😎"
         });
         setOpenMemeGeneratedModal(true);
         setIsLoading(false);
@@ -44,7 +45,8 @@ export default function MemeGeneratorX() {
       onError: () => {
         toast({
           variant: "destructive",
-          title: "Failed to generate meme! 😞",
+          title: "Error",
+          description: "Failed to generate meme! 😞"
         });
       },
     });
@@ -372,7 +374,8 @@ export default function MemeGeneratorX() {
     } catch (e) {
       toast({
         variant: "destructive",
-        title: `Failed to upload meme to IPFS! 😞 ${e}`,
+        title: "Error",
+        description: `Failed to upload meme to IPFS! 😞 ${e}`
       });
     }
   };

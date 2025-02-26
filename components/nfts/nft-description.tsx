@@ -39,7 +39,8 @@ export default function NFTDescription({
       onSuccess: () => {
         toast({
           variant: "success",
-          title: "NFT Successfully Purchased! 😎",
+          title: "Success",
+          description:"NFT Successfully Purchased! 😎"
         });
         trpcUtils.token.getBalance.invalidate();
         trpcUtils.listing.getListingByID.invalidate();
@@ -51,7 +52,8 @@ export default function NFTDescription({
       onError: (error) => {
         toast({
           variant: "destructive",
-          title: error.message,
+          title: "Error",
+          description: error.message,
         });
       },
     });
