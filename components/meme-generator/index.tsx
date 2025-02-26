@@ -37,7 +37,7 @@ export default function MemeGeneratorX() {
         toast({
           variant: "success",
           title: "Success",
-          description: "Meme Successfully Generated! 😎"
+          description: "Meme Successfully Generated! 😎",
         });
         setOpenMemeGeneratedModal(true);
         setIsLoading(false);
@@ -46,7 +46,7 @@ export default function MemeGeneratorX() {
         toast({
           variant: "destructive",
           title: "Error",
-          description: "Failed to generate meme! 😞"
+          description: "Failed to generate meme! 😞",
         });
       },
     });
@@ -325,15 +325,19 @@ export default function MemeGeneratorX() {
       setIsLoading(false);
       return;
     }
+    // Add text watermark
+    const watermarkText = "made on on-meme.vercel.app";
+    ctx.font = "bold 14px Arial";
+    ctx.textAlign = "left";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 4;
+    ctx.strokeText(watermarkText, 20, canvas.height - 20);
+    ctx.fillStyle = "white";
+    ctx.fillText(watermarkText, 20, canvas.height - 20);
 
     // Convert canvas to URL
     try {
       const url = canvas.toDataURL("image/png");
-
-      // const link = document.createElement("a");
-      // link.href = url;
-      // link.download = "meme.png";
-      // link.click();
 
       const response = await fetch(url);
       const blob = await response.blob();
@@ -375,7 +379,7 @@ export default function MemeGeneratorX() {
       toast({
         variant: "destructive",
         title: "Error",
-        description: `Failed to upload meme to IPFS! 😞 ${e}`
+        description: `Failed to upload meme to IPFS! 😞 ${e}`,
       });
     }
   };
