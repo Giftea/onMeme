@@ -47,7 +47,7 @@ export default function NFTCard({ nft }: { nft: NFT }) {
               {listedNFT?.status === "listed" ? (
                 <p className="text-green-500 w-fit rounded-lg">Listed </p>
               ) : listedNFT?.status === "sold" ? (
-                <p className="text-gray-500 w-fit rounded-lg">Sold </p>
+                <p className="text-gray-500 w-fit rounded-lg">Purchased </p>
               ) : listedNFT?.status === "cancelled" ? (
                 <p className="text-red-500 w-fit rounded-lg">Cancelled </p>
               ) : null}

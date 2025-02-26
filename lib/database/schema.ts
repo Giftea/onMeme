@@ -110,6 +110,24 @@ export const balances = pgTable(
   (table) => [primaryKey({ columns: [table.address, table.tokenId] })]
 );
 
+// NFT Transfers Table
+export const nftTransfers = pgTable("nft_transfers", {
+  id: serial("id").primaryKey(),
+  nftId: integer("nft_id")
+    .references(() => nfts.id, { onDelete: "cascade" })
+    .notNull(),
+  seller: varchar("seller", { length: 42 })
+    .references(() => users.address)
+    .notNull(),
+  buyer: varchar("buyer", { length: 42 })
+    .references(() => users.address)
+    .notNull(),
+  price: integer("price").notNull(),
+  transferredAt: timestamp("transferred_at", { withTimezone: true }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   memes: many(memes),

@@ -57,7 +57,8 @@ export default function MintNFTModal({
     onSuccess: () => {
       toast({
         variant: "success",
-        title: "NFT Successfully Minted! 😎",
+        title: "Success",
+        description: "NFT Successfully Minted! 😎"
       });
       trpcUtils.nft.getNFTsByOwner.invalidate();
       trpcUtils.nft.getAllNFTs.invalidate();

@@ -7,8 +7,9 @@ import {
   memes,
   tokens,
   balances,
+  nftTransfers,
 } from "@/lib/database/schema";
-import { eq, sql, and } from "drizzle-orm";
+import { eq, sql, and, desc } from "drizzle-orm";
 const PROJECT_OWNER_ADDRESS = process.env.PROJECT_OWNER_ADDRESS || "";
 
 // Get all users
@@ -193,14 +194,31 @@ export async function purchaseNFT(listingId: number, buyerAddress: string) {
         and(eq(balances.address, listing.seller), eq(balances.tokenId, 1))
       );
 
-    //  Update listing status to "sold"
+    // Update listing status to "sold"
     await tx
       .update(listings)
-      .set({ status: "sold" })
+      .set({ status: "sold", seller: buyerAddress })
       .where(eq(listings.id, listingId));
+
+    // Log the NFT transfer in `nft_transfers`
+    await tx.insert(nftTransfers).values({
+      nftId: listing.nftId,
+      seller: listing.seller,
+      buyer: buyerAddress,
+      price: listing.price,
+    });
   });
 
   return { message: "NFT purchased successfully!", newOwner: buyerAddress };
+}
+
+export async function getNFTTransfersByNFTId(nftId: number) {
+  const nftHistory = await db
+    .select()
+    .from(nftTransfers)
+    .where(eq(nftTransfers.nftId, nftId))
+    .orderBy(desc(nftTransfers.transferredAt));
+  return nftHistory;
 }
 
 // Get all listings
