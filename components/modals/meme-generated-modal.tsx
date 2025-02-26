@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
-import XIcon from "../icons/x-icon";
-import FacebookIcon from "../icons/facebook";
-import Reddit from "../icons/reddit";
+import XIcon from "../SVG/icons/x-icon";
+import FacebookIcon from "../SVG/icons/facebook";
+import Reddit from "../SVG/icons/reddit";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 import { useAddress } from "@chopinframework/react";
