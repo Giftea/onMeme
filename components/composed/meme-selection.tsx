@@ -20,7 +20,7 @@ const MemeSelection = ({
 }: Props) => {
   return (
     <React.Fragment>
-      <p className="text-lg font-semibold border-b my-4">
+      <p className="text-lg font-semibold capitalize border-b my-4">
         {selectedMeme ? selectedMeme.name : "Select a meme template"}
       </p>
       <ScrollArea className="w-120 whitespace-nowrap rounded-md border">
