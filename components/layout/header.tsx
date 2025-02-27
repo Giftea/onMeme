@@ -20,6 +20,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import CopyAddress from "../composed/copy-icon";
 
 export default function Header() {
   const [balance, setBalance] = useState(0);
@@ -82,9 +83,10 @@ export default function Header() {
                           <p className="text-slate-400 capitalize">
                             {userProfile?.username}
                           </p>
-                          <p className="text-sm text-primary">
-                            {shortenAddress(address)}
-                          </p>
+                          <div className="text-sm text-primary flex items-center space-x-2">
+                            <span>{shortenAddress(address)}</span>
+                            <CopyAddress userAddress={address} size={4} />
+                          </div>
                         </div>
                       </div>
                       <NavigationMenuLink

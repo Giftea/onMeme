@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { trpc } from "@/lib/utils/trpc.utils";
 import { Meme } from "@/lib/types";
-import { Loader } from "lucide-react";
+import { Brain, Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import MemeSelection from "../composed/meme-selection";
@@ -43,7 +43,7 @@ export default function AiMemeGenerator({ address }: { address: string }) {
     },
   });
 
-  const { mutateAsync: createMeme } = trpc.meme.createMeme.useMutation({
+  const { mutateAsync: createMeme, data: createdMemeData } = trpc.meme.createMeme.useMutation({
     onSuccess: () => {
       trpcUtils.meme.getMemesByOwner.invalidate();
       setOpenMemeGeneratedModal(true);
@@ -92,13 +92,14 @@ export default function AiMemeGenerator({ address }: { address: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" className="text-sm md:text-base">
-          Generate with AI
+        <Button variant="secondary" className="text-sm md:text-base md:w-[50%] lg:w-[65%] flex space-x-">
+          <Brain />
+          <span>Generate with AI</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="w-4/5 md:w-11/12 max-w-[1024px] gap-0 h-[calc(100%-2rem)] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Select AI template</DialogTitle>
+          <DialogTitle className="text-2xl">AI Meme Generation</DialogTitle>
           <DialogDescription>Use AI to generate a Meme</DialogDescription>
         </DialogHeader>
         <>
@@ -128,6 +129,7 @@ export default function AiMemeGenerator({ address }: { address: string }) {
         memeImage={memeImage}
         open={openMemeGeneratedModal}
         setOpen={setOpenMemeGeneratedModal}
+        memeId={createdMemeData && createdMemeData[0].id}
       />
     </Dialog>
   );

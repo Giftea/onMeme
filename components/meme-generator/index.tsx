@@ -32,26 +32,24 @@ export default function MemeGeneratorX() {
   const trpcUtils = trpc.useUtils();
   const { data: memeData, isLoading: loading } =
     trpc.meme.fetchMemes.useQuery();
-  const { mutateAsync: createMeme, isPending } =
-    trpc.meme.createMeme.useMutation({
-      onSuccess: () => {
-        trpcUtils.meme.getMemesByOwner.invalidate();
-        toast({
-          variant: "success",
-          title: "Success",
-          description: "Meme Successfully Generated! 😎",
-        });
-        setOpenMemeGeneratedModal(true);
-        setIsLoading(false);
-      },
-      onError: () => {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to generate meme! 😞",
-        });
-      },
-    });
+  const {
+    mutateAsync: createMeme,
+    data: createdMemeData,
+    isPending,
+  } = trpc.meme.createMeme.useMutation({
+    onSuccess: () => {
+      trpcUtils.meme.getMemesByOwner.invalidate();
+      setOpenMemeGeneratedModal(true);
+      setIsLoading(false);
+    },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to generate meme! 😞",
+      });
+    },
+  });
 
   const memes = memeData ?? [];
 
@@ -438,7 +436,7 @@ export default function MemeGeneratorX() {
         <div className="flex flex-col md:flex-row w-fit md:w-full gap-2 justify-between">
           <CardTitle className="text-2xl">Meme Generator</CardTitle>
 
-          <div className="flex justify-center items-center gap-4">
+          <div className="flex justify-between items-center md:w-[50%] gap-4">
             <AiMemeGenerator address={address} />
             <UploadTemplate
               handleImageChange={handleImageChange}
@@ -495,6 +493,7 @@ export default function MemeGeneratorX() {
         memeImage={memeImage}
         open={openMemeGeneratedModal}
         setOpen={setOpenMemeGeneratedModal}
+        memeId={createdMemeData && createdMemeData[0].id}
       />
     </LoadSkeleton>
   );

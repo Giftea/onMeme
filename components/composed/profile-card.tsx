@@ -6,9 +6,7 @@ import { useRouter } from "next/navigation";
 import EditUsernameModal from "../modals/edit-username-modal";
 import { trpc } from "@/lib/utils/trpc.utils";
 import Avatar from "../composed/avatar";
-import { CopyIcon } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
-import useCopy from "@/hooks/use-copy";
+import CopyAddress from "./copy-icon";
 
 interface ProfileCardProps {
   isProfilePage?: boolean;
@@ -28,20 +26,6 @@ export default function ProfileCard({
     initAccount: true,
   });
 
-  const { copyToClipboard } = useCopy();
-
-  const handleCopyToClipboard = () => {
-    if (!userProfile?.address) {
-      toast({
-        title: "Failed",
-        description: "Failed to copy address",
-        variant: "destructive",
-      });
-    } else {
-      copyToClipboard(userProfile.address, "Wallet address copied!");
-    }
-  };
-
   return (
     <Card className="p-6 my-6 flex max-sm:flex-col sm:justify-between sm:items-center">
       <div className="flex space-x-4 items-center">
@@ -57,9 +41,7 @@ export default function ProfileCard({
               <p className="text-lg">
                 {shortenAddress(String(userProfile?.address))}
               </p>
-              <div onClick={handleCopyToClipboard} className="cursor-pointer">
-                <CopyIcon className="size-4 hover:stroke-blue-400" />
-              </div>
+              <CopyAddress userAddress={userProfile?.address} size={4} />
             </div>
           )}
         </div>
