@@ -41,7 +41,7 @@ export default function ProfileCard({
               <p className="text-lg">
                 {shortenAddress(String(userProfile?.address))}
               </p>
-              <CopyAddress userAddress={userProfile?.address} size={4} />
+              <CopyAddress userAddress={userProfile?.address} />
             </div>
           )}
         </div>
