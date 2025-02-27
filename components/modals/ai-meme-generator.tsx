@@ -22,7 +22,7 @@ export default function AiMemeGenerator({ address }: { address: string }) {
   const searchParams = useSearchParams();
   const { push } = useRouter();
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [memeImage, setMemeImage] = useState<string | null>(null);
   const [openMemeGeneratedModal, setOpenMemeGeneratedModal] = useState(false);
 
@@ -92,7 +92,9 @@ export default function AiMemeGenerator({ address }: { address: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default">AI</Button>
+        <Button variant="default" className="text-sm md:text-base">
+          Generate with AI
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-4/5 md:w-11/12 max-w-[1024px] gap-0 h-[calc(100%-2rem)] flex flex-col">
         <DialogHeader>

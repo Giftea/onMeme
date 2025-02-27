@@ -54,7 +54,6 @@ export default function MemeGeneratorX() {
 
   const memes = memeData ?? [];
 
-  const [open, setOpen] = useState(false);
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [selectedTextId, setSelectedTextId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -197,7 +196,6 @@ export default function MemeGeneratorX() {
         }
       };
       reader.readAsDataURL(file);
-      setOpen(false);
     }
   };
 
@@ -456,13 +454,11 @@ export default function MemeGeneratorX() {
         <div className="flex flex-col md:flex-row w-fit md:w-full gap-2 justify-between">
           <CardTitle className="text-2xl">Meme Generator</CardTitle>
 
-          <div className="flex  gap-4">
+          <div className="flex justify-center items-center gap-4">
             <AiMemeGenerator address={address} />
             <UploadTemplate
               handleImageChange={handleImageChange}
               fileInputRef={fileInputRef}
-              open={open}
-              setOpen={setOpen}
             />
           </div>
         </div>
