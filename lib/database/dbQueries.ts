@@ -23,7 +23,7 @@ export async function getUserByAddress(address: string) {
 }
 
 // Create a new user
-export async function createUser(id: string, address: string) {
+export async function createUser(id: string, address: string, avatar: string) {
   const [existingUser] = await db
     .select()
     .from(users)
@@ -33,7 +33,7 @@ export async function createUser(id: string, address: string) {
 
   const [newUser] = await db
     .insert(users)
-    .values({ address, username: "", id })
+    .values({ address, username: "", id, avatar })
     .returning();
 
   await db

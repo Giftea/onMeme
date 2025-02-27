@@ -73,7 +73,7 @@ export async function createUserAccount(address?: AddressSchemaType) {
     });
   }
 
-  const newUser = await createUser(id, address);
+  const newUser = await createUser(id, address, '');
 
   return newUser;
 }
