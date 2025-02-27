@@ -27,7 +27,7 @@ export default function NFTCard({ nft }: { nft: NFT }) {
     if (pathName === "/profile") {
       setIsProfilePage(true);
     }
-  }, [addressPathname, isProfilePage]);
+  }, [addressPathname, isProfilePage, pathName]);
   return (
     <div className="space-y-3 w-full">
       <div className="space-y-3">

@@ -87,7 +87,7 @@ export default function AiMemeGenerator({ address }: { address: string }) {
 
       handleMeme();
     }
-  }, [data]);
+  }, [data, address]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
