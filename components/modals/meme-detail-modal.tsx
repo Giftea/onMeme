@@ -1,8 +1,14 @@
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useAddress } from "@chopinframework/react";
-import Image from "next/image";
 import MintNFTModal from "./mint-nft-modal";
 import { Memes } from "@/lib/types";
+import Image from "next/image";
 
 interface MemeDetailModalProps {
   isOpen: boolean;
@@ -23,27 +29,27 @@ export function MemeDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-    <DialogContent className="max-w-2xl h-[65vh] p-6 flex flex-col items-center">
-      {/* Meme Image */}
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="relative w-full md:w-3/4 h-full">
-          <Image
-            src={imageUrl}
-            alt="nft"
-            className="rounded-lg min-[object-contain] min-w-full"
-            fill
-          />
-        </div>
-      </div>
-  
-      {/* Mint NFT Button (only for the owner) */}
-      {address === userAddress && (
-        <div className="mt-4">
-          <MintNFTModal meme={meme} address={address} />
-        </div>
-      )}
-    </DialogContent>
-  </Dialog>
-  
+      <DialogContent className="h-fit w-fit p-3 md:p-6 flex flex-col items-center">
+        <DialogHeader className="hidden">
+          <DialogTitle></DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        {/* Meme Image */}
+        <Image
+          src={imageUrl}
+          alt="nft"
+          width={300}
+          height={300}
+          className="rounded-lg w-[auto] h-[auto]"
+        />
+
+        {address === userAddress && (
+          <div className="flex justify-end w-full">
+            {" "}
+            <MintNFTModal meme={meme} address={address} />
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }

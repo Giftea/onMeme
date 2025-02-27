@@ -32,7 +32,7 @@ export default function NFTCard({ nft }: { nft: NFT }) {
     }
   }, [addressPathname, isProfilePage]);
   return (
-    <div className="space-y-3 w-full">
+    <div className="space-y-3 w-full cursor-pointer">
       <div className="space-y-3" onClick={() => setIsModalOpen(true)}>
         {nft?.metadata && (
           <Image

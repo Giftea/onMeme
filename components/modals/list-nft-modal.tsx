@@ -121,7 +121,7 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
       case "sold":
       case "cancelled":
         return (
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center space-x-2">
             <p className="text-gray-300: font-semibold">
               Price:{" "}
               <span
@@ -137,7 +137,7 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
         );
       case "listed":
         return (
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center space-x-2">
             <p className="text-gray-300: font-semibold">
               Price:{" "}
               <span

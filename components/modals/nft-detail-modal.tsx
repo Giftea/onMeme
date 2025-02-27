@@ -1,10 +1,16 @@
 "use client";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import Image from "next/image";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { shortenText } from "@/lib/utils";
 import { NFT } from "@/lib/types";
 import ListNFTModal from "./list-nft-modal";
+import Image from "next/image";
 
 interface NFTDetailModalProps {
   isOpen: boolean;
@@ -48,35 +54,34 @@ export function NFTDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl h-[65vh] md:h-[90vh] p-6 flex flex-col">
-        <div className="flex flex-col md:flex-row gap-6 w-full h-full">
-          {/* Left Side: NFT Image */}
-          <div className="w-full md:w-1/2 h-full flex items-center justify-center">
-            <div className="relative w-full h-full">
-              <Image
-                src={nft.metadata.image}
-                alt="nft"
-                className="rounded-lg object-cover border"
-                fill
-              />
-            </div>
-          </div>
+      <DialogContent className="h-fit w-fit p-3 md:p-6">
+        <DialogHeader className="text-left">
+          <DialogTitle>{nft.metadata.name}</DialogTitle>
+          <DialogDescription className="max-sm:text-xs">{nft.metadata.description}</DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col space-y-2">
+          <Image
+            src={nft.metadata.image}
+            alt="nft"
+            width={300}
+            height={300}
+            className="rounded-lg w-[auto] h-[auto]"
+          />
 
-          {/* Right Side: NFT Details */}
-          <div className="w-full md:w-1/2 flex flex-col justify-center space-y-3">
-            <p className="font-semibold text-lg">{nft.metadata.name}</p>
-            <p className="text-gray-500">
-              {shortenText(nft.metadata.description)}
-            </p>
+          <div className="flex justify-between items-center">
             {nft.status && (
-              <p className="text-gray-300 font-semibold">
+              <p className="font-semibold max-sm:text-sm">
                 Status:{" "}
-                <span className={`${statusMap[nft.status].className} text-lg`}>
+                <span
+                  className={`${statusMap[nft.status].className} font-normal`}
+                >
                   {statusMap[nft.status].text}
                 </span>
               </p>
             )}
-            <div className="">{isProfilePage && <ListNFTModal nft={nftData} />}</div>
+            <div className="hidden md:block">
+              {isProfilePage && <ListNFTModal nft={nftData} />}
+            </div>
           </div>
         </div>
       </DialogContent>

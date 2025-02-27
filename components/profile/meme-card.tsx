@@ -37,7 +37,7 @@ export default function Card({
   };
 
   return (
-    <div className="border flex justify-center items-center border-gray-400 rounded-lg p-4">
+    <div className="border flex justify-center items-center cursor-pointer border-gray-400 rounded-lg p-4">
       {meme && address && (
         <div className="space-y-3 w-full cursor-pointer" onClick={handleCardClick}>
           <Image
