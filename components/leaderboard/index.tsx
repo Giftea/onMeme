@@ -35,7 +35,7 @@ const LeaderBoard = () => {
             >
               <span className="font-semibold flex space-x-2 items-center">
                 <span>#{index + 1}</span>{" "}
-                <Avatar size={38} userAddress={user.address} />
+                <Avatar size={38} userAddress={user.address} url={user?.avatar} />
                 <Link className="text-primary capitalize" href={`/user/${user.address}`}>
                   {user.username ? user.username : shortenAddress(user.address)}
                 </Link>

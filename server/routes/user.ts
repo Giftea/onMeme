@@ -12,6 +12,7 @@ import { TRPCError } from "@trpc/server";
 import { getAddress } from "@chopinframework/next";
 import { createAvatar } from "@dicebear/core";
 import { croodles } from "@dicebear/collection";
+import { uploadToIpfs } from "@/lib/utils/ipfs.utils";
 
 export const userRouter = router({
   updateUser: publicProcedure.input(UserSchema).mutation(async ({ input }) => {
@@ -50,17 +51,7 @@ export const userRouter = router({
         });
       }
 
-      const avatar = createAvatar(croodles, {
-        size: 128,
-        seed: user[0].address || "default",
-      }).toDataUri();
-
-      const userData = {
-        ...user[0],
-        avatar,
-      };
-
-      return userData as FetchUserResponse & { avatar: string };
+      return user[0] as FetchUserResponse & { avatar: string };
     }),
 });
 
@@ -73,7 +64,14 @@ export async function createUserAccount(address?: AddressSchemaType) {
     });
   }
 
-  const newUser = await createUser(id, address, '');
+  const avatar = createAvatar(croodles, {
+    size: 128,
+    seed: address,
+  }).toDataUri();
+
+  const ipfsData = await uploadToIpfs(avatar, true);
+
+  const newUser = await createUser(id, address, ipfsData);
 
   return newUser;
 }

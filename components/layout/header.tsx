@@ -72,13 +72,13 @@ export default function Header() {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="rounded-full h-14 p-2">
                     {" "}
-                    <Avatar userAddress={address} size={38} />
+                    <Avatar userAddress={address} size={38} url={userProfile?.avatar} />
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="min-w-52">
                     <div className="flex flex-col">
                       <div className="grid grid-cols-3 p-4 border-b">
                         {" "}
-                        <Avatar userAddress={address} size={34} />
+                        <Avatar userAddress={address} size={34}  url={userProfile?.avatar}/>
                         <div className="col-span-2">
                           <p className="text-slate-400 capitalize">
                             {userProfile?.username}

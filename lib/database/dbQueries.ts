@@ -518,6 +518,7 @@ export async function getLeaderboard() {
       userId: users.id,
       username: users.username,
       address: users.address,
+      avatar: users.avatar,
 
       totalPoints: sql<number>`
       (COALESCE(COUNT(DISTINCT CASE WHEN ${listings.status} = 'sold' THEN ${listings.id} END), 0) * 5) +  

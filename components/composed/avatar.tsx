@@ -1,25 +1,21 @@
 "use client";
-import { useMemo } from "react";
-import { createAvatar } from "@dicebear/core";
-import { croodles } from "@dicebear/collection";
 import Image from "next/image";
 export default function Avatar({
   size,
-  userAddress,
+  url,
 }: {
   size?: number;
   userAddress: string;
+  url?: string | null;
 }) {
-  const avatar = useMemo(() => {
-    return createAvatar(croodles, {
-      size: size || 128,
-      seed: userAddress || "default",
-    }).toDataUri();
-  }, [userAddress, size]);
+
+  const avatar = url
+    ? url
+    : "https://tan-usual-nightingale-869.mypinata.cloud/ipfs/bafkreifqh73xq3z7dnt4yprvh7onwzz4xpm6zqy3w5ze3u4ccqngzpy2j4";
 
   return (
     <Image
-      width={size ||100}
+      width={size || 100}
       height={size || 100}
       src={avatar}
       alt="Avatar"
