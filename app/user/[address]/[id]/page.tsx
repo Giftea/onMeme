@@ -11,9 +11,7 @@ type Props = {
   params: Promise<{ id: number }>;
 };
 
-export async function generateMetadata({
-  params,
-}: Props): Promise<Metadata | null> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = (await params).id;
 
   const caller = memeRouter.createCaller({});
@@ -43,9 +41,5 @@ export default async function Page({ params }: PageProps) {
 
   const memeData = await caller.getMemeByID({ id: Number(id) });
 
-  return (
-    <div>
-      <ProfileLayout meme={memeData} address={memeData.ownerAddress} />
-    </div>
-  );
+  return <ProfileLayout meme={memeData} address={memeData.ownerAddress} />;
 }
