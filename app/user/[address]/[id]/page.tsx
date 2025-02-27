@@ -25,7 +25,7 @@ export async function generateMetadata({
   }/${Number(id)}`;
 
   return Meta({
-    title: `${memeData.ownerAddress} Profile - onMeme`,
+    title: `onMeme - ${memeData.ownerAddress} Profile`,
     description: `View my generated Meme on onMeme`,
     metaProfile: {
       name: memeData.ownerAddress,

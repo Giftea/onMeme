@@ -16,6 +16,7 @@ import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 import { useAddress } from "@chopinframework/react";
 import useCopy from "@/hooks/use-copy";
+import { downloadImage } from "@/lib/utils/download.utils";
 
 type Props = {
   open: boolean;
@@ -35,7 +36,9 @@ export default function MemeGeneratedModal({
     "Check out this meme I created on onMeme! 🔥"
   );
 
-  const urls = `${process.env.API_URL}/user/${address}/${Number(memeId)}`;
+  const urls = `${process.env.NEXT_PUBLIC_APP_URL}/user/${address}/${Number(
+    memeId
+  )}`;
 
   const encodedUrl = encodeURIComponent(String(urls));
 
@@ -48,7 +51,11 @@ export default function MemeGeneratedModal({
   };
 
   const handleCopyToClipboard = () => {
-    copyToClipboard(String(memeImage), "copied");
+    copyToClipboard(String(urls), "copied");
+  };
+
+  const handleDownloadMeme = () => {
+    downloadImage(memeImage!);
   };
 
   return (
@@ -71,50 +78,53 @@ export default function MemeGeneratedModal({
         ) : (
           <Skeleton className="w-full rounded-lg h-[400px] bg-muted" />
         )}
+
         {address && (
-          <div className="mt-4 flex justify-center gap-4">
-            <a
-              href={socialLinks.twitter}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" className="bg-slate-100">
-                <XIcon />
+          <>
+            <div className="mt-4 flex justify-center gap-4">
+              <a
+                href={socialLinks.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" className="bg-slate-100">
+                  <XIcon />
+                </Button>
+              </a>
+              <a
+                href={socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" className="bg-[#316FF6]">
+                  <FacebookIcon />
+                </Button>
+              </a>
+              <a
+                href={socialLinks.reddit}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" className="bg-[#FF4500]">
+                  <Reddit />
+                </Button>
+              </a>
+              <Button variant={"outline"} onClick={handleCopyToClipboard}>
+                <Copy />
               </Button>
-            </a>
-            <a
-              href={socialLinks.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" className="bg-[#316FF6]">
-                <FacebookIcon />
-              </Button>
-            </a>
-            <a
-              href={socialLinks.reddit}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" className="bg-[#FF4500]">
-                <Reddit />
-              </Button>
-            </a>
-            <Button variant={"outline"} onClick={handleCopyToClipboard}>
-              <Copy />
-            </Button>
-          </div>
+            </div>
+            <div className="mt-4">
+              <Link
+                className="text-primary underline text-center flex items-center justify-self-center"
+                href="/profile"
+              >
+                View on Dashboard{" "}
+                <ExternalLink size={16} className="ml-[2px]" />
+              </Link>
+            </div>
+          </>
         )}
-        {address && (
-          <div className="mt-4">
-            <Link
-              className="text-primary underline text-center flex items-center justify-self-center"
-              href="/profile"
-            >
-              View on Dashboard <ExternalLink size={16} className="ml-[2px]" />
-            </Link>
-          </div>
-        )}
+        <Button onClick={handleDownloadMeme}>Download</Button>
       </DialogContent>
     </Dialog>
   );

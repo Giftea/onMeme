@@ -39,11 +39,6 @@ export default function MemeGeneratorX() {
   } = trpc.meme.createMeme.useMutation({
     onSuccess: () => {
       trpcUtils.meme.getMemesByOwner.invalidate();
-      toast({
-        variant: "success",
-        title: "Success",
-        description: "Meme Successfully Generated! 😎",
-      });
       setOpenMemeGeneratedModal(true);
       setIsLoading(false);
     },
