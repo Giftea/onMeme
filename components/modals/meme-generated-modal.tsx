@@ -79,7 +79,7 @@ export default function MemeGeneratedModal({
           <Skeleton className="w-full rounded-lg h-[400px] bg-muted" />
         )}
 
-        {address && (
+        {address ? (
           <>
             <div className="mt-4 flex justify-center gap-4">
               <a
@@ -123,8 +123,9 @@ export default function MemeGeneratedModal({
               </Link>
             </div>
           </>
+        ) : (
+          <Button onClick={handleDownloadMeme}>Download</Button>
         )}
-        <Button onClick={handleDownloadMeme}>Download</Button>
       </DialogContent>
     </Dialog>
   );
