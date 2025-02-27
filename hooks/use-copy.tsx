@@ -2,13 +2,13 @@ import { useToast } from "./use-toast";
 
 
 interface UseCopy {
-  handleCopy: (url: string, successMessage?: string) => void;
+  copyToClipboard: (url: string, successMessage?: string) => void;
 }
 
 const useCopy = (): UseCopy => {
   const { toast } = useToast();
 
-  const handleCopy = (url: string, successMessage?: string) => {
+  const copyToClipboard = (url: string, successMessage?: string) => {
     if (navigator && url) {
       navigator.clipboard.writeText(url);
       toast({
@@ -19,7 +19,7 @@ const useCopy = (): UseCopy => {
     }
   };
 
-  return { handleCopy };
+  return { copyToClipboard };
 };
 
 export default useCopy;

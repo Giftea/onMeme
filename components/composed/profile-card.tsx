@@ -28,9 +28,9 @@ export default function ProfileCard({
     initAccount: true,
   });
 
-  const { handleCopy } = useCopy();
+  const { copyToClipboard } = useCopy();
 
-  const handleCopyLink = () => {
+  const handleCopyToClipboard = () => {
     if (!userProfile?.address) {
       toast({
         title: "Failed",
@@ -38,7 +38,7 @@ export default function ProfileCard({
         variant: "destructive",
       });
     } else {
-      handleCopy(userProfile.address, "Wallet address copied!");
+      copyToClipboard(userProfile.address, "Wallet address copied!");
     }
   };
 
@@ -57,7 +57,7 @@ export default function ProfileCard({
               <p className="text-lg">
                 {shortenAddress(String(userProfile?.address))}
               </p>
-              <div onClick={handleCopyLink} className="cursor-pointer">
+              <div onClick={handleCopyToClipboard} className="cursor-pointer">
                 <CopyIcon className="size-4 hover:stroke-blue-400" />
               </div>
             </div>
