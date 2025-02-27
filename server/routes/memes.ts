@@ -118,7 +118,7 @@ export const memeRouter = router({
         const data = (await response.json()) as GenerateAiMemeResponse;
 
         if (data.data?.url) {
-          const ipfsData = await uploadToIpfs(data.data.url);
+          const ipfsData = await uploadToIpfs(data.data.url, true);
           return ipfsData;
         }
 

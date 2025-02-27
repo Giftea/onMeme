@@ -337,7 +337,7 @@ export default function MemeGeneratorX() {
     try {
       const url = canvas.toDataURL("image/png");
 
-      const ipfsUrl = await uploadToIpfs(url);
+      const ipfsUrl = await uploadToIpfs(url, false);
 
       if (ipfsUrl) {
         const img = new Image();
