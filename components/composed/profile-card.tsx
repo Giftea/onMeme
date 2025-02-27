@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 import EditUsernameModal from "../modals/edit-username-modal";
 import { trpc } from "@/lib/utils/trpc.utils";
 import Avatar from "../composed/avatar";
+import { CopyIcon, SquareUserRound } from "lucide-react";
+import Link from "next/link";
+import { toast } from "@/hooks/use-toast";
+import useCopy from "@/hooks/use-copy";
 
 interface ProfileCardProps {
   isProfilePage?: boolean;
@@ -25,18 +29,39 @@ export default function ProfileCard({
     initAccount: true,
   });
 
+  const { handleCopy } = useCopy();
+
+  const handleCopyLink = () => {
+    if (!userProfile?.address) {
+      toast({
+        title: "Failed",
+        description: "Failed to copy address",
+        variant: "destructive",
+      });
+    } else {
+      handleCopy(userProfile.address, "Wallet address copied!");
+    }
+  };
+
   return (
     <Card className="p-6 my-6 flex max-sm:flex-col sm:justify-between sm:items-center">
       <div className="flex space-x-4 items-center">
-        <Avatar userAddress={String(userAddress)} />
+        <Avatar userAddress={String(userProfile?.address)} />
         <div>
           {userProfile && (
             <p className="text-lg font-semibold capitalize">
               {userProfile?.username}{" "}
             </p>
           )}
-          {userAddress && (
-            <p className="text-lg">{shortenAddress(String(userAddress))}</p>
+          {userProfile?.address && (
+            <div className="flex justify-center items-center gap-2">
+              <p className="text-lg">
+                {shortenAddress(String(userProfile?.address))}
+              </p>
+              <div onClick={handleCopyLink} className="cursor-pointer">
+                <CopyIcon className="size-4 hover:stroke-blue-400" />
+              </div>
+            </div>
           )}
         </div>
       </div>
