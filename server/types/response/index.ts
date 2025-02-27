@@ -14,3 +14,13 @@ export type FetchUserResponse = {
   id: string;
   createdAt: string | null;
 };
+
+export type GenerateAiMemeResponse = {
+  success: boolean;
+  data?: {
+    texts: string[];
+    template_id: 131087935;
+    url: string;
+    page_url: string;
+  };
+};

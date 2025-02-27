@@ -24,6 +24,7 @@ import MemeGeneratorSkeleton from "../skeleton/meme-generator.skeleton";
 import IsLoading from "../composed/loader";
 import MemeGeneratedModal from "../modals/meme-generated-modal";
 import { useAddress } from "@chopinframework/react";
+import AiMemeGenerator from "../modals/ai-meme-generator";
 
 export default function MemeGeneratorX() {
   const { address } = useAddress();
@@ -341,6 +342,7 @@ export default function MemeGeneratorX() {
 
       const response = await fetch(url);
       const blob = await response.blob();
+      console.log("blob", url);
       const file = new File([blob], "meme.png", { type: "image/png" });
 
       const formData = new FormData();
@@ -352,6 +354,8 @@ export default function MemeGeneratorX() {
       });
 
       const ipfsUrl = await uploadResponse.json();
+
+      console.log("ipfsUrl", ipfsUrl);
 
       if (ipfsUrl) {
         const img = new Image();
@@ -451,12 +455,16 @@ export default function MemeGeneratorX() {
       <Card className="p-6 my-6">
         <div className="flex flex-col md:flex-row w-fit md:w-full gap-2 justify-between">
           <CardTitle className="text-2xl">Meme Generator</CardTitle>
-          <UploadTemplate
-            handleImageChange={handleImageChange}
-            fileInputRef={fileInputRef}
-            open={open}
-            setOpen={setOpen}
-          />
+
+          <div className="flex  gap-4">
+            <AiMemeGenerator address={address} />
+            <UploadTemplate
+              handleImageChange={handleImageChange}
+              fileInputRef={fileInputRef}
+              open={open}
+              setOpen={setOpen}
+            />
+          </div>
         </div>
 
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-4 p-0 mt-5">
