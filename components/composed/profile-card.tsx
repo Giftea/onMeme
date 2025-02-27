@@ -44,7 +44,7 @@ export default function ProfileCard({
   };
 
   return (
-    <Card className="  p-6 my-6 flex justify-between items-center">
+    <Card className="p-6 my-6 flex max-sm:flex-col sm:justify-between sm:items-center">
       <div className="flex space-x-4 items-center">
         <Avatar userAddress={String(userProfile?.address)} />
         <div>
@@ -67,18 +67,21 @@ export default function ProfileCard({
       </div>
       {!isUserPublicPage &&
         (isProfilePage ? (
-          userProfile && <EditUsernameModal userName={userProfile.username} />
+          userProfile && (
+            <div>
+              <EditUsernameModal userName={userProfile.username} />
+            </div>
+          )
         ) : (
-          <Link href="/profile">
-            <SquareUserRound className="text-sky-500 flex md:hidden" />
+          <div>
             <Button
               onClick={() => router.push("/profile")}
-              className="text-lg hidden md:flex"
+              className="text-lg max-sm:float-right w-fit"
               variant={"link"}
             >
               View Profile
             </Button>
-          </Link>
+          </div>
         ))}
     </Card>
   );
