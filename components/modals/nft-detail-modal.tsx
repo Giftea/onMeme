@@ -7,7 +7,6 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { shortenText } from "@/lib/utils";
 import { NFT } from "@/lib/types";
 import ListNFTModal from "./list-nft-modal";
 import Image from "next/image";
