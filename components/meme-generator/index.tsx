@@ -436,7 +436,7 @@ export default function MemeGeneratorX() {
         <div className="flex flex-col md:flex-row w-fit md:w-full gap-2 justify-between">
           <CardTitle className="text-2xl">Meme Generator</CardTitle>
 
-          <div className="flex justify-center items-center gap-4">
+          <div className="flex justify-between items-center md:w-[50%] gap-4">
             <AiMemeGenerator address={address} />
             <UploadTemplate
               handleImageChange={handleImageChange}
