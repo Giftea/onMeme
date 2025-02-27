@@ -9,7 +9,7 @@ import {
 import { navLinks, NavLinks } from "./header";
 import { trpc } from "@/lib/utils/trpc.utils";
 import { useEffect, useState } from "react";
-import { AlignRight } from "lucide-react";
+import { AlignRight, LogOut } from "lucide-react";
 import { useAddress } from "@chopinframework/react";
 import { Button } from "../ui/button";
 import Logo from "../composed/logo";
@@ -23,8 +23,7 @@ export function Sidebar({ address }: { address: string | null }) {
     tokenId: 1,
   });
   const handleLogin = async () => {
-    const response = await login();
-    console.log(response);
+    await login();
   };
 
   const handleLogout = () => {
@@ -57,7 +56,12 @@ export function Sidebar({ address }: { address: string | null }) {
           <span>Balance: {balance} OMC</span>
           <div>
             {address ? (
-              <Button onClick={handleLogout}>Logout</Button>
+              <Button
+                className="w-full text-red-500 bg-red-100 hover:bg-red-200 text-center"
+                onClick={handleLogout}
+              >
+                <LogOut /> <span>Logout</span>{" "}
+              </Button>
             ) : (
               <Button className="px-8 font-semibold" onClick={handleLogin}>
                 Login

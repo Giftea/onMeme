@@ -9,6 +9,7 @@ import { useAddress } from "@chopinframework/react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { NFTDetailModal } from "../modals/nft-detail-modal";
 
 export default function NFTCard({ nft }: { nft: NFT }) {
   const { data: listedNFT } = trpc.listing.getListingByNFTId.useQuery({
@@ -23,14 +24,16 @@ export default function NFTCard({ nft }: { nft: NFT }) {
     nftId: nft?.id,
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     if (pathName === "/profile") {
       setIsProfilePage(true);
     }
-  }, [addressPathname, isProfilePage]);
+  }, [addressPathname, isProfilePage, pathName]);
   return (
-    <div className="space-y-3 w-full">
-      <div className="space-y-3">
+    <div className="space-y-3 w-full cursor-pointer">
+      <div className="space-y-3" onClick={() => setIsModalOpen(true)}>
         {nft?.metadata && (
           <Image
             src={nft?.metadata?.image}
@@ -74,6 +77,27 @@ export default function NFTCard({ nft }: { nft: NFT }) {
             </span>
           </p>
         ))}
+
+      {/* NFT Detail Modal */}
+      {nft?.metadata && (
+        <NFTDetailModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          nft={{
+            metadata: {
+              image: nft.metadata.image,
+              name: nft.metadata.name,
+              description: nft.metadata.description,
+            },
+            price: listedNFT?.price?.toString(),
+            status: listedNFT?.status,
+          }}
+          isProfilePage={isProfilePage}
+          addressPathname={addressPathname}
+          userAddress={userAddress}
+          nftData={nft}
+        />
+      )}
     </div>
   );
 }

@@ -40,7 +40,7 @@ export default function NFTDescription({
         toast({
           variant: "success",
           title: "Success",
-          description:"NFT Successfully Purchased! 😎"
+          description: "NFT Successfully Purchased! 😎",
         });
         trpcUtils.token.getBalance.invalidate();
         trpcUtils.listing.getListingByID.invalidate();
@@ -60,11 +60,7 @@ export default function NFTDescription({
 
   async function handlePurchaseNFT() {
     if (!address) return;
-    try {
-      await purchaseNFT({ listingId: nft.listingId, buyerAddress: address });
-    } catch (error) {
-      console.log(error);
-    }
+    await purchaseNFT({ listingId: nft.listingId, buyerAddress: address });
   }
   return (
     <LoadSkeleton
