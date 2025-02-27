@@ -14,8 +14,6 @@ export async function uploadToIpfs(url: string, server: boolean) {
     body: formData,
   });
 
-  console.log("uploadResponse", uploadResponse);
-
   const ipfsUrl = (await uploadResponse.json()) as string;
 
   return ipfsUrl;
