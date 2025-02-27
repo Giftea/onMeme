@@ -25,6 +25,7 @@ import IsLoading from "../composed/loader";
 import MemeGeneratedModal from "../modals/meme-generated-modal";
 import { useAddress } from "@chopinframework/react";
 import AiMemeGenerator from "../modals/ai-meme-generator";
+import { uploadToIpfs } from "@/lib/utils/ipfs.utils";
 
 export default function MemeGeneratorX() {
   const { address } = useAddress();
@@ -338,22 +339,7 @@ export default function MemeGeneratorX() {
     try {
       const url = canvas.toDataURL("image/png");
 
-      const response = await fetch(url);
-      const blob = await response.blob();
-      console.log("blob", url);
-      const file = new File([blob], "meme.png", { type: "image/png" });
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const uploadResponse = await fetch("/api/files", {
-        method: "POST",
-        body: formData,
-      });
-
-      const ipfsUrl = await uploadResponse.json();
-
-      console.log("ipfsUrl", ipfsUrl);
+      const ipfsUrl = await uploadToIpfs(url);
 
       if (ipfsUrl) {
         const img = new Image();
