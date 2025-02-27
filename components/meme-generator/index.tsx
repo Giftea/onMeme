@@ -172,8 +172,6 @@ export default function MemeGeneratorX() {
       reader.onload = (e) => {
         const result = e.target?.result as string;
         if (result) {
-          console.log("result", result);
-
           const img = new Image();
           img.onload = () => {
             setImage(img);
