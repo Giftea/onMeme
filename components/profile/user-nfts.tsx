@@ -19,7 +19,7 @@ export default function UserNFTs({
         {nfts && nfts?.length > 0 && (
           <>
             {nfts.toReversed().map((item) => (
-              <div key={item.id}>
+              <div key={item.id} >
                 <NFTCard nft={item} />
               </div>
             ))}
