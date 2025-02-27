@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       name: userData.address,
       url: profileUrl,
       description: "View my Meme",
-      image: "",
+      image: userData.avatar,
     },
   });
 }
