@@ -7,7 +7,7 @@ export async function uploadToIpfs(url: string) {
   const formData = new FormData();
   formData.append("file", file);
 
-  const uploadResponse = await fetch(`${process.env.APP_URL}/api/files`, {
+  const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/files`, {
     method: "POST",
     body: formData,
   });
