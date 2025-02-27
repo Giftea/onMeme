@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MemeGeneratorSkeleton() {
   return (
-    <div className="min-h-screen rounded-lg bg-card text-white p-4">
+    <div className="rounded-lg bg-card text-white p-4">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <Skeleton className="h-10 w-48 bg-muted" />
