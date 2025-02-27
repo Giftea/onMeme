@@ -20,9 +20,9 @@ export async function generateMetadata({
 
   const memeData = await caller.getMemeByID({ id: Number(id) });
 
-  const profileUrl = `${process.env.API_URL}/user/share/${
+  const profileUrl = `${process.env.API_URL}/user/${
     memeData.ownerAddress
-  }?id=${Number(id)}`;
+  }/${Number(id)}`;
 
   return Meta({
     title: `${memeData.ownerAddress} Profile - onMeme`,
