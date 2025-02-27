@@ -6,8 +6,12 @@ import {
   createMeme,
 } from "@/lib/database/dbQueries";
 import { TRPCError } from "@trpc/server";
-import { GetMemeTemplateResponse } from "../types/response";
+import {
+  GenerateAiMemeResponse,
+  GetMemeTemplateResponse,
+} from "../types/response";
 import { BLANK_MEME_TEMPLATE } from "@/config/meme.config";
+import { uploadToIpfs } from "@/lib/utils/ipfs.utils";
 
 export const memeRouter = router({
   // Get all memes
@@ -63,4 +67,73 @@ export const memeRouter = router({
       });
     }
   }),
+  fetchAiMemes: publicProcedure.query(async () => {
+    try {
+      const response = await fetch("https://api.imgflip.com/get_memes");
+      if (!response.ok) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "failed to fetch memes",
+        });
+      }
+      const data = (await response.json()) as GetMemeTemplateResponse;
+
+      const defaultData = data.data?.memes ?? [];
+
+      return defaultData;
+    } catch (err: unknown) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to fetch memes",
+        cause: err as Error,
+      });
+    }
+  }),
+  generateAiMeme: publicProcedure
+    .input(
+      z.object({
+        template_id: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { template_id } = input;
+
+      const payload = new URLSearchParams();
+      payload.append("username", process.env.IMGFLIP_USERNAME!);
+      payload.append("password", process.env.IMGFLIP_PASSWORD!);
+      payload.append("model", "classic");
+      payload.append("prefix_text", "");
+      payload.append("template_id", template_id);
+      payload.append("no_watermark", "true");
+
+      try {
+        const response = await fetch("https://api.imgflip.com/ai_meme", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: payload,
+        });
+
+        const data = (await response.json()) as GenerateAiMemeResponse;
+
+        if (data.data?.url) {
+          const ipfsData = await uploadToIpfs(data.data.url);
+          return ipfsData;
+        }
+
+        if (!data.success) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "AI failed to generate meme",
+          });
+        }
+      } catch (err: unknown) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "AI Failed to generate meme",
+          cause: err as Error,
+        });
+      }
+    }),
 });

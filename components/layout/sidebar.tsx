@@ -23,8 +23,7 @@ export function Sidebar({ address }: { address: string | null }) {
     tokenId: 1,
   });
   const handleLogin = async () => {
-    const response = await login();
-    console.log(response);
+    await login();
   };
 
   const handleLogout = () => {

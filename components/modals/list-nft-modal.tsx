@@ -59,7 +59,7 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
       });
       setOpen(false);
     },
-    [toast, trpcUtils]
+    [trpcUtils]
   );
 
   const { mutateAsync: handleListing, isPending } =

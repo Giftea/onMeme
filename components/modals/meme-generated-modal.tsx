@@ -15,6 +15,7 @@ import Reddit from "../SVG/icons/reddit";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 import { useAddress } from "@chopinframework/react";
+import useCopy from "@/hooks/use-copy";
 
 type Props = {
   open: boolean;
@@ -33,14 +34,16 @@ export default function MemeGeneratedModal({
   );
   const encodedUrl = encodeURIComponent(String(memeImage));
 
+  const { copyToClipboard } = useCopy();
+
   const socialLinks = {
     twitter: `https://twitter.com/intent/tweet?text=${shareText}&url=${encodedUrl}`,
     reddit: `https://www.reddit.com/submit?url=${encodedUrl}&title=${shareText}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
   };
 
-  const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(String(memeImage));
+  const handleCopyToClipboard = () => {
+    copyToClipboard(String(memeImage), "copied");
   };
 
   return (
@@ -92,7 +95,7 @@ export default function MemeGeneratedModal({
               <Reddit />
             </Button>
           </a>
-          <Button variant={"outline"} onClick={copyToClipboard}>
+          <Button variant={"outline"} onClick={handleCopyToClipboard}>
             <Copy />
           </Button>
         </div>

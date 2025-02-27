@@ -30,7 +30,7 @@ export default function NFTCard({ nft }: { nft: NFT }) {
     if (pathName === "/profile") {
       setIsProfilePage(true);
     }
-  }, [addressPathname, isProfilePage]);
+  }, [addressPathname, isProfilePage, pathName]);
   return (
     <div className="space-y-3 w-full cursor-pointer">
       <div className="space-y-3" onClick={() => setIsModalOpen(true)}>
