@@ -53,8 +53,6 @@ export default function MemeGeneratorX() {
 
   const memes = memeData ?? [];
 
-  console.log("createdMemeData", createdMemeData && createdMemeData[0].id);
-
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [selectedTextId, setSelectedTextId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);

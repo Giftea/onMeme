@@ -33,7 +33,7 @@ export default function ProfileLayout({
     <div>
       <ProfileCard userAddress={address} isProfilePage isUserPublicPage />
       <User address={address} />
-      {meme && (
+      {meme.imageUrl && (
         <MemeDetailModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
