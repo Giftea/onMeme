@@ -10,6 +10,8 @@ import { publicProcedure, router } from "@/server/trpc";
 import { FetchUserResponse } from "../types/response";
 import { TRPCError } from "@trpc/server";
 import { getAddress } from "@chopinframework/next";
+import { createAvatar } from "@dicebear/core";
+import { croodles } from "@dicebear/collection";
 
 export const userRouter = router({
   updateUser: publicProcedure.input(UserSchema).mutation(async ({ input }) => {
@@ -48,7 +50,17 @@ export const userRouter = router({
         });
       }
 
-      return user[0] as FetchUserResponse;
+      const avatar = createAvatar(croodles, {
+        size: 128,
+        seed: user[0].address || "default",
+      }).toDataUri();
+
+      const userData = {
+        ...user[0],
+        avatar,
+      };
+
+      return userData as FetchUserResponse & { avatar: string };
     }),
 });
 
