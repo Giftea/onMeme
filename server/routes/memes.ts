@@ -4,6 +4,7 @@ import {
   getAllMemes,
   getMemesByOwner,
   createMeme,
+  getMemeByID,
 } from "@/lib/database/dbQueries";
 import { TRPCError } from "@trpc/server";
 import {
@@ -24,6 +25,12 @@ export const memeRouter = router({
     .input(z.object({ ownerAddress: z.string() }))
     .query(async ({ input }) => {
       return await getMemesByOwner(input.ownerAddress);
+    }),
+
+  getMemeByID: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      return await getMemeByID(input.id);
     }),
 
   // Create a new meme

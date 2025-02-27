@@ -43,7 +43,7 @@ export default function AiMemeGenerator({ address }: { address: string }) {
     },
   });
 
-  const { mutateAsync: createMeme } = trpc.meme.createMeme.useMutation({
+  const { mutateAsync: createMeme, data: createdMemeData } = trpc.meme.createMeme.useMutation({
     onSuccess: () => {
       trpcUtils.meme.getMemesByOwner.invalidate();
       setOpenMemeGeneratedModal(true);
@@ -129,6 +129,7 @@ export default function AiMemeGenerator({ address }: { address: string }) {
         memeImage={memeImage}
         open={openMemeGeneratedModal}
         setOpen={setOpenMemeGeneratedModal}
+        memeId={createdMemeData && createdMemeData[0].id}
       />
     </Dialog>
   );

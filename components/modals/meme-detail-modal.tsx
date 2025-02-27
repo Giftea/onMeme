@@ -9,6 +9,7 @@ import { useAddress } from "@chopinframework/react";
 import MintNFTModal from "./mint-nft-modal";
 import { Memes } from "@/lib/types";
 import Image from "next/image";
+import { Skeleton } from "../ui/skeleton";
 
 interface MemeDetailModalProps {
   isOpen: boolean;
@@ -35,13 +36,17 @@ export function MemeDetailModal({
           <DialogDescription></DialogDescription>
         </DialogHeader>
         {/* Meme Image */}
-        <Image
-          src={imageUrl}
-          alt="nft"
-          width={300}
-          height={300}
-          className="rounded-lg w-[auto] h-[auto]"
-        />
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt="nft"
+            width={300}
+            height={300}
+            className="rounded-lg w-[auto] h-[auto]"
+          />
+        ) : (
+          <Skeleton className="w-full rounded-lg h-[400px] bg-muted" />
+        )}
 
         {address === userAddress && (
           <div className="flex justify-end w-full">
