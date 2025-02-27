@@ -9,17 +9,17 @@ import Avatar from "../composed/avatar";
 import { shortenAddress } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
-import { Moon, Sun } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Logo from "../composed/logo";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 export default function Header() {
   const [balance, setBalance] = useState(0);
@@ -66,69 +66,78 @@ export default function Header() {
           {isLoading ? (
             <Skeleton className="w-20 h-10 bg-muted" />
           ) : address ? (
-            <Menubar className="bg-transparent shadow-none border-0">
-              <MenubarMenu>
-                <MenubarTrigger className="focus:bg-transparent data-[state=open]:bg-transparent">
-                  {" "}
-                  <div className="flex space-x-2 items-center cursor-pointer">
-                    <Avatar userAddress={address} size={50} />
-                    <div>
-                      <p className="text-sm text-slate-400 capitalize">
-                        {userProfile?.username}
-                      </p>
-                      <p className="text-sm text-primary">
-                        {shortenAddress(address)}
-                      </p>
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="rounded-full h-14 p-2">
+                    {" "}
+                    <Avatar userAddress={address} size={38} />
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent className="min-w-52">
+                    <div className="flex flex-col">
+                      <div className="grid grid-cols-3 p-4 border-b">
+                        {" "}
+                        <Avatar userAddress={address} size={34} />
+                        <div className="col-span-2">
+                          <p className="text-slate-400 capitalize">
+                            {userProfile?.username}
+                          </p>
+                          <p className="text-sm text-primary">
+                            {shortenAddress(address)}
+                          </p>
+                        </div>
+                      </div>
+                      <NavigationMenuLink
+                        href="/profile"
+                        className="p-4 border-b text-primary"
+                      >
+                        View Profile
+                      </NavigationMenuLink>
+                      <NavigationMenuLink className="p-4 border-b">
+                        Balance: {balance} OMC
+                      </NavigationMenuLink>
+                      <div className="p-4 border-b">
+                        {" "}
+                        <div className="flex items-center justify-between w-full bg-card text-card-foreground rounded-full p-2">
+                          <button
+                            onClick={() => setTheme("dark")}
+                            className={`${
+                              theme === "dark" && "bg-gray-400"
+                            } rounded-full hover:bg-gray-500 py-1 px-2`}
+                          >
+                            <Moon />
+                          </button>
+                          <button
+                            onClick={() => setTheme("dark")}
+                            className={`${
+                              theme === "system" && "bg-gray-400"
+                            } rounded-full hover:bg-gray-500 py-1 px-2`}
+                          >
+                            auto
+                          </button>
+                          <button
+                            onClick={() => setTheme("light")}
+                            className={`${
+                              theme === "light" && "bg-gray-400"
+                            } rounded-full hover:bg-gray-500 py-1 px-2`}
+                          >
+                            <Sun />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <Button
+                          className="w-full text-red-500 text-lg bg-red-100 hover:bg-red-200 text-center space-x-2"
+                          onClick={handleLogout}
+                        >
+                          <LogOut /> <span>Logout</span>{" "}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </MenubarTrigger>
-                <MenubarContent>
-                  <MenubarItem>
-                    <Link href="/profile">View Profile</Link>
-                  </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarItem>
-                    <span>Balance: {balance} OMC</span>
-                  </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarItem className="focus:text-foreground">
-                    <div className="flex items-center justify-between w-full bg-card text-card-foreground rounded-full p-2">
-                      <button
-                        onClick={() => setTheme("dark")}
-                        className={`${
-                          theme === "dark" && "bg-gray-400 rounded-full"
-                        } py-1 px-2`}
-                      >
-                        <Moon />
-                      </button>
-                      <button
-                        onClick={() => setTheme("dark")}
-                        className={`${
-                          theme === "system" && "bg-gray-400 rounded-full"
-                        } py-1 px-2`}
-                      >
-                        auto
-                      </button>
-                      <button
-                        onClick={() => setTheme("light")}
-                        className={`${
-                          theme === "light" && "bg-gray-400 rounded-full"
-                        } py-1 px-2`}
-                      >
-                        <Sun />
-                      </button>
-                    </div>
-                  </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarItem
-                    className="cursor-pointer"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-            </Menubar>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           ) : (
             <Button className="font-semibold px-8" onClick={handleLogin}>
               Login
@@ -161,9 +170,7 @@ export function NavLinks({
         pathName === link.split("?")[0] && theme === "dark" && "text-secondary"
       } ${
         pathName === link.split("?")[0] && theme === "light" && "text-primary"
-      } ${
-        theme === "dark" ? "hover:text-cyan-200/70" : "hover:text-blue-300"
-      }`}
+      } ${theme === "dark" ? "hover:text-cyan-200/70" : "hover:text-blue-300"}`}
       href={link}
     >
       {name}

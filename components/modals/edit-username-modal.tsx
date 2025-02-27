@@ -43,7 +43,7 @@ export default function EditUsernameModal({ userName }: { userName: string }) {
         toast({
           variant: "success",
           title: "Success",
-          description: "Username updated successfully"
+          description: "Username updated successfully",
         });
       },
       onError: (error) => {
@@ -60,7 +60,9 @@ export default function EditUsernameModal({ userName }: { userName: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Username</Button>
+        <Button variant="outline" className="max-sm:float-right w-fit">
+          Add Username
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] ">
         <DialogHeader>
