@@ -9,7 +9,7 @@ export default function ProfileLayout({
   meme,
 }: {
   address: string;
-  meme: {
+  meme?: {
     id: number;
     ownerAddress: string;
     templateId: string;
@@ -21,7 +21,7 @@ export default function ProfileLayout({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (meme.imageUrl) {
+    if (meme?.imageUrl) {
       setIsModalOpen(true);
     }
   }, []);
@@ -33,7 +33,7 @@ export default function ProfileLayout({
     <div>
       <ProfileCard userAddress={address} isProfilePage isUserPublicPage />
       <User address={address} />
-      {meme.imageUrl && (
+      {meme?.imageUrl && (
         <MemeDetailModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}

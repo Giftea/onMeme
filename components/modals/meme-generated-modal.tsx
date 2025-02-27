@@ -36,11 +36,11 @@ export default function MemeGeneratedModal({
     "Check out this meme I created on onMeme! 🔥"
   );
 
-  const urls = `${process.env.NEXT_PUBLIC_APP_URL}/user/${address}/${Number(
+  const URL = `${process.env.NEXT_PUBLIC_APP_URL}/user/${address}/${Number(
     memeId
   )}`;
 
-  const encodedUrl = encodeURIComponent(String(urls));
+  const encodedUrl = encodeURIComponent(String(URL));
 
   const { copyToClipboard } = useCopy();
 
@@ -51,7 +51,7 @@ export default function MemeGeneratedModal({
   };
 
   const handleCopyToClipboard = () => {
-    copyToClipboard(String(urls), "copied");
+    copyToClipboard(String(URL), "copied");
   };
 
   const handleDownloadMeme = () => {
@@ -79,7 +79,7 @@ export default function MemeGeneratedModal({
           <Skeleton className="w-full rounded-lg h-[400px] bg-muted" />
         )}
 
-        {address && (
+        {address ? (
           <>
             <div className="mt-4 flex justify-center gap-4">
               <a
@@ -123,8 +123,9 @@ export default function MemeGeneratedModal({
               </Link>
             </div>
           </>
+        ) : (
+          <Button onClick={handleDownloadMeme}>Download</Button>
         )}
-        <Button onClick={handleDownloadMeme}>Download</Button>
       </DialogContent>
     </Dialog>
   );
