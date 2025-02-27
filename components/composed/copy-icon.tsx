@@ -6,16 +6,16 @@ import { toast } from "@/hooks/use-toast";
 
 export default function CopyAddress({
   userAddress,
-  size,
 }: {
   userAddress: string;
-  size: number;
 }) {
   const { data: userProfile } = trpc.user.fetchUser.useQuery({
     address: String(userAddress),
     initAccount: true,
   });
   const { copyToClipboard } = useCopy();
+
+  const URL = `${process.env.NEXT_PUBLIC_APP_URL}/user/${userProfile?.address}`;
 
   const handleCopyToClipboard = () => {
     if (!userProfile?.address) {
@@ -25,13 +25,13 @@ export default function CopyAddress({
         variant: "destructive",
       });
     } else {
-      copyToClipboard(userProfile.address, "Wallet address copied!");
+      copyToClipboard(URL, "User profile copied!");
     }
   };
 
   return (
     <div onClick={handleCopyToClipboard} className="cursor-pointer">
-      <CopyIcon className={`size-${size} hover:stroke-blue-400`} />
+      <CopyIcon className={`size-4 hover:stroke-blue-400`} />
     </div>
   );
 }

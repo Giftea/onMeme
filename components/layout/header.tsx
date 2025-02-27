@@ -85,7 +85,7 @@ export default function Header() {
                           </p>
                           <div className="text-sm text-primary flex items-center space-x-2">
                             <span>{shortenAddress(address)}</span>
-                            <CopyAddress userAddress={address} size={4} />
+                            <CopyAddress userAddress={address} />
                           </div>
                         </div>
                       </div>
