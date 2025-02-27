@@ -32,28 +32,33 @@ export default function MemeGeneratorX() {
   const trpcUtils = trpc.useUtils();
   const { data: memeData, isLoading: loading } =
     trpc.meme.fetchMemes.useQuery();
-  const { mutateAsync: createMeme, isPending } =
-    trpc.meme.createMeme.useMutation({
-      onSuccess: () => {
-        trpcUtils.meme.getMemesByOwner.invalidate();
-        toast({
-          variant: "success",
-          title: "Success",
-          description: "Meme Successfully Generated! 😎",
-        });
-        setOpenMemeGeneratedModal(true);
-        setIsLoading(false);
-      },
-      onError: () => {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to generate meme! 😞",
-        });
-      },
-    });
+  const {
+    mutateAsync: createMeme,
+    data: createdMemeData,
+    isPending,
+  } = trpc.meme.createMeme.useMutation({
+    onSuccess: () => {
+      trpcUtils.meme.getMemesByOwner.invalidate();
+      toast({
+        variant: "success",
+        title: "Success",
+        description: "Meme Successfully Generated! 😎",
+      });
+      setOpenMemeGeneratedModal(true);
+      setIsLoading(false);
+    },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to generate meme! 😞",
+      });
+    },
+  });
 
   const memes = memeData ?? [];
+
+  console.log("createdMemeData", createdMemeData && createdMemeData[0].id);
 
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [selectedTextId, setSelectedTextId] = useState<string | null>(null);
@@ -495,6 +500,7 @@ export default function MemeGeneratorX() {
         memeImage={memeImage}
         open={openMemeGeneratedModal}
         setOpen={setOpenMemeGeneratedModal}
+        memeId={createdMemeData && createdMemeData[0].id}
       />
     </LoadSkeleton>
   );

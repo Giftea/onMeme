@@ -21,18 +21,23 @@ type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   memeImage: string | null;
+  memeId?: number;
 };
 
 export default function MemeGeneratedModal({
   open,
   setOpen,
   memeImage,
+  memeId,
 }: Props) {
   const { address } = useAddress();
   const shareText = encodeURIComponent(
     "Check out this meme I created on onMeme! 🔥"
   );
-  const encodedUrl = encodeURIComponent(String(memeImage));
+
+  const urls = `${process.env.API_URL}/user/${address}/${Number(memeId)}`;
+
+  const encodedUrl = encodeURIComponent(String(urls));
 
   const { copyToClipboard } = useCopy();
 
@@ -66,39 +71,40 @@ export default function MemeGeneratedModal({
         ) : (
           <Skeleton className="w-full rounded-lg h-[400px] bg-muted" />
         )}
-
-        <div className="mt-4 flex justify-center gap-4">
-          <a
-            href={socialLinks.twitter}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button variant="outline" className="bg-slate-100">
-              <XIcon />
+        {address && (
+          <div className="mt-4 flex justify-center gap-4">
+            <a
+              href={socialLinks.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" className="bg-slate-100">
+                <XIcon />
+              </Button>
+            </a>
+            <a
+              href={socialLinks.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" className="bg-[#316FF6]">
+                <FacebookIcon />
+              </Button>
+            </a>
+            <a
+              href={socialLinks.reddit}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" className="bg-[#FF4500]">
+                <Reddit />
+              </Button>
+            </a>
+            <Button variant={"outline"} onClick={handleCopyToClipboard}>
+              <Copy />
             </Button>
-          </a>
-          <a
-            href={socialLinks.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button variant="outline" className="bg-[#316FF6]">
-              <FacebookIcon />
-            </Button>
-          </a>
-          <a
-            href={socialLinks.reddit}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button variant="outline" className="bg-[#FF4500]">
-              <Reddit />
-            </Button>
-          </a>
-          <Button variant={"outline"} onClick={handleCopyToClipboard}>
-            <Copy />
-          </Button>
-        </div>
+          </div>
+        )}
         {address && (
           <div className="mt-4">
             <Link
