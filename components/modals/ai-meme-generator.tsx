@@ -43,19 +43,20 @@ export default function AiMemeGenerator({ address }: { address: string }) {
     },
   });
 
-  const { mutateAsync: createMeme, data: createdMemeData } = trpc.meme.createMeme.useMutation({
-    onSuccess: () => {
-      trpcUtils.meme.getMemesByOwner.invalidate();
-      setOpenMemeGeneratedModal(true);
-    },
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to create meme! 😞",
-      });
-    },
-  });
+  const { mutateAsync: createMeme, data: createdMemeData } =
+    trpc.meme.createMeme.useMutation({
+      onSuccess: () => {
+        trpcUtils.meme.getMemesByOwner.invalidate();
+        setOpenMemeGeneratedModal(true);
+      },
+      onError: () => {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to create meme! 😞",
+        });
+      },
+    });
 
   const selectedMemeId = searchParams.get("ai-meme");
   const selectedMeme =
@@ -72,6 +73,20 @@ export default function AiMemeGenerator({ address }: { address: string }) {
       ownerAddress: address,
       imageUrl: data!,
       templateId: String(selectedMemeId),
+    });
+  }
+
+  async function handleMemeSubmit() {
+    if (!address) {
+      return toast({
+        variant: "destructive",
+        title: "Error",
+        description: "You need to login first!",
+      });
+    }
+
+    await handleGenerateAiMeme({
+      template_id: selectedMemeId ?? "6235864",
     });
   }
 
@@ -92,12 +107,15 @@ export default function AiMemeGenerator({ address }: { address: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary" className="text-sm md:text-base md:w-[50%] lg:w-[65%] flex space-x-">
+        <Button
+          variant="secondary"
+          className="text-sm md:text-base md:w-[50%] lg:w-[65%] flex space-x-"
+        >
           <Brain />
           <span>Generate with AI</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-4/5 md:w-11/12 max-w-[1024px] gap-0 h-[calc(100%-2rem)] flex flex-col">
+      <DialogContent className="w-4/5 md:w-11/12 max-w-[1024px] gap-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-2xl">AI Meme Generation</DialogTitle>
           <DialogDescription>Use AI to generate a Meme</DialogDescription>
@@ -113,13 +131,9 @@ export default function AiMemeGenerator({ address }: { address: string }) {
             />
           )}
           <Button
-            disabled={isPending}
+            disabled={isPending || !selectedMemeId}
             className="mt-4"
-            onClick={() =>
-              handleGenerateAiMeme({
-                template_id: selectedMemeId ?? "6235864",
-              })
-            }
+            onClick={handleMemeSubmit}
           >
             {isPending ? <Loader /> : "Generate"}{" "}
           </Button>
