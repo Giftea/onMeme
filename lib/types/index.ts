@@ -52,7 +52,7 @@ export interface UserType {
 
 export interface Memes {
   id: number;
-  createdAt: string | null;
+  createdAt: Date | string | null;
   ownerId?: string;
   ownerAddress: string;
   templateId: string;

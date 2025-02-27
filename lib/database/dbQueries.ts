@@ -383,6 +383,12 @@ export async function getMemesByOwner(ownerAddress: string) {
     .where(eq(memes.ownerAddress, ownerAddress));
 }
 
+// Get NFT by ID
+export async function getMemeByID(id: number) {
+  const meme = await db.select().from(memes).where(eq(memes.id, id));
+  return meme[0];
+}
+
 // Create a new meme
 export async function createMeme(
   ownerAddress: string,
