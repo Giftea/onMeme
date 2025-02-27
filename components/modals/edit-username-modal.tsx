@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import { trpc } from "@/lib/utils/trpc.utils";
 import { UserSchema, UserSchemaType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
+import { Loader, UserRoundPen } from "lucide-react";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 
@@ -43,7 +43,7 @@ export default function EditUsernameModal({ userName }: { userName: string }) {
         toast({
           variant: "success",
           title: "Success",
-          description: "Username updated successfully"
+          description: "Username updated successfully",
         });
       },
       onError: (error) => {
@@ -60,7 +60,10 @@ export default function EditUsernameModal({ userName }: { userName: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Username</Button>
+        <Button variant="outline" className="flex items-center gap-2">
+          <UserRoundPen className="text-sky-500 block sm:hidden" />
+          <span className="hidden sm:block">Add Username</span>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] ">
         <DialogHeader>
