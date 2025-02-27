@@ -23,7 +23,7 @@ export async function getUserByAddress(address: string) {
 }
 
 // Create a new user
-export async function createUser(id: string, address: string) {
+export async function createUser(id: string, address: string, avatar: string) {
   const [existingUser] = await db
     .select()
     .from(users)
@@ -33,7 +33,7 @@ export async function createUser(id: string, address: string) {
 
   const [newUser] = await db
     .insert(users)
-    .values({ address, username: "", id })
+    .values({ address, username: "", id, avatar })
     .returning();
 
   await db
@@ -518,6 +518,7 @@ export async function getLeaderboard() {
       userId: users.id,
       username: users.username,
       address: users.address,
+      avatar: users.avatar,
 
       totalPoints: sql<number>`
       (COALESCE(COUNT(DISTINCT CASE WHEN ${listings.status} = 'sold' THEN ${listings.id} END), 0) * 5) +  

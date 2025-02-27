@@ -29,7 +29,10 @@ export default function ProfileCard({
   return (
     <Card className="p-6 my-6 flex max-sm:flex-col sm:justify-between sm:items-center">
       <div className="flex space-x-4 items-center">
-        <Avatar userAddress={String(userProfile?.address)} />
+        <Avatar
+          userAddress={String(userProfile?.address)}
+          url={userProfile?.avatar}
+        />
         <div>
           {userProfile && (
             <p className="text-lg font-semibold capitalize">

@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
         port: "",
       },
     ],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; img-src * data: blob:;",
     domains: ["i.imgflip.com", "tan-usual-nightingale-869.mypinata.cloud"],
   },
 };

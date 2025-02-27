@@ -17,6 +17,7 @@ export const users = pgTable("users", {
   id: varchar("id", { length: 42 }).primaryKey(),
   username: varchar("username", { length: 255 }).notNull(),
   address: varchar("address", { length: 42 }).unique().notNull(),
+  avatar: text("avatar"),
   createdAt: timestamp("created_at", { withTimezone: true }).default(
     sql`CURRENT_TIMESTAMP`
   ),
