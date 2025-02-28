@@ -21,7 +21,6 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import CopyAddress from "../composed/copy-icon";
-import LoadSkeleton from "../skeleton";
 
 export default function Header() {
   const [balance, setBalance] = useState(0);
