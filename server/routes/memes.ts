@@ -13,6 +13,7 @@ import {
 } from "../types/response";
 import { BLANK_MEME_TEMPLATE } from "@/config/meme.config";
 import { uploadToIpfs } from "@/lib/utils/ipfs.utils";
+import { addWatermark } from "@/lib/utils/image.utlis";
 
 export const memeRouter = router({
   // Get all memes
@@ -125,7 +126,13 @@ export const memeRouter = router({
         const data = (await response.json()) as GenerateAiMemeResponse;
 
         if (data.data?.url) {
-          const ipfsData = await uploadToIpfs(data.data.url, true);
+          const watermarkImage = await addWatermark(data.data.url);
+
+          const ipfsData = await uploadToIpfs(
+            data.data.url,
+            true,
+            watermarkImage
+          );
           return ipfsData;
         }
 
