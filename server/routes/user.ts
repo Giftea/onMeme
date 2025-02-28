@@ -2,7 +2,6 @@ import { AddressSchemaType } from "../../lib/types";
 import {
   createUser,
   getUserByAddress,
-  getUsers,
   updateUser,
 } from "@/lib/database/dbQueries";
 import { generateMockEthereumAddress } from "@/lib/utils";
