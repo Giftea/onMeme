@@ -2,6 +2,7 @@ import { AddressSchemaType } from "../../lib/types";
 import {
   createUser,
   getUserByAddress,
+  getUsers,
   updateUser,
 } from "@/lib/database/dbQueries";
 import { generateMockEthereumAddress } from "@/lib/utils";
@@ -12,6 +13,7 @@ import { TRPCError } from "@trpc/server";
 import { getAddress } from "@chopinframework/next";
 import { createAvatar } from "@dicebear/core";
 import { croodles } from "@dicebear/collection";
+import sharp from "sharp";
 import { uploadToIpfs } from "@/lib/utils/ipfs.utils";
 
 export const userRouter = router({
@@ -65,11 +67,15 @@ export async function createUserAccount(address?: AddressSchemaType) {
   }
 
   const avatar = createAvatar(croodles, {
-    size: 128,
+    size: 400,
     seed: address,
-  }).toDataUri();
+  }).toString();
 
-  const ipfsData = await uploadToIpfs(avatar, true);
+  const pngBuffer = await sharp(Buffer.from(avatar)).png().toBuffer();
+  const pngBase64 = pngBuffer.toString("base64");
+  const dataUri = `data:image/png;base64,${pngBase64}`;
+
+  const ipfsData = await uploadToIpfs(dataUri, true);
 
   const newUser = await createUser(id, address, ipfsData);
 
