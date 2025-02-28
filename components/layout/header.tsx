@@ -50,10 +50,10 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-card p-4 md:px-10">
-      <div className="flex items-center justify-between mx-auto max-w-[1060px]">
+    <header className="bg-card p-4 md:px-10 h-20 flex items-center justify-between">
+      <div className="flex-1 flex items-center justify-between mx-auto max-w-[1060px]">
         <Logo />
-        <div className="space-x-3 hidden md:flex">
+        <div className="hidden space-x-3 md:flex">
           {navLinks.map((item, index) => (
             <NavLinks
               theme={theme}
@@ -63,7 +63,7 @@ export default function Header() {
             />
           ))}
         </div>
-        <div className="max-md:hidden">
+        <div className="max-md:hidden w-20">
           {isLoading ? (
             <Skeleton className="w-20 h-10 bg-muted" />
           ) : address ? (
@@ -72,13 +72,21 @@ export default function Header() {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="rounded-full h-14 p-2">
                     {" "}
-                    <Avatar userAddress={address} size={38} url={userProfile?.avatar} />
+                    <Avatar
+                      userAddress={address}
+                      size={38}
+                      url={userProfile?.avatar}
+                    />
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="min-w-52">
                     <div className="flex flex-col">
                       <div className="grid grid-cols-3 p-4 border-b">
                         {" "}
-                        <Avatar userAddress={address} size={34}  url={userProfile?.avatar}/>
+                        <Avatar
+                          userAddress={address}
+                          size={34}
+                          url={userProfile?.avatar}
+                        />
                         <div className="col-span-2">
                           <p className="text-slate-400 capitalize">
                             {userProfile?.username}

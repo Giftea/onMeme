@@ -6,7 +6,7 @@ export default function Logo() {
   const { theme } = useTheme();
 
   return (
-    <Link href={"/"}>
+    <Link href={"/"} className="w-36">
       {theme === "dark" && (
         <Image
           src="/images/logo.svg"
