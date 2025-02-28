@@ -167,7 +167,7 @@ If you encounter issues:
 
 - **Database Errors**: Ensure `.env` is correctly set up and run `pnpm db:migrate`.
 - **Chopin Wallet Issues**: Clear browser cache and restart the app.
-- **IPFS Upload Failures**: Check `lib/utils/metadata.utils.ts` and verify API access.
+- **IPFS Upload Failures**: Check `lib/utils/ipfs.utils.ts` and verify API access.
 
 ---
 
