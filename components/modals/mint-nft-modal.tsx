@@ -111,7 +111,7 @@ export default function MintNFTModal({
           <DialogContent className="lg:max-w-[700px]">
             <DialogHeader>
               <DialogTitle className="text-2xl">Mint Meme as NFT</DialogTitle>
-              <DialogDescription />
+              <DialogDescription hidden />
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 py-4">
               <Image

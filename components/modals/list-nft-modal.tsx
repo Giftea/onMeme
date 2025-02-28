@@ -174,7 +174,7 @@ export default function ListNFTModal({ nft }: { nft: NFT }) {
             <DialogTitle className="text-2xl">
               List Your NFT for Sale
             </DialogTitle>
-            <DialogDescription />
+            <DialogDescription hidden />
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-4">
             {nft?.metadata?.image && (

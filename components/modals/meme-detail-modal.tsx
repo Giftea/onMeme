@@ -32,8 +32,8 @@ export function MemeDetailModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="h-fit w-fit p-3 md:p-6 flex flex-col items-center">
         <DialogHeader className="hidden">
-          <DialogTitle></DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogTitle hidden />
+          <DialogDescription hidden />
         </DialogHeader>
         {/* Meme Image */}
         {imageUrl ? (
