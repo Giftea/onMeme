@@ -24,12 +24,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const profileUrl = `https://on-meme.vercel.app/user/${address}`;
 
   return Meta({
-    title: `onMeme - ${userData.username ?? userData.address} Profile`,
-    description: `View my generated Meme on onMeme`,
+    title: `${userData.username ?? userData.address} - onMeme Profile`,
+    description: `View my onMeme profile`,
     metaProfile: {
       name: userData.address,
       url: profileUrl,
-      description: "View my Meme",
+      description: "View my onMeme profile",
       image: userData.avatar,
     },
   });
