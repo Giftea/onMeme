@@ -46,16 +46,22 @@ pnpm install
 ```bash
 pnpm start:dev
 ```
-This will run the app on `http://localhost:4000`✅. Please kindly ignore port `3000`❌
+This will run the app on `http://localhost:3000`✅.
 
-**IMPORTANT NOTE**: To access the chopin functionalities, access the app on port `4000` ✅ not `3000` ❌
 
 ### **4️⃣ Set Up Environment Variables**
 Reach out on Telegram (@gif_tea) for the environment variables.
 Or send an email at eleojogiftuhiene@gmail.com
 
 ### **5️⃣ Chopin Authentication**
-Click the "Login" button to authenticate, you'll be redirected to `http://localhost:4000/_chopin/login`, kindly navigate back to `http://localhost:4000` to access the application. 
+Click the "Login" button to authenticate, you'll be redirected to a page requesting your email address.
+<img width="471" alt="Screenshot 2025-02-28 at 11 28 42" src="https://github.com/user-attachments/assets/a7c18c93-b31e-4d30-bd20-5990466491fe" />
+
+After submiting your email address, a 6-digit code will be sent to your email. Enter the code and click "Continue".
+
+<img width="452" alt="Screenshot 2025-02-28 at 11 29 04" src="https://github.com/user-attachments/assets/9b89586d-0516-488a-8e04-db3fa163aa45" />
+
+You're now authenticated and a wallet address has been generated for you.
 
 ---
 
