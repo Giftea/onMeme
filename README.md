@@ -1,4 +1,4 @@
-# **onMeme Meme Generation NFT App**  
+# **onMeme Meme Generation NFT App**
 
 This README provides setup instructions, project structure details, key features, and documentation on how the **Chopin Framework** and other technologies were used in onMeme.
 
@@ -8,36 +8,42 @@ Find deployed project link [HERE](https://on-meme.vercel.app/)
 
 ---
 
-## **🚀 Project Overview**  
-**onMeme** is an **onchain meme generator and NFT marketplace** where users can:  
-✅ **Create and customize memes**  
-✅ **Mint memes as NFTs**  
-✅ **Buy, sell, and trade NFTs** using **OMC (onMeme Coin)**  
-✅ **Engage in a leaderboard system** based on meme popularity and NFT sales  
-✅ **Use AI-powered meme generation**  
+## **🚀 Project Overview**
+**onMeme** is an **onchain meme generator and NFT marketplace** where users can:
+✅ **Create and customize memes**
+✅ **Mint memes as NFTs**
+✅ **Buy, sell, and trade NFTs** using **OMC (onMeme Coin)**
+✅ **Engage in a leaderboard system** based on meme popularity and NFT sales
+✅ **Use AI-powered meme generation**
 
 The project leverages the **Chopin Framework** for **embedded wallets, decentralized transactions, and token management**, alongside **Next.js, tRPC, Drizzle ORM, Neon Postgres Database, IPFS, and Celestia**.
 
 ---
 
 ## **🛠️ Tech Stack**
-- **Frontend**: Next.js, TypeScript, Tailwind CSS  
-- **Backend**: tRPC, Drizzle ORM, Neon PostgreSQL  
+- **Frontend**: Next.js, TypeScript, Tailwind CSS
+- **Backend**: tRPC, Drizzle ORM, Neon PostgreSQL
 - **Blockchain**: Chopin Framework, Celestia
-- **Storage**: IPFS (for meme metadata)  
-- **AI**: OpenAI API (for AI-generated meme suggestions)  
+- **Storage**: IPFS (for meme metadata)
+- **AI**: OpenAI API (for AI-generated meme suggestions)
 
 ---
 
-## **📥 Installation & Setup**  
+## **📥 Installation & Setup**
 
-### **1️⃣ Clone the Repository**
+### **1️⃣ Install Dependencies**
+
+- [Git](https://git-scm.com/)
+- [Node.js v20.x (LTS)](https://nodejs.org)
+- [pnpm](https://pnpm.io/) version 9.x.x or higher
+
+
+### **2️⃣ Clone the Repository**
 ```bash
 git clone https://github.com/Giftea/onMeme.git
 cd onMeme
 ```
 
-### **2️⃣ Install Dependencies**
 ```bash
 pnpm install
 ```
@@ -46,7 +52,7 @@ pnpm install
 ```bash
 pnpm start:dev
 ```
-This will run the app on `http://localhost:3000`✅.
+This will run the app on [http://localhost:3000](http://localhost:3000)✅.
 
 
 ### **4️⃣ Set Up Environment Variables**
@@ -65,7 +71,7 @@ You're now authenticated and a wallet address has been generated for you.
 
 ---
 
-## **📂 Project Structure**  
+## **📂 Project Structure**
 
 ```
 onMeme
@@ -73,7 +79,7 @@ onMeme
 │── components/       # Reusable UI components (ShadCN, Meme Editor and app components)
 │── config/           # App configuration settings
 │── hooks/            # Custom React hooks
-│── lib/              
+│── lib/
 │   ├── chopin/       # Chopin Framework integrations
 │   ├── database/     # Drizzle ORM schemas, queries, and migrations
 │   │   ├── migrations/
@@ -83,7 +89,7 @@ onMeme
 │   │   ├── schema.ts
 │   ├── types/        # TypeScript types
 │   ├── utils/        # Utility functions (IPFS, metadata, trpc utils, canvas utils)
-│── server/     
+│── server/
 │   ├── routes/        # tRPC API routes
 │── public/           # Static assets
 │── .env              # Environment variables
@@ -95,7 +101,7 @@ onMeme
 
 ---
 
-## **🔹 How onMeme Uses Chopin Framework**  
+## **🔹 How onMeme Uses Chopin Framework**
 
 ### **1️⃣ Embedded Wallets for Seamless Authentication**
 - onMeme uses **Chopin’s Multi-Party Computation (MPC) wallets**, allowing users to interact without setting up external wallets.
@@ -128,31 +134,31 @@ onMeme
 ---
 
 ## **📌 Special Features Beyond the Original Concept**
-✔ **AI Meme Generation** – Users can generate AI-powered meme images and captions.  
-✔ **Leaderboard System** – Users earn points for engagement, sales, and community interaction.  
-✔ **Preventing Self-Purchases** – Users cannot buy their own NFTs.  
-✔ **Instant Token Transfers** – OMC transfers happen **seamlessly on-chain**.  
-✔ **IPFS & Celestia Integration** – Meme metadata is stored in a **decentralized manner**.  
+✔ **AI Meme Generation** – Users can generate AI-powered meme images and captions.
+✔ **Leaderboard System** – Users earn points for engagement, sales, and community interaction.
+✔ **Preventing Self-Purchases** – Users cannot buy their own NFTs.
+✔ **Instant Token Transfers** – OMC transfers happen **seamlessly on-chain**.
+✔ **IPFS & Celestia Integration** – Meme metadata is stored in a **decentralized manner**.
 
 ---
 
 ## **📜 Future Plans**
-- Implement **community-driven meme challenges** where users compete for top memes.  
-- Introduce **staking rewards for top creators** based on meme engagement.  
-- Expand AI meme generation to allow **users to train their own meme styles**.  
+- Implement **community-driven meme challenges** where users compete for top memes.
+- Introduce **staking rewards for top creators** based on meme engagement.
+- Expand AI meme generation to allow **users to train their own meme styles**.
 
 ---
 
 ## **💡 Troubleshooting**
-If you encounter issues:  
-- **Database Errors**: Ensure `.env` is correctly set up and run `pnpm db:migrate`.  
-- **Chopin Wallet Issues**: Clear browser cache and restart the app.  
-- **IPFS Upload Failures**: Check `lib/utils/metadata.utils.ts` and verify API access.  
+If you encounter issues:
+- **Database Errors**: Ensure `.env` is correctly set up and run `pnpm db:migrate`.
+- **Chopin Wallet Issues**: Clear browser cache and restart the app.
+- **IPFS Upload Failures**: Check `lib/utils/metadata.utils.ts` and verify API access.
 
 ---
 📞 Contact
 
-Reach out on Telegram (@gif_tea) for any questions.
+Reach out on [Telegram (@gif_tea)](https://t.me/gif_tea) for any questions.
 Or send an email at eleojogiftuhiene@gmail.com
 
 You can also reach out for environment variables to run th app properly locally. Thanks!
