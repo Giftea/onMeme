@@ -2,6 +2,10 @@
 
 This README provides setup instructions, project structure details, key features, and documentation on how the **Chopin Framework** and other technologies were used in onMeme.
 
+Find deployed project link [HERE](https://on-meme.vercel.app/)
+
+![Screenshot 2025-02-28 at 09 56 53](https://github.com/user-attachments/assets/bc381847-4df4-4861-bf5f-e52227b51358)
+
 ---
 
 ## **🚀 Project Overview**  
