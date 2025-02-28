@@ -7,7 +7,14 @@ export default async function Home() {
 
   return (
     <>
-      {address && <ProfileCard userAddress={address} />}
+      {address && (
+        <ProfileCard
+          userAddress={address}
+          isProfilePage={false}
+          isUserPublicPage={false}
+        />
+      )}
+
       <MemeGeneratorX />
     </>
   );

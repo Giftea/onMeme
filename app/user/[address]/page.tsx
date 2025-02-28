@@ -44,5 +44,11 @@ export default async function Page({ params }: PageProps) {
     address: String(address),
     initAccount: true,
   });
-  return <ProfileLayout address={userData.address} />;
+  return (
+    <ProfileLayout
+      address={userData.address}
+      isProfilePage={false}
+      isUserPublicPage={true}
+    />
+  );
 }

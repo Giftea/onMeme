@@ -41,5 +41,12 @@ export default async function Page({ params }: PageProps) {
 
   const memeData = await caller.getMemeByID({ id: Number(id) });
 
-  return <ProfileLayout meme={memeData} address={memeData.ownerAddress} />;
+  return (
+    <ProfileLayout
+      meme={memeData}
+      address={memeData.ownerAddress}
+      isProfilePage={false}
+      isUserPublicPage={true}
+    />
+  );
 }

@@ -39,21 +39,22 @@ export default function Card({
   return (
     <div className="border flex justify-center items-center cursor-pointer border-gray-400 rounded-lg p-4">
       {meme && address && (
-        <div className="space-y-3 w-full cursor-pointer" onClick={handleCardClick}>
-          <Image
-            src={meme?.imageUrl}
-            alt="meme"
-            className="rounded-lg h-[300px] w-full object-cover"
-            width={300}
-            height={300}
-          />
+        <div className="flex flex-col space-y-3  justify-center items-end">
+          <div className="w-full cursor-pointer" onClick={handleCardClick}>
+            <Image
+              src={meme?.imageUrl}
+              alt="meme"
+              className="rounded-lg h-[300px] w-full object-cover"
+              width={300}
+              height={300}
+            />
+          </div>
           {address === userAddress && (
             <MintNFTModal meme={meme} address={address} />
           )}
         </div>
       )}
-      {nft && nft?.metadata &&  <NFTCard  nft={nft} />
-      }
+      {nft && nft?.metadata && <NFTCard nft={nft} />}
 
       {listedNFT && listedNFT?.nftMetadata && (
         <div className="space-y-3 w-full">
@@ -91,13 +92,13 @@ export default function Card({
       )}
       {meme && (
         <div>
-        <MemeDetailModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          imageUrl={meme.imageUrl}
-          meme={meme} // Pass the meme object
-          address={address || null} 
-        />
+          <MemeDetailModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            imageUrl={meme.imageUrl}
+            meme={meme} // Pass the meme object
+            address={address || null}
+          />
         </div>
       )}
     </div>

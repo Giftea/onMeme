@@ -58,12 +58,12 @@ export default function MintNFTModal({
       toast({
         variant: "success",
         title: "Success",
-        description: "NFT Successfully Minted! 😎"
+        description: "NFT Successfully Minted! 😎",
       });
       trpcUtils.nft.getNFTsByOwner.invalidate();
       trpcUtils.nft.getAllNFTs.invalidate();
       setOpen(false);
-      router.push("profile?tab=nfts");
+      router.push("/profile?tab=nfts");
     },
     onError: (error) => {
       toast({
@@ -111,7 +111,7 @@ export default function MintNFTModal({
           <DialogContent className="lg:max-w-[700px]">
             <DialogHeader>
               <DialogTitle className="text-2xl">Mint Meme as NFT</DialogTitle>
-              <DialogDescription />
+              <DialogDescription hidden />
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 py-4">
               <Image
