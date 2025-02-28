@@ -24,7 +24,6 @@ export const addWatermark = async (url: string) => {
           fill="white"
           stroke="black"
           stroke-width="2"
-          stroke-linejoin="round"
       >
         ${waterMarkText}
       </text>
