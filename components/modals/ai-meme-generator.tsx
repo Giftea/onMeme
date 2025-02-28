@@ -37,7 +37,7 @@ export default function AiMemeGenerator({ address }: { address: string }) {
     onError: (error) => {
       toast({
         variant: "destructive",
-        title: "Error",
+        title: "Template unavailable",
         description: error.message,
       });
     },
