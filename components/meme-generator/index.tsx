@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
-import { preventDefaults } from "@/lib/utils/canvas/prevent-default.utils";
 import { convertImageToBase64 } from "@/lib/utils";
 import UploadTemplate from "../composed/upload-template";
 import Canvas from "../composed/canvas";
@@ -239,24 +238,6 @@ export default function MemeGeneratorX() {
     );
   };
 
-  // Drag and drop functionality for image upload
-  const handleDrop = (e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const file = e.dataTransfer?.files[0];
-    if (file && file.type.match("image.*")) {
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      if (fileInputRef.current) {
-        fileInputRef.current.files = dataTransfer.files;
-        handleImageChange({
-          target: { files: dataTransfer.files },
-        } as ChangeEvent<HTMLInputElement>);
-      }
-    }
-  };
-
   // Text dragging functionality
   const handleTextDragStart = (id: string, e: React.MouseEvent) => {
     if (!image || !previewCanvasRef.current) return;
@@ -374,31 +355,6 @@ export default function MemeGeneratorX() {
       updatePreview();
     }
   }, [textElements, image, selectedTextId]);
-
-  // Set up event listeners for drag and drop
-  useEffect(() => {
-    const dropArea = document.getElementById("dropArea");
-    if (!dropArea) return;
-
-    const events = ["dragenter", "dragover", "dragleave", "drop"];
-
-    events.forEach((eventName) => {
-      dropArea.addEventListener(eventName, preventDefaults as EventListener);
-    });
-
-    dropArea.addEventListener("drop", handleDrop as EventListener);
-
-    return () => {
-      events.forEach((eventName) => {
-        dropArea.removeEventListener(
-          eventName,
-          preventDefaults as EventListener
-        );
-      });
-
-      dropArea.removeEventListener("drop", handleDrop as EventListener);
-    };
-  }, []);
 
   // Set up mouse event listeners for text dragging
   useEffect(() => {
