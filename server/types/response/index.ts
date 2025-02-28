@@ -19,7 +19,7 @@ export type GenerateAiMemeResponse = {
   success: boolean;
   data?: {
     texts: string[];
-    template_id: 131087935;
+    template_id: number;
     url: string;
     page_url: string;
   };
