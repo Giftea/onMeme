@@ -145,7 +145,7 @@ export const memeRouter = router({
       } catch (err: unknown) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "AI Failed to generate meme",
+          message: "Unable to use this template at this time, try another",
           cause: err as Error,
         });
       }
