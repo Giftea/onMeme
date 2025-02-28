@@ -1,6 +1,6 @@
 "use client";
-import ProfileCard from "@/components/composed/profile-card";
-import User from "@/components/profile";
+
+import ProfileLayout from "@/components/layout/profile";
 import { useAddress } from "@chopinframework/react";
 
 export default function Home() {
@@ -8,8 +8,11 @@ export default function Home() {
 
   return (
     <div>
-      <ProfileCard userAddress={address} isProfilePage />
-      <User address={address} />
+      <ProfileLayout
+        address={address}
+        isProfilePage={true}
+        isUserPublicPage={false}
+      />
     </div>
   );
 }

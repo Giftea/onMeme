@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 export default function ProfileLayout({
   address,
   meme,
+  isProfilePage = false,
+  isUserPublicPage = false,
 }: {
   address: string;
   meme?: {
@@ -17,6 +19,8 @@ export default function ProfileLayout({
     isPublic: boolean | null;
     createdAt: Date | string | null;
   };
+  isProfilePage?: boolean;
+  isUserPublicPage?: boolean;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -31,7 +35,11 @@ export default function ProfileLayout({
   }
   return (
     <div>
-      <ProfileCard userAddress={address} isProfilePage isUserPublicPage />
+      <ProfileCard
+        userAddress={address}
+        isProfilePage={isProfilePage}
+        isUserPublicPage={isUserPublicPage}
+      />
       <User address={address} />
       {meme?.imageUrl && (
         <MemeDetailModal

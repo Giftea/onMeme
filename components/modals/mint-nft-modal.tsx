@@ -58,12 +58,12 @@ export default function MintNFTModal({
       toast({
         variant: "success",
         title: "Success",
-        description: "NFT Successfully Minted! 😎"
+        description: "NFT Successfully Minted! 😎",
       });
       trpcUtils.nft.getNFTsByOwner.invalidate();
       trpcUtils.nft.getAllNFTs.invalidate();
       setOpen(false);
-      router.push("profile?tab=nfts");
+      router.push("/profile?tab=nfts");
     },
     onError: (error) => {
       toast({
