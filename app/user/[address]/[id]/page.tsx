@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const memeData = await caller.getMemeByID({ id: Number(id) });
 
-  const profileUrl = `${process.env.API_URL}/user/${
+  const profileUrl = `https://on-meme.vercel.app/user/${
     memeData.ownerAddress
   }/${Number(id)}`;
 

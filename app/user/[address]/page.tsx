@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     initAccount: true,
   });
 
-  const profileUrl = `${process.env.API_URL}/user/${address}`;
+  const profileUrl = `https://on-meme.vercel.app/user/${address}`;
 
   return Meta({
     title: `onMeme - ${userData.username ?? userData.address} Profile`,
