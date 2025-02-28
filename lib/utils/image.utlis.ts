@@ -16,7 +16,7 @@ export const addWatermark = async (url: string) => {
   const height = metadata.height || 0;
 
   const watermarkSvg = `
-      <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <svg width="${width}" height="${height}">
         <text
           x="10" y="${height - 10}"
           font-family="${font}"
