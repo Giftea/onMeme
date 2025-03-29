@@ -104,6 +104,12 @@ export const memeRouter = router({
       })
     )
     .mutation(async ({ input }) => {
+      if (!!input.template_id) {
+        throw new TRPCError({
+          code: "SERVICE_UNAVAILABLE",
+          message: "Service temporarily unavailable",
+        });
+      }
       const { template_id } = input;
 
       const payload = new URLSearchParams();
